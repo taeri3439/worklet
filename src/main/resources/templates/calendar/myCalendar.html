@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/calendar/myCalendar.css}">
+
+    <title>Document</title>
+
+
+</head>
+<body>
+
+<div th:replace="~{include/header :: headerFragment}"></div>
+
+    <div id="mobileCalendarButton" >
+        <div>
+            <button type="button" id="mobileOpenJobPosting">공채정보</button>
+            <button type="button" id="mobileJobPosting">채용정보</button>
+            <button type="button" id="mobileStartDate">시작일</button>
+            <button type="button" id="mobileEndDate">종료일</button>
+        </div>
+    </div>
+
+    <div id='external-events'>
+
+    </div>
+
+
+    <div id="titleToolTip"></div>
+    <div id="explanationToolTip" style="display: block; position:absolute; border:none; padding: 10px; z-index:10000;
+                                        left: 1400px">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background-color: green"></span>
+        <span style="display: inline-block">: 공고 시작일</span>
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; margin-left: 10px; background-color: red"></span>
+        <span style="display: inline-block">: 공고 종료일</span>
+    </div>
+    <div id='calendar'></div>
+
+
+
+    <script th:src="@{/css/js/calendar.js}"></script>
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendar.Draggable;
+
+    var containerEl = document.getElementById('external-events');
+    var calendarEl = document.getElementById('calendar');
+    var tooltip = document.getElementById('titleToolTip');
+
+        if (tooltip && tooltip.parentNode !== document.body) {
+            document.body.appendChild(tooltip);
+        }
+
+    var currentEventMode = null;
+
+    // initialize the external events
+    // -----------------------------------------------------------------
+
+    new Draggable(containerEl, {
+        itemSelector: '.fc-event',
+        eventData: function(eventEl) {
+        return {
+            title: eventEl.innerText
+        };
+        }
+    });
+
+    // function initializeCalendar(events) {
+        var customButtons = {
+            startDay: {
+                text: '시작일',
+                className: 'startDay',
+                click: function () {
+                    ButtonClick('startDay');
+
+                }
+            },
+            endDay: {
+                text: '종료일',
+                className: 'endDay',
+                click: function () {
+                    ButtonClick('endDay');
+                }
+            },
+
+            allPosting: {
+                text: '전체',
+                className: 'allPosting',
+                click: function () {
+                    ButtonClick('allPosting');
+                }
+            },
+            allCalendar: {
+                text: '전체달력',
+                className: 'allCalendar',
+                click: function () {
+                    // 세션에 필요한 데이터 저장 (예: 'calendar'라는 키에 'true' 값 저장)
+                    // sessionStorage.setItem('myCalendarAccess', 'true');
+
+                    // 페이지 이동 (예: 'calendar.html'로 이동)
+                    location.href = "/calendar/calendar";  // 원하는 페이지로 변경 //mycalendar 페이지로 이동
+                }
+            }
+        };
+
+        function ButtonClick(e) {
+
+            currentEventMode = e; //현재 모드 저당
+
+            var buttonClasses = ['fc-startDay-button', 'fc-endDay-button', 'fc-allCalendar-button'];
+
+            for (var i = 0; i < buttonClasses.length; i++) {
+                var btn = document.querySelector('.' + buttonClasses[i]);
+                if (btn) {
+                    if (buttonClasses[i] === 'fc-' + e + '-button') {
+                        btn.classList.add('bottomline');
+                    } else {
+                        btn.classList.remove('bottomline');
+                    }
+                }
+            }
+
+            if(e === 'startDay') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/mycalendar/eventsStartDay', method: 'GET' });
+
+            } else if(e === 'endDay') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/mycalendar/eventsEndDay', method: 'GET' });
+
+            } else if(e === 'allPosting') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/mycalendar/favoriteList', method: 'GET' });
+                // calendar.addEventSource({ url: '/mycalendar/eventsEndDay', method: 'GET' });
+
+                // calendar.setOption('events', '/mycalendar/favoriteList')
+
+
+            } else {
+
+                    calendar.setOption('events', []);
+                }
+        }
+
+
+
+
+        var calendar = new Calendar(calendarEl, {
+            locale: 'ko',
+            headerToolbar: {
+                left: window.innerWidth < 767 ? '' : 'allPosting,startDay,endDay',
+                center: 'prev,title,next',
+                right: 'allCalendar'
+            },
+            initialView: 'dayGridMonth',
+            customButtons: customButtons,
+            dayCellContent: function (arg) {
+                return arg.date.getDate();
+            },
+
+            events: [], //초기엔 아무것도 불러오지 않음
+
+
+
+            dayMaxEvents: true, // 또는 숫자로: dayMaxEvents: 3 //칸 이상은 + 처리
+
+            //일정 스타일
+            eventDidMount: function (info) {
+                // var mainEl = info.el.querySelector('.fc-event-main');
+                // if (mainEl) {
+                //     mainEl.setAttribute('title', info.event.title);
+                //     mainEl.style.color = '#000'
+                //     mainEl.style.backgroundColor = '#fff';
+                //     mainEl.style.marginTop = '3px';
+                //     mainEl.style.border = 'none';
+                //
+                //     //하나짜리 형태/앞에 점
+                //     // mainEl.classList.add('fc-daygrid-event-dot');
+                //     mainEl.classList.add('fc-event-title');
+                //
+                //     //즐찾과 제목 한줄정렬
+                //     mainEl.style.display = 'flex';
+                //     mainEl.style.alignItems = 'center';
+                //     mainEl.style.justifyContent = 'space-between';
+                //
+                //     //시작일, 종료일 구분을 위한 colordot
+                //     var colorDot = document.createElement('span');
+                //     colorDot.style.display = 'inline-block';
+                //     colorDot.style.width = '8px';
+                //     colorDot.style.height = '8px';
+                //     colorDot.style.borderRadius = '50%';
+                //     colorDot.style.marginRight = '5px';
+                //
+                //     //색깔구분
+                //     if(info.event.source && info.event.source.url === '/mycalendar/eventsStartDay') {
+                //         // || info.event.source && info.event.source.url === '/calendar/getStartDayEventsOnlyY'
+                //         // || info.event.source && info.event.source.url === '/calendar/getStartDayEventsOnlyN') {
+                //         colorDot.style.backgroundColor = 'green';
+                //     } else if(info.event.source && info.event.source.url === '/mycalendar/eventsEndDay') {
+                //         // || info.event.source && info.event.source.url === '/calendar/getEndDayEventsOnlyY'
+                //         // || info.event.source && info.event.source.url === '/calendar/getEndDayEventsOnlyN') {
+                //         colorDot.style.backgroundColor = 'red';
+                //     }
+                //
+                //
+                //     //그냥 하면 안되니까 제목 부분을 span으로 감싸서 between 먹게
+                //     var titleSpan = document.createElement('span');
+                //     titleSpan.textContent = info.event.title;
+                //     titleSpan.style.flex = '1';
+                //     titleSpan.style.overflow = 'hidden';
+                //     titleSpan.style.textOverflow = 'ellipsis';
+                //     titleSpan.style.whiteSpace = 'nowrap';
+                //     titleSpan.classList.add('titleSpan');
+                //
+                //     //텍스트 집어넣기
+                //     mainEl.innerHTML = '';
+                //     mainEl.appendChild(colorDot);
+                //     mainEl.appendChild(titleSpan);
+                //
+                //
+                //     titleSpan.addEventListener('mouseenter', function () {
+                //
+                //         var rect = titleSpan.getBoundingClientRect();
+                //
+                //         tooltip.innerHTML = info.event.title;
+                //         tooltip.style.position = 'absolute';
+                //         tooltip.style.zIndex = '9999';
+                //         tooltip.style.top = (rect.top + window.scrollY - 150) + 'px';
+                //         tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                //         tooltip.style.minWidth = rect.width + 'px';
+                //         tooltip.style.backgroundColor = '#e4e4e4';
+                //         tooltip.style.color = '#000';
+                //
+                //         tooltip.style.display = 'block';
+                //
+                //         titleSpan.style.cursor = 'pointer'
+                //
+                //
+                //     });
+                //
+                //     titleSpan.addEventListener('mouseleave', function () {
+                //         tooltip.style.display = 'none';
+                //
+                //         info.el.style.cursor = 'default';
+                //     });
+                //
+                //     titleSpan.addEventListener('click', function () {
+                //         var homepgDetail = info.event.extendedProps.empWantedHomepgDetail;
+                //
+                //         if (homepgDetail) {
+                //             window.location.href = homepgDetail;
+                //         } else {
+                //             alert('현재 해당 공고의 상세페이지로 접근할 수 없습니다!');
+                //         }
+                //     })
+                //
+                // }
+                //
+                //
+                // // ⭐ 즐겨찾기 하트 추가 시작
+                // var heart = document.createElement('span');
+                //
+                // var eventMain = info.el.querySelector('.fc-event-main');
+                //
+                // heart.style.marginLeft = '8px';
+                // heart.style.cursor = 'pointer';
+                //
+                // console.log(info.event.extendedProps.favorite);
+                //
+                // if (info.event.extendedProps.favorite) {
+                //     heart.innerHTML = '❤️';
+                //     heart.setAttribute('data-favorited', 'true');
+                //
+                //     if(eventMain) {
+                //         eventMain.style.color='blue';
+                //         eventMain.style.fontWeight = 'bold';
+                //     }
+                //
+                //
+                // } else {
+                //     heart.innerHTML = '🤍';
+                //     heart.setAttribute('data-favorited', 'false');
+                //
+                //     if(eventMain) {
+                //         eventMain.style.color='black';
+                //         eventMain.style.fontWeight = 'normal';
+                //     }
+                // };
+                //
+                // heart.addEventListener('click', function (e) {
+                //     e.stopPropagation(); // 상세 페이지 이동 막기
+                //
+                //     var userId = sessionStorage.getItem('userId');
+                //     if(userId == null) {
+                //         alert('로그인 후 이용할 수 있는 기능입니다');
+                //         return;
+                //     }
+                //
+                //
+                //     var isFav = heart.getAttribute('data-favorited') === 'true';
+                //     var empSeqNo = Number(info.event.extendedProps.empSeqNo);
+                //
+                //
+                //
+                //
+                //     if (isFav) {
+                //         heart.innerHTML = '🤍';
+                //         heart.setAttribute('data-favorited', 'false');
+                //
+                //         if(eventMain) {
+                //             eventMain.style.color='black';
+                //             eventMain.style.fontWeight = 'normal';
+                //         }
+                //
+                //         var xhr = new XMLHttpRequest();
+                //         xhr.open("post", "/mycalendar/favorite/remove", true);
+                //         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                //
+                //
+                //
+                //         xhr.send(JSON.stringify({
+                //             empSeqNo: empSeqNo,
+                //             userId: sessionStorage.getItem('userId')
+                //         }))
+                //
+                //
+                //
+                //     } else {
+                //         heart.innerHTML = '❤️';
+                //         heart.setAttribute('data-favorited', 'true');
+                //
+                //         if(eventMain) {
+                //             eventMain.style.color='blue';
+                //             eventMain.style.fontWeight = 'bold';
+                //         }
+                //
+                //         var xhr = new XMLHttpRequest();
+                //         xhr.open("post", "/mycalendar/favorite/add", true);
+                //         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                //
+                //
+                //
+                //         xhr.send(JSON.stringify({
+                //             empSeqNo: empSeqNo,
+                //             userId: sessionStorage.getItem('userId')
+                //         }))
+                //
+                //     }
+                //
+                //     // 서버로 즐겨찾기 상태 저장하고 싶으면 여기에 Ajax 요청 작성
+                //
+                //
+                //     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                //     xhr.send(JSON.stringify({
+                //         id: info.event.id,
+                //         favorite: !isFav
+                //     }));
+                //
+                // });
+                //
+                // var eventMain = info.el.querySelector('.fc-event-main');
+                // if (eventMain) {
+                //     eventMain.appendChild(heart);
+                // }
+                // // ⭐ 즐겨찾기 하트 추가 끝
+                console.log(info.event.extendedProps);
+
+                var mainEl = info.el.querySelector('.fc-event-main');
+                if (!mainEl) return;
+
+                mainEl.style.display = 'flex';
+                mainEl.style.alignItems = 'center';
+                mainEl.style.justifyContent = 'space-between';
+                mainEl.style.border = 'none';
+                mainEl.style.backgroundColor = '#fff';
+                mainEl.style.marginTop = '3px';
+
+
+
+                var titleSpan = document.createElement('span');
+                titleSpan.textContent = info.event.title;
+                titleSpan.style.color = '#000';
+
+                titleSpan.style.flex = '1';
+                titleSpan.style.overflow = 'hidden';
+                titleSpan.style.textOverflow = 'ellipsis';
+                titleSpan.style.whiteSpace = 'nowrap';
+                titleSpan.style.minWidth = '0';
+
+                var heart = document.createElement('span');
+                heart.style.marginLeft = '8px';
+                heart.style.cursor = 'pointer';
+
+                var isFav = info.event.extendedProps.favorite;
+                heart.innerHTML = isFav ? '❤️' : '🤍';
+                heart.setAttribute('data-favorited', isFav ? 'true' : 'false');
+
+                heart.addEventListener('click', function (e) {
+                    e.stopPropagation();
+
+                    var userId = sessionStorage.getItem('userId');
+                    if (!userId) {
+                        if(confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+                            location.href = '/user/login';
+                        }
+                        return;
+                    }
+
+                    var isNowFav = heart.getAttribute('data-favorited') === 'true';
+                    var empSeqNo = Number(info.event.extendedProps.empSeqNo);
+
+                    heart.innerHTML = isNowFav ? '🤍' : '❤️';
+                    heart.setAttribute('data-favorited', (!isNowFav).toString());
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('post', isNowFav ? '/mycalendar/favorite/remove' : '/mycalendar/favorite/add', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                    xhr.send(JSON.stringify({
+                        empSeqNo: empSeqNo,
+                        userId: userId
+                    }));
+                });
+
+                // 마우스 호버 툴팁
+                titleSpan.addEventListener('mouseenter', function () {
+                    var rect = titleSpan.getBoundingClientRect();
+
+                    tooltip.innerHTML = info.event.title;
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.setProperty('z-index', '2147483647', 'important');
+                    tooltip.style.top = (rect.top + window.scrollY - 150) + 'px';
+                    tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                    tooltip.style.minWidth = rect.width + 'px';
+                    tooltip.style.backgroundColor = 'var(--sub-color2)';
+                    tooltip.style.color = '#000';
+                    tooltip.style.display = 'block';
+
+                    titleSpan.style.cursor = 'pointer';
+
+                    setTimeout(function () {
+                        var popovers = document.querySelectorAll('.fc-popover');
+                        for (var i = 0; i < popovers.length; i++) {
+                            popovers[i].style.zIndex = '1000';
+                        }
+                    }, 0);
+
+                });
+
+                titleSpan.addEventListener('mouseleave', function () {
+                    tooltip.style.display = 'none';
+                });
+
+                titleSpan.addEventListener('click', function () {
+                    var homepgDetail = info.event.extendedProps.empWantedHomepgDetail;
+                    if (homepgDetail) {
+                        window.open(homepgDetail, '_blank');
+                    } else {
+                        alert('현재 해당 공고의 상세페이지로 접근할 수 없습니다!');
+                    }
+                });
+
+                mainEl.innerHTML = '';
+
+                if (currentEventMode === 'allPosting') {
+                    var allWrapper = document.createElement('div');
+                    allWrapper.style.display = 'flex';
+                    allWrapper.style.alignItems = 'center';
+                    allWrapper.style.flex = '1';
+                    allWrapper.style.overflow = 'hidden';
+
+                    titleSpan.style.marginLeft = '5px'; // 하트와 제목 사이 여백
+
+                    var bgColor = info.event.extendedProps.color;
+                    if(bgColor) {
+                        mainEl.style.backgroundColor = bgColor;
+                    } else {
+                        mainEl.style.backgroundColor = 'rgba(255, 255, 255, 0)';
+                    }
+
+                    mainEl.style.borderRadius = "7px";
+                    mainEl.style.paddingTop = "3px";
+                    mainEl.style.paddingBottom = "3px";
+
+                    allWrapper.appendChild(heart);
+                    allWrapper.appendChild(titleSpan);
+                    mainEl.appendChild(allWrapper);
+
+                } else {
+                    // 시작일/종료일 모드
+                    var colorDot = document.createElement('span');
+                    colorDot.style.display = 'inline-block';
+                    colorDot.style.width = '8px';
+                    colorDot.style.height = '8px';
+                    colorDot.style.borderRadius = '50%';
+                    colorDot.style.marginRight = '5px';
+
+
+                    if (currentEventMode === 'startDay') {
+                        colorDot.style.backgroundColor = 'green';
+                    } else if (currentEventMode === 'endDay') {
+
+                        colorDot.style.backgroundColor = 'red';
+                    }
+
+                    var titleWrapper = document.createElement('div');
+                    titleWrapper.style.display = 'flex';
+                    titleWrapper.style.alignItems = 'center';
+                    titleWrapper.style.flex = '1';
+                    titleWrapper.style.overflow = 'hidden';
+
+                    titleWrapper.appendChild(colorDot);
+                    titleWrapper.appendChild(titleSpan);
+
+                    mainEl.appendChild(titleWrapper);
+                    mainEl.appendChild(heart);
+                }
+            }
+
+        });
+
+        calendar.render();
+
+
+    });
+
+
+    </script>
+
+
+<script th:src="@{/css/js/header.js}"></script>
+
+
+
+<div class="goPostingPageBox">
+    <button type="button" id="goPostingPage">상세검색</button>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const goPostingPage = document.getElementById('goPostingPage');
+        goPostingPage.addEventListener('click', function () {
+            event.preventDefault();
+            location.href = "/jobposting";
+        });
+    });
+
+</script>
+
+
+<div th:replace="~{include/footer :: footerFragment}"></div>
+
+</body>
+</html>

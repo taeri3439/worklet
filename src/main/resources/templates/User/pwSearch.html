@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/pwSearch.css">
+</head>
+
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+
+    <div class="wrap">
+        <div class="header">
+            <h1><img src="../image/logo-white.png" alt=""></h1>
+            <p>비밀번호 찾기</p>
+        </div>
+
+        <div class="card">
+            <form action="/user/pwEdit" method="get">
+                <h2><strong th:text="${userVO != null ? userVO.userName : '사용자 정보 없음'}"></strong>님의 정보와<br />일치하는 비밀번호 입니다.</h2>
+                <a href="#"  th:text="${userVO != null ? userVO.userPw : '비밀번호 없음'}">dergeQWQjl3242!@</a>
+                <div class="date">가입일&nbsp;&nbsp;<strong   th:text="${userVO != null && userVO.joinDate != null ? #temporals.format(userVO.joinDate, 'yyyy.MM.dd') : '가입일 없음'}">2025.12.01</strong></div>
+                <div class="date">아이디&nbsp;&nbsp;<strong  th:text="${userVO !=null ? userVO.userId : '아이디 없음'}">wewe123</strong></div>
+                <th:block th:if="${userVO != null}">
+                    <input type="hidden" name="userId" th:value="${userVO.userId}" />
+                </th:block>
+                <div class="buttons">
+                    <button class="btn-secondary">비밀번호 바꾸기</button>
+                    <button class="btn-primary">로그인</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script src="../css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+
+<script>
+    var pwEditBtn = document.querySelector(".btn-secondary");
+    var btnPrimary = document.querySelector(".btn-primary");
+    //
+    // pwEditBtn.addEventListener('click',function (){
+    //     location.href="/user/pwEdit"
+    // })
+
+    btnPrimary.addEventListener('click',function (){
+        location.href="/user/login"
+    })
+
+</script>
+</body>
+
+</html>

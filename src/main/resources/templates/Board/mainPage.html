@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mainPage</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/board/mainPage.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
+
+<body>
+    <div class="wrap">
+        <div th:replace="include/header :: headerFragment"></div>
+        <section id="sec01" >
+            <div class="flex">
+                <div class="slide-wrap">
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide"><img src="../image/slideEx.jpg" alt=""></div>
+                            <div class="swiper-slide"><img src="../image/slideEx2.jpg" alt=""></div>
+                            <div class="swiper-slide"><img src="../image/slideEx.jpg" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="goToService">
+                        <div class="flex">
+                            <p>편하게</p>
+                            <h3>바로가기 서비스</h3>
+                            <ul class="flex serviceMenu">
+                                <li>
+                                    <a href="/user/mypage">
+                                        <img src="../image/person.png" alt="">
+                                    </a>
+                                    <h4>마이페이지</h4>
+                                    <p>바로가기</p>
+                                </li>
+                                <li>
+                                    <a href="/qna/qna_list">
+                                        <img src="../image/question.png" alt="">
+                                    </a>
+                                    <h4>문의</h4>
+                                    <p>바로가기</p>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="../image/chat.png" alt="">
+                                    </a>
+                                    <h4>최근 본 공고</h4>
+                                    <p>바로가기 </p>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="sec01_notice">
+                        <div class="notice_title flex">
+                            <div class="notice_icon flex">
+                                <figure>
+                                    <a href="/notice/notice_list">
+                                        <img th:src="@{/image/notification.png}" alt="공지 아이콘">
+
+                                    </a>
+                                </figure>
+                                <p>공지</p>
+                            </div>
+                            <div class="more flex">
+                                <a href="/notice/notice_list"><p>더보기</p></a>
+                                <figure><img src="../image/Arrow.png" alt="더보기 아이콘"></figure>
+                            </div>
+                        </div>
+
+                        <div class="notice_slide">
+                            <div class="swiper mySwiper2">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide" th:each="notice : ${noticeList}">
+                                        <!-- 각 공지 제목을 클릭하면 해당 공지의 상세 페이지로 이동 -->
+                                        <a th:href="@{'/notice/notice_list'}">
+                                            <p th:text="${notice.noticeTitle}">공지 제목</p>
+                                            <span th:text="${#temporals.format(notice.noticeCreatedAt, 'yyyy.MM.dd')}">날짜</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </section>
+
+        <section id="sec02">
+            <div class="sec02Title">
+                <h1>취업을 더 쉽게, 더 정확하게.</h1>
+                <p>WORKLET은<br> 당신에게 딱 맞는 채용을 추천합니다.</p>
+            </div>
+            <div class="sec02Box">
+                <ul class="flex">
+                    <li>
+                        <div class="flex">
+                            <figure><img src="../image/sec02_image01.png" alt=""></figure>
+                            <p>스크랩하면 <b style="color: #009BBA;">자동</b>으로
+                                <b style="color: #009BBA;">캘린더</b>에 저장!
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex">
+                            <figure><img src="../image/sec02_image02.png" alt=""></figure>
+                            <p>다가오는 일정이 있다면
+                                <b style="color: #8500EA;">알람</b>으로 잊지 않기!
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex">
+                            <figure><img src="../image/sec02_image03.png" alt=""></figure>
+                            <p><b style="color: #0048FF;">이력서</b>를 미리 작성해서
+                                취업률을 올려요!</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <button type="button">
+                    <figure class="logo">
+                        <img src="../image/WORKLET_logo.png" alt="">
+                    </figure>
+                    <p>알아보기</p>
+                    <div class="arrow">
+                        <img src="../image/Arrow.png" alt="">
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <section id="sec03">
+            <div class="sec03_wrap">
+                <div class="sec03Title flex">
+                    <h2>진행 하고 있는 공채 소식</h2>
+                    <button type="button" class="flex">
+                        <a id="goPostingPage"><p>더보기</p></a> <figure><img src="../image/Arrow.png" alt=""></figure>
+                    </button>
+                </div>
+
+                <div class="sec03_pc_slide">
+                    <div class="swiper-wrapper-mask">
+                        <div class="swiper mySwiper3">
+                            <div class="swiper-wrapper">
+                                <!-- 각 슬라이드 아이템을 동적으로 렌더링 -->
+                                <div class="swiper-slide" th:each="vo : ${list}">
+                                    <a th:href="${vo.empWantedHomepgDetail}" target="_blank" class="slide-link">
+                                        <h3>[[${vo.empWantedTitle}]]</h3>
+                                        <p>[[${vo.empRecrNm}]]</p>
+                                        <figure class="slide_logo">
+                                            <img th:src="@{${vo.regLogImgNm}}" alt="로고">
+                                        </figure>
+                                        <div class="hidden-box">
+                                            <h4>지원자격</h4>
+                                            <ul>
+                                                <li>
+                                                    <span>회사명</span>
+                                                    <b>[[${vo.empWantedTitle}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>경력</span>
+                                                    <b>[[${vo.empWantedCareerNm}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>지역</span>
+                                                    <b>[[${vo.workRegionNm}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>기타</span>
+                                                    <b>[[${vo.empWantedTypeNm}]]</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+
+                <div class="sec03_mobile_slide">
+                    <div class="swiper-wrapper-mask">
+                        <div class="swiper mySwiper4">
+                            <div class="swiper-wrapper">
+                                <!-- 각 슬라이드 아이템을 동적으로 렌더링 -->
+                                <div class="swiper-slide" th:each="vo : ${list}">
+                                    <a th:href="${vo.empWantedHomepgDetail}" target="_blank" class="slide-link">
+                                        <h3>[[${vo.empWantedTitle}]]</h3>
+                                        <p>[[${vo.empRecrNm}]]</p>
+                                        <figure class="slide_logo">
+                                            <img th:src="@{${vo.regLogImgNm}}" alt="로고">
+                                        </figure>
+                                        <div class="hidden-box">
+                                            <h4>지원자격</h4>
+                                            <ul>
+                                                <li>
+                                                    <span>회사명</span>
+                                                    <b>[[${vo.empWantedTitle}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>경력</span>
+                                                    <b>[[${vo.empWantedCareerNm}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>지역</span>
+                                                    <b>[[${vo.workRegionNm}]]</b>
+                                                </li>
+                                                <li>
+                                                    <span>기타</span>
+                                                    <b>[[${vo.empWantedTypeNm}]]</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="sec04">
+            <div class="list flex">
+                <div class="notice_list">
+                    <div class="list_title flex">
+                        <p>공지사항</p>
+                        <div class="more flex">
+                            <a href="/notice/notice_list"><p>더보기</p></a>
+                            <figure><img src="../image/Arrow.png" alt=""></figure>
+                        </div>
+                    </div>
+
+                    <ul>
+                        <li th:each="notice : ${noticeList}">
+                            <a th:href="@{'/notice/notice_list'}">
+                                <p th:text="${notice.noticeTitle}">공지 제목</p>
+                                <span th:text="${#temporals.format(notice.noticeCreatedAt, 'yyyy.MM.dd')}">날짜</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="employment_list">
+                    <div class="list_title flex">
+                        <p>채용</p>
+                        <div class="more flex">
+                            <a href="/job_postings/job_posting_list">
+                                <a id="goPostingPage"><p>더보기</p></a>
+                                <figure><img src="../image/Arrow.png" alt=""></figure>
+                            </a>
+                        </div>
+                    </div>
+                    <ul>
+                        <li th:each="job : ${jobPostingList}">
+                            <a th:href="${job.empWantedHomepgDetail}" target="_blank">
+                                <p th:text="${job.empWantedTitle}">채용공고 제목</p>
+                            </a>
+                            <span th:text="${job.empWantedStdt}">채용공고 날짜</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="call">
+                <div class="call_title flex">
+                    <div class="call_logo">
+                        <img src="../image/call.png" alt="">
+                    </div>
+                    <h3>고객센터</h3>
+                </div>
+                <h2>7328-3242</h2>
+                <div class="call_image">
+                    <img src="../image/callimage.png" alt="">
+                </div>
+            </div>
+        </section>
+
+        <div th:replace="include/footer :: footerFragment"></div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script th:src="@{/css/js/header.js}"></script>
+    <script th:src="@{/css/js/mainPage.js}"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const goPostingPage = document.getElementById('goPostingPage');
+            goPostingPage.addEventListener('click', function () {
+                event.preventDefault();
+                location.href = "/jobposting";
+            });
+        });
+
+    </script>
+</body>
+
+</html>

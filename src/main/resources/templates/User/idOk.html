@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아이디 확인</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/idOk.css">
+</head>
+
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+    <div class="wrap">
+        <div class="header">
+            <h1><img src="../image/logo-white.png" alt=""></h1>
+            <p>아이디 찾기</p>
+        </div>
+
+        <div class="card">
+            <h2>WORKLET 홈페이지<br> ‘아이디 찾기’에 필요한<br>
+                사용자 확인을 진행합니다.</h2>
+            <form action="/user/idOk" method="post" name="idOk">
+                <div class="form-row">
+                    <label for="password">이메일 확인</label>
+                    <input type="text" name="userEmail" id="password" placeholder="example@email.com">
+                </div>
+
+                <div class="form-row">
+                    <label for="passwordCheck">연락처 확인</label>
+                    <input type="text" id="passwordCheck"  name="userPhone" placeholder="000-0000-0000">
+                </div>
+
+                <div class="buttons">
+                    <button class="btn-secondary submit-btn" type="submit">아이디 확인</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+
+        var errorMessage = [[${errorMessage}]];
+        if (errorMessage) {
+            alert(errorMessage);  // 에러 메시지 띄우기
+        }
+
+        document.querySelector("form[name='idOk']").addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 제출 동작 막기
+
+            const pw = document.getElementById("password");
+            const pwCheck = document.getElementById("passwordCheck");
+            const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+
+            if (!pw.value || !emailRegex.test(pw.value)) {
+                alert("올바른 이메일을 입력해주세요");
+                pw.focus();
+                return;
+            }
+
+            if (!pwCheck.value || !phoneRegex.test(pwCheck.value)) {
+                alert("전화번호 형식을 확인해주세요 (예: 010-1234-5678)");
+                pwCheck.focus();
+                return;
+            }
+
+            this.submit(); // 조건 통과하면 폼 제출
+        });
+
+
+    </script>
+<script src="../css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+
+</html>

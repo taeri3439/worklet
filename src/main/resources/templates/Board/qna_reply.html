@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1문의 답변 관리자 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap Icons CDN (for chevron) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="/css/inquiry_admin.css">
+    <link rel="stylesheet" href="/css/Board/qna_reply.css">
+</head>
+<body>
+
+<div th:replace="include/header :: headerFragment"></div>
+<div class="container">
+    <h1>1:1문의 답변 관리자 페이지</h1>
+    <div class="inquiry-list">
+        <!-- Thymeleaf 반복문 -->
+        <div th:each="inquiry : ${qnaList}" th:class="'inquiry-item ' + (${inquiry.inquiryStatus} == '답변대기' ? 'active' : '')">
+            <div class="inquiry-title">
+                <span class="inquiry-num" th:text="${inquiry.inquiryId}"></span>
+                <span class="inquiry-subject" th:text="${inquiry.inquiryTitle}"></span>
+                <span class="inquiry-user" th:text="'유저' + ${inquiry.userNum}"></span>
+                <span class="inquiry-date" th:text="${inquiry.inquiryCreateAt}"></span>
+                <span class="inquiry-status" th:text="${inquiry.inquiryStatus}"></span>
+                <span class="toggle-icon">
+                    <i class="bi" th:classappend="'bi-chevron-' + (${inquiry.inquiryStatus} == '답변대기' ? 'up' : 'down')"></i>
+                </span>
+            </div>
+            <div class="inquiry-content">
+                <div class="inquiry-question" th:text="${inquiry.inquiryContent}"></div>
+
+                <!-- 답변 입력 폼 -->
+                <form action="/qna/qna_reply" method="POST">
+                    <!-- 문의 ID 전달 -->
+                    <input type="hidden" name="inquiryId" th:value="${inquiry.inquiryId}" />
+
+                    <!-- 답변 내용 입력 -->
+                    <textarea class="inquiry-answer" name="inquiryReply" placeholder="답변내용을 입력하세요" required></textarea>
+                    <button type="submit" class="answer-submit-btn">답변등록</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span class="page-arrow">&lt;&lt;</span>
+        <span class="page-arrow">&lt;</span>
+        <span class="page-number active">1</span>
+        <span class="page-number">2</span>
+        <span class="page-number">3</span>
+        <span class="page-number">4</span>
+        <span class="page-number">5</span>
+        <span class="page-arrow">&gt;</span>
+        <span class="page-arrow">&gt;&gt;</span>
+    </div>
+</div>
+<div th:replace="include/footer :: footerFragment"></div>
+
+<script>
+    // 아코디언 토글
+    document.querySelectorAll('.inquiry-title').forEach(title => {
+        title.addEventListener('click', function() {
+            const item = title.parentElement;
+            const alreadyActive = item.classList.contains('active');
+            document.querySelectorAll('.inquiry-item').forEach(i => i.classList.remove('active'));
+            if (!alreadyActive) item.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>

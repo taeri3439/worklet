@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/pwOk.css">
+</head>
+
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+    <div class="wrap">
+        <div class="header">
+            <h1><img src="../image/logo-white.png" alt=""></h1>
+            <p>비밀번호 찾기</p>
+        </div>
+
+        <div class="card">
+            <h2>WORKLET 홈페이지<br> ‘비밀번호 재설정’에 필요한<br>
+                사용자 확인을 진행합니다.</h2>
+            <form action="/user/pwOk" method="post" name="pwOk">
+                <div class="form-row">
+                    <label for="password">아이디</label>
+                    <input type="text" name="userId" id="password" placeholder="6~20자 영문자 또는 숫자">
+                    <p>아이디가 기억나지 않을 시, '아이디 찾기'에서 본인인증 후 확인하실 수 있습니다.</p>
+                </div>
+
+                <div class="form-row">
+                    <label for="passwordCheck">이메일 확인</label>
+                    <input type="text" id="passwordCheck"  name="userEmail" placeholder="example@email.com">
+                </div>
+
+                <div class="buttons">
+                    <button class="btn-secondary submit-btn" type="submit">비밀번호 확인</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        var errorMessage = [[${errorMessage}]];
+        if (errorMessage) {
+            alert(errorMessage);  // 에러 메시지 띄우기
+        }
+
+
+        document.querySelector("form[name='pwOk']").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const userIdInput = document.getElementById("password");
+            const userEmailInput = document.getElementById("passwordCheck");
+
+            const idRegex = /^[a-z0-9]{6,20}$/i;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!userIdInput.value || !idRegex.test(userIdInput.value)) {
+                alert("올바른 아이디를 입력해주세요");
+                userIdInput.focus();
+                return;
+            }
+
+            if (!userEmailInput.value || !emailRegex.test(userEmailInput.value)) {
+                alert("올바른 이메일을 입력해주세요");
+                userEmailInput.focus();
+                return;
+            }
+
+            this.submit();
+        });
+
+
+
+
+    </script>
+
+
+<script src="../css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+
+</html>

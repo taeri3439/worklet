@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/resume.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="flex">
+            <h1><a href="#"><img src="./image/WORKLET_logo.png" alt="logo"></a></h1>
+            <ul class="flex menu">
+                <li><a href="#">기업소개</a></li>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">채용공고</a></li>
+                <li><a href="#">이력서 가이드</a></li>
+                <li><a href="#">문의사항</a></li>
+            </ul>
+            <ul class="flex logout">
+                <li><a href="#" style="color: var(--main-color1); font-weight: bold;">마이페이지</a></li>
+                <li><a href="#">로그아웃</a></li>
+            </ul>
+            <ul class="flex login">
+                <li><a href="#" style="color: var(--main-color1);
+            font-weight: bold;">로그인</a></li>
+                <li><a href="#">회원가입</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="ham-menu">
+                <ul class="menu-list">
+                    <li><a href="#">기업소개</a></li>
+                    <li><a href="#">공지사항</a></li>
+                    <li><a href="#">채용공고</a></li>
+                    <li><a href="#">이력서 가이드</a></li>
+                    <li><a href="#">문의사항</a></li>
+                </ul>
+                <ul class="ham-logout">
+                    <li><a href="#" style="color: var(--main-color1); font-weight: bold;">마이페이지</a></li>
+                    <li><a href="#">로그아웃</a></li>
+                </ul>
+                <ul class="ham-login">
+                    <li><a href="#" style="color: var(--main-color1);
+                font-weight: bold;">로그인</a></li>
+                    <li><a href="#">회원가입</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="content-wrap flex">
+            <div class="left-sticky">
+                <div class="step-container">
+                    <h2>이력서 작성</h2>
+                    <div class="flex step-box">
+                        <div class="step">
+                            <div class="circle active"></div>
+                            <div class="text">
+                                <small>STEP 01</small>
+                                <span>AI 회원정보 작성 안내</span>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="circle active"></div>
+                            <div class="text">
+                                <small>STEP 02</small>
+                                <span>학력</span>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="circle"></div>
+                            <div class="text">
+                                <small>STEP 03</small>
+                                <span>경력</span>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="circle"></div>
+                            <div class="text">
+                                <small>STEP 04</small>
+                                <span>자격증</span>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="circle"></div>
+                            <div class="text">
+                                <small>STEP 05</small>
+                                <span>자기소개서</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="contents">
+                <section class="sec01">
+                    <h3>AI 이력서 작성 안내</h3>
+                    <div class="sec01-box">
+                        <p>
+                            AI 자기소개서 생성 기능은 간단한 정보 입력만으로, 나만의 맞춤형 자기소개서를 자동으로 완성해주는 서비스입니다.
+                            사용자는 학력, 경력 등 핵심 정보를 입력하면, AI가 문맥에 맞게 자연스럽고 설득력 있는 문장을 작성해줍니다.
+                            WORKLET이 글쓰기 부담은 줄이고, 나를 더 잘 표현할 수 있도록 도와드립니다.
+                        </p>
+                        <figure>
+                            <img src="./image/aiGuidi_image.png" alt="">
+                        </figure>
+                    </div>
+                </section>
+
+                <section class="sec02">
+                    <h2>01</h2>
+                    <p>회원정보</p>
+                    <div class="info flex">
+                        <div class="my-info">
+                            <h3 class="name">김나연</h3>
+                            <div class="birth">
+                                2000-12-07 <span>만 24세</span>
+                            </div>
+                            <p class="gender">여</p>
+                            <div class="email flex">
+                                <figure>
+                                    <img src="./image/email.png" alt="">
+                                </figure>
+                                <p>SRCF@naver.com</p>
+                            </div>
+                            <div class="phone flex">
+                                <figure>
+                                    <img src="./image/phone.png" alt="">
+                                </figure>
+                                <p>010-1111-1111</p>
+                            </div>
+                            <div class="address flex ">
+                                <figure>
+                                    <img src="./image/home.png" alt="">
+                                </figure>
+                                <p>서울특별시 강남구 어쩌고</p>
+                            </div>
+                        </div>
+                        <div class="my-picture">
+                            <label for="my-picture-input" class="picture-label">
+                                <div class="plus-box">
+                                    <img src="./image/plus.png" alt="사진추가" class="plus-icon">
+                                </div>
+                                <span class="add-text">사진추가</span>
+                                <input type="file" id="my-picture-input" name="my-picture" accept="image/*"
+                                    class="file-input">
+
+                            </label>
+                            <img src="./image/pencil.png" alt="">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sec03">
+                    <h2>02</h2>
+                    <div class="flex plus">
+                        <p>학력</p>
+                        <figure class="flex">
+                            <img src="./image/plus.png" alt="">
+                            <p>추가</p>
+                        </figure>
+                    </div>
+                    <div class="school-list">
+
+                        <div class="education flex">
+                            <div class="school">
+                                <h4>서울대학교</h4>
+                                <p>컴퓨터공학과</p>
+                            </div>
+                            <div class="edu-info">
+                                <div>
+                                    <span>주간</span>
+                                    <span>졸업</span>
+                                </div>
+
+                                <p class="graduration">2025-07-22 졸업</p>
+                            </div>
+                            <img src="./image/pencil.png" alt="">
+                        </div>
+                    </div>
+                    <div class="add-edu-form">
+                        <input type="text" class="input-school" placeholder="학교명" name="school-name">
+                        <div class="flex">
+                            <input type="text" class="input-major" placeholder="전공" name="major">
+                            <select class="input-type widthstyle part">
+                                <option value="">이수형태</option>
+                                <option value="주간">주간</option>
+                                <option value="야간">야간</option>
+                                <option value="온라인">온라인</option>
+                            </select>
+                            <select class="input-type widthstyle">
+                                <option value="">학력구분</option>
+                                <option value="박사">박사</option>
+                                <option value="학사">학사</option>
+                                <option value="4년제">4년제</option>
+                                <option value="2/3년제">2/3년제</option>
+                                <option value="고졸">고졸</option>
+                            </select>
+                            <select class="input-status widthstyle draduation">
+                                <option value="">졸업여부</option>
+                                <option value="졸업">졸업</option>
+                                <option value="재학">재학</option>
+                                <option value="휴학">휴학</option>
+                                <option value="중퇴">중퇴</option>
+                            </select>
+                            <input type="text" name="graduationdate" class="custom-date widthstyle"
+                                placeholder="졸업/졸업예정일" />
+
+                        </div>
+                        <div class="button">
+                            <button type="button" class="btn-save">저장</button>
+                            <button type="button" class="btn-del">취소</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sec04">
+                    <h2>03</h2>
+                    <div class="flex plus">
+                        <p>경력</p>
+                        <figure class="flex">
+                            <img src="./image/plus.png" alt="">
+                            <p>추가</p>
+                        </figure>
+                    </div>
+                    <div class="com-list">
+
+                        <div class="education flex">
+                            <div class="school">
+                                <h4>삼성전자</h4>
+                                <p>전략기획실</p>
+                            </div>
+                            <div class="edu-info">
+                                <span>2020-05-10 ~ 2025-05-30</span>
+                                <span>과장</span>
+                            </div>
+                            <img src="./image/pencil.png" alt="">
+                        </div>
+                    </div>
+                    <div class="add-edu-form">
+                        <input type="text" class="company-name" placeholder="회사명">
+                        <div class="flex">
+                            <input type="text" class="department" placeholder="부서" name="department">
+                            <input type="text" name="join-date" class="custom-date widthstyle" placeholder="입사일" />
+                            <input type="text" name="quit-date" class="custom-date widthstyle" placeholder="퇴사일" />
+                            <input type="text" name="position" class="input-school widthstyle" placeholder="직급">
+                        </div>
+                        <textarea id="myText" placeholder="주요업무 (최대 300자까지 입력 가능)" maxlength="300"
+                            oninput="updateCount()"></textarea>
+                        <p><span id="charCount">0</span>/300자</p>
+                        <div class="button">
+                            <button type="button" class="btn-save">저장</button>
+                            <button type="button" class="btn-del">취소</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sec05">
+                    <h2>04</h2>
+                    <div class="flex plus">
+                        <p>자격증</p>
+                        <figure class="flex">
+                            <img src="./image/plus.png" alt="">
+                            <p>추가</p>
+                        </figure>
+                    </div>
+                    <ul class="license-list flex">
+                        <li class="license-card">
+                            <h3 class="name">정보처리기사</h3>
+                            <span class="org">발급기관</span>
+                            <p class="date">2025-04-22 ~ 2046-02-33</p>
+                        </li>
+                        <li class="license-card">
+                            <h3 class="name">정보처리기사</h3>
+                            <span class="org">발급기관</span>
+                            <p class="date">2025-04-22 ~ 2046-02-33</p>
+                        </li>
+                        <li class="license-card">
+                            <h3 class="name">정보처리기사</h3>
+                            <span class="org">발급기관</span>
+                            <p class="date">2025-04-22 ~ 2046-02-33</p>
+                        </li>
+                        <li class="license-card">
+                            <h3 class="name">정보처리기사</h3>
+                            <span class="org">발급기관</span>
+                            <p class="date">2025-04-22 ~ 2046-02-33</p>
+                        </li>
+                        <li class="license-card">
+                            <h3 class="name">정보처리기사</h3>
+                            <span class="org">발급기관</span>
+                            <p class="date">2025-04-22 ~ 2046-02-33</p>
+                        </li>
+                    </ul>
+
+                    <!-- 자격증 추가 폼 -->
+                    <div class="add-license-form">
+                        <input type="text" class="license-name" placeholder="자격증명 입력" name="licenseName">
+                        <input type="text" class="license-org" placeholder="발급 기관" name="licenseOrg">
+                        <input type="text" name="acquisition" class="custom-date widthstyle" placeholder="자격증 취득일" />
+                        <input type="text" name="expiration" class="custom-date widthstyle" placeholder="자격증 만료일" />
+                        <div class="button">
+                            <button type="button" class="btn-license-save">저장</button>
+                            <button type="button" class="btn-license-cancel">취소</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sec06">
+                    <h2>05</h2>
+                    <p>자기소개서</p>
+                    <div class="introduceMyself">
+                        <div class="resume-item outerBox">
+                            <label>
+                                성장과정 <img src="./image/pencil.png" alt="수정" class="edit-icon">
+                            </label>
+                            
+                            <p><span id="charCount2">0</span>&nbsp; 자</p>
+                            <textarea class="writeBox" data-type="resumeEarlyLife" data-name="성장과정" placeholder="성장과정을 입력하세요." name="growth" id="growth"  oninput="updateCount()">
+                            </textarea>
+                            <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                            <div class="spinner" style="display: none;"></div>
+                        </div>
+
+                        <div class="resume-item">
+                            <label>
+                                학창 시절 및 경력 <img src="./image/pencil.png" alt="수정" class="edit-icon">
+                            </label>
+                            <p><span id="charCount3">0 </span>&nbsp; 자</p>
+                            <textarea placeholder="학창 시절 및 경력을 입력하세요." name="student-day" id="student-day" oninput="updateCount()"></textarea>
+                            <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                            <div class="spinner" style="display: none;"></div>
+                        </div>
+
+                        <div class="resume-item">
+                            <label>
+                                성격의 장단점 <img src="./image/pencil.png" alt="수정" class="edit-icon">
+                            </label>
+                            <p><span id="charCount4">0</span>&nbsp; 자</p>
+                            <textarea placeholder="성격의 장단점을 입력하세요." name="pros-and-cons" id="pros-and-cons" oninput="updateCount()"></textarea>
+                            <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                            <div class="spinner" style="display: none;"></div>
+                        </div>
+
+                        <div class="resume-item">
+                            <label>
+                                입사 후 포부 <img src="./image/pencil.png" alt="수정" class="edit-icon">
+                            </label>
+                            <p><span id="charCount5">0</span>&nbsp; 자</p>
+                            <textarea placeholder="입사 후 포부를 입력하세요." name="aspiration" id="aspiration"  oninput="updateCount()"></textarea>
+                            <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                            <div class="spinner" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <input type="button" id="downloadPDF" value="pdf로 저장">
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="./js/resume.js"></script>
+
+    <script>
+        document.querySelectorAll('.preview-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const textarea = this.previousElementSibling;
+                const content = textarea.value;
+                const name = textarea.getAttribute('data-name');
+
+                // 로딩 스피너를 해당 텍스트 영역 아래에 표시
+                const spinner = textarea.nextElementSibling.nextElementSibling; // "spinner" 클래스를 찾음
+
+                // 스피너 보이기
+                spinner.style.display = "block";
+                textarea.innerText = ""; // 이전 결과 지우기
+
+
+                fetch('submitresume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        name: name
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        spinner.style.display = "none";
+                        textarea.value = data.result || '응답이 없습니다.';
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        textarea.value = '오류가 발생했습니다.';
+                    });
+            });
+        });
+
+        document.getElementById("downloadPDF").addEventListener("click", async function () {
+            // 각 textarea 값 추출
+            const inputs = {};
+            document.querySelectorAll(".writeBox").forEach(textarea => {
+                const key = textarea.getAttribute("data-type");
+                const valuee = textarea.value;
+                inputs[key] = valuee;
+
+            });
+
+            // Ajax 요청 보내기
+            fetch("/generatepdf", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(inputs)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("PDF 생성 실패");
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Blob으로 다운로드 처리
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "이력서.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                })
+                .catch(error => {
+                    console.error("에러:", error);
+                    alert("PDF 생성 중 오류 발생");
+                });
+        });
+    </script>
+</body>
+
+</html>

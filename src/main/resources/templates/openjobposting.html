@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/OpenJobPosting.css">
+    <script src="/css/js/header.js"></script>
+    <!-- <link rel="stylesheet" href="OpenJobPosting_mobile.css"> -->
+
+</head>
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+    <div>
+    
+        <div class="searchTitle">
+            <h2>공채공고 보기</h2>
+        </div>
+
+        <div class="searchCheckBoxRemake"> <!--검색 카테고리리-->
+            <div>
+                <div class="searchToggleButton"><p class="searchToggleButtonLegion">지역별</p></div>
+                <div class="searchToggleButton"><p class="searchToggleButtonJobType">직종별</p></div>
+            </div>
+
+            <hr class="legionUnderBar"><hr class="jobTypeUnderBar">
+
+            <div class="searchCheckBoxLegion"> <!--검색 세부 3개까지 / 가로 7 세로 3-->
+                <div><input type="checkbox" class="searchCheckLegion">서울</div>
+                <div><input type="checkbox" class="searchCheckLegion">경기</div>
+                <div><input type="checkbox" class="searchCheckLegion">인천</div>
+                <div><input type="checkbox" class="searchCheckLegion">대전</div>
+                <div><input type="checkbox" class="searchCheckLegion">세종</div>
+                <div><input type="checkbox" class="searchCheckLegion">충남</div>
+                <div><input type="checkbox" class="searchCheckLegion">충북</div>
+                <div><input type="checkbox" class="searchCheckLegion">광주</div>
+                <div><input type="checkbox" class="searchCheckLegion">전남</div>
+                <div><input type="checkbox" class="searchCheckLegion">전북</div>
+                <div><input type="checkbox" class="searchCheckLegion">대구</div>
+                <div><input type="checkbox" class="searchCheckLegion">경남</div>
+                <div><input type="checkbox" class="searchCheckLegion">경북</div>
+                <div><input type="checkbox" class="searchCheckLegion">부산</div>
+                <div><input type="checkbox" class="searchCheckLegion">울산</div>
+                <div><input type="checkbox" class="searchCheckLegion">강원</div>
+                <div><input type="checkbox" class="searchCheckLegion">제주</div>
+                <div><input type="checkbox" class="searchCheckLegion">전국</div>
+
+                
+                
+
+
+            </div>
+
+            <div class="searchCheckBoxJobType"> <!--검색 세부 3개까지 / 가로 7 세로 3-->
+                <div class="searchCheckTopCategoryJobType">
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">기획·전략 </div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">마케팅·홍보·조사</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">회계·세무·재무</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">인사·노무·HRD</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">총무·법무·사무</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">IT개발·데이터</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">디자인</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">영업·판매·무역</div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory">고객상담·TM</div>
+                </div>
+                <div class="searchCheckUnderCategoryJobType">
+                    <div><input type="checkbox" class="searchCheckJobType">공공기관 및 기업 고위직 </div>
+                    <div><input type="checkbox" class="searchCheckJobType">행정·경영지원 및 마케팅 관리직</div>
+                    <div><input type="checkbox" class="searchCheckJobType">전문 서비스 관리직</div>
+                    <div><input type="checkbox" class="searchCheckJobType">건설·전기 및 생산 관련 관리직</div>
+                    <div><input type="checkbox" class="searchCheckJobType">판매 및 고객 서비스 관리직직</div>
+                </div>
+                
+
+            </div>
+
+            <hr>
+
+            <div>
+                <div> 
+                    <div class="searchSubmitButtonBox lastBox">
+                        <input type="submit" value="검색" class="searchSubmitButton">
+                    </div>                
+                </div>
+            </div>
+
+
+        </div>
+
+        <script>
+            var searchToggleButton = document.querySelectorAll('.searchToggleButton');
+            var searchToggleButtonLegion = document.querySelector('.searchToggleButtonLegion');
+            var searchToggleButtonJobType = document.querySelector('.searchToggleButtonJobType');
+            var LegionBox = document.querySelector('.searchCheckBoxLegion');
+            var jobTypeBox = document.querySelector('.searchCheckBoxJobType');
+            var LegionCheckBox = document.querySelectorAll('.searchCheckLegion');
+            var jobTypeCheckBox = document.querySelectorAll('.searchCheckJobType');
+
+            var legionUnderBar = document.querySelector('.legionUnderBar');
+            var jobTypeUnderBar = document.querySelector('.jobTypeUnderBar');
+
+            var fakeCheckBoxLegion = document.querySelectorAll('.searchCheckBoxLegion > div')
+            var fakeCheckBoxJobType = document.querySelectorAll('.searchCheckUnderCategoryJobType > div')
+            
+            var topCategoryCheckJobType = document.querySelectorAll('.topCategoryCheckJobType')
+            var searchCheckTopCategoryJobType = document.querySelectorAll('.searchCheckTopCategoryJobType > div')
+            var searchCheckUnderCategoryJobType = document.querySelector('.searchCheckUnderCategoryJobType')
+
+            //지역, 직종 토글
+            for(var i = 0 ; i < 2; i++) {
+                searchToggleButton[i].addEventListener('click', function() {
+                    var toggleButtonName = this.innerText;
+                    
+                    if(toggleButtonName === '지역별') {
+                        LegionBox.style.display = 'flex';
+                        searchToggleButtonLegion.style.fontWeight = 'bold';
+                        legionUnderBar.style.backgroundColor = '#000'
+                        jobTypeBox.style.display = 'none';
+                        searchToggleButtonJobType.style.fontWeight = 'normal';
+                        jobTypeUnderBar.style.backgroundColor = '#D0D0D0';
+
+                        for(var j = 0; j < topCategoryCheckJobType.length; j++) {
+                            topCategoryCheckJobType[j].checked = false;
+                        }
+
+                        for(var j = 0; j<jobTypeCheckBox.length; j++ ) {
+                            jobTypeCheckBox[j].checked = false;
+                            jobTypeCheckBox[j].parentElement.style.borderColor = '#D0D0D0';
+                            jobTypeCheckBox[j].parentElement.style.backgroundColor = '#ffffff';
+                            jobTypeCheckBox[j].parentElement.style.color = '#000000';
+
+                        }
+
+
+                            
+                    } else if(toggleButtonName === '직종별') {
+                        LegionBox.style.display = 'none';
+                        searchToggleButtonJobType.style.fontWeight = 'bold';
+                        jobTypeUnderBar.style.backgroundColor = '#000'
+                        jobTypeBox.style.display = 'flex';
+                        searchToggleButtonLegion.style.fontWeight = 'normal';
+                        legionUnderBar.style.backgroundColor = '#D0D0D0';
+
+                        for(var j = 0; j<LegionCheckBox.length; j++) {
+                            LegionCheckBox[j].checked=false;
+                            LegionCheckBox[j].parentElement.style.borderColor = '#D0D0D0';
+                            LegionCheckBox[j].parentElement.style.backgroundColor = '#ffffff';
+                            LegionCheckBox[j].parentElement.style.color = '#000000';
+                        }
+
+
+
+                    }
+
+                })
+            }
+
+            //지역별 - 3개까지 체크크
+            for (var i = 0; i< 18; i++) {
+                (function(index) {                
+                    fakeCheckBoxLegion[index].addEventListener('click', function() {
+                        var checkbox = fakeCheckBoxLegion[index].querySelector('.searchCheckLegion')
+
+                        if(checkbox.checked) {
+                            checkbox.checked = false;
+                            this.style.borderColor = '#D0D0D0'
+                            this.style.backgroundColor = '#ffffff'
+                            this.style.color = '#000000'
+                            
+                        } else {
+                            var checkedCount = document.querySelectorAll('.searchCheckLegion:checked').length;
+
+                            if(checkedCount > 2) {
+                                alert('최대 3개까지 선택할 수 있습니다!');
+                                this.checked = false; //다시 체크해제
+                                return;
+                            }
+
+                            checkbox.checked = true;
+                            this.style.borderColor = '#ffffff'
+                            this.style.backgroundColor = '#255EEE'
+                            this.style.color = '#ffffff'
+                        }
+
+                    });
+                })(i);
+
+                // LegionCheckBox[i].addEventListener('click', function() {
+
+                //     if(LegionCheckBox.checked) {
+                //         LegionCheckBox.checked = false;
+                //         this.style.borderColor = '#D0D0D0'
+                //         this.style.color = '#000000'
+                        
+                //     } else {
+                //         LegionCheckBox.checked = true;
+                //         this.style.borderColor = '#255EEE'
+                //         this.style.color = '#255EEE'
+                //     }
+
+                // })
+            }
+
+            //대분류
+            for(var i = 0; i<searchCheckTopCategoryJobType.length; i++ ) {
+                (function(index) {
+                    searchCheckTopCategoryJobType[index].addEventListener('click', function() {
+                        
+                        for(var j=0; j< searchCheckTopCategoryJobType.length; j++) {
+                            searchCheckTopCategoryJobType[j].style.borderColor='#d0d0d0';
+                            searchCheckTopCategoryJobType[j].style.backgroundColor='#ffffff';
+                            searchCheckTopCategoryJobType[j].style.color='#000000'
+                        }
+                        
+                        var radioBox = searchCheckTopCategoryJobType[index].querySelector('.topCategoryCheckJobType')
+
+                        radioBox.checked = true;
+
+                            
+                        searchCheckTopCategoryJobType[index].style.borderColor = '#ffffff';
+                        searchCheckTopCategoryJobType[index].style.backgroundColor = '#255EEE';
+                        searchCheckTopCategoryJobType[index].style.color = '#ffffff';
+                        
+
+                        
+                        document.querySelector('.searchCheckUnderCategoryJobType').style.display = 'inline-block';
+                        });
+
+                    })(i);         
+
+            }
+
+
+            //소분류 3개까지지
+            for (var i = 0; i< jobTypeCheckBox.length; i++) {
+                (function(index) {                
+                    fakeCheckBoxJobType[index].addEventListener('click', function() {
+                        var checkbox = fakeCheckBoxJobType[index].querySelector('.searchCheckJobType')
+
+                        if(checkbox.checked) {
+                            checkbox.checked = false;
+                            this.style.borderColor = '#D0D0D0'
+                            this.style.backgroundColor = '#ffffff'
+                            this.style.color = '#000000'
+                            
+                        } else {
+                            var checkedCount = document.querySelectorAll('.searchCheckJobType:checked').length;
+
+                            if(checkedCount > 2) { //3으로 하면 비교하는 순서때문에 4개까지 체크가 된 것 처럼 보인다 그래서 -1 해서 해야 우리가 생각하는 3개 체크처럼 보임
+                                alert('최대 3개까지 선택할 수 있습니다!');
+                                this.checked = false; //다시 체크해제
+                                return;
+                            }
+
+                            checkbox.checked = true;
+                            this.style.borderColor = '#ffffff'
+                            this.style.backgroundColor = '#255EEE'
+                            this.style.color = '#ffffff'
+                        }
+
+                    });
+                })(i);
+
+                // jobTypeCheckBox[i].addEventListener('click', function() {
+
+                //     if(jobTypeCheckBox.checked) {
+                //         jobTypeCheckBox.checked = false;
+                //         this.style.borderColor = '#D0D0D0'
+                //         this.style.color = '#000000'
+                        
+                //     } else {
+                //         jobTypeCheckBox.checked = true;
+                //         this.style.borderColor = '#255EEE'
+                //         this.style.color = '#255EEE'
+                //     }
+
+                // })
+
+
+            }
+            
+                
+            
+
+            // for(var i =0; i<LegionCheckBox.length; i++) {
+            //     LegionCheckBox[i].addEventListener('change', function() {
+            //         var checkedCount = document.querySelectorAll('.searchCheckLegion:checked').length;
+
+            //         if(checkedCount > 3) {
+            //             alert('최대 3개까지 선택할 수 있습니다!');
+            //             this.checked = false; //다시 체크해제
+            //         }
+
+            //     })
+            // }
+
+            // for(var i =0; i<jobTypeCheckBox.length; i++) {
+            //     jobTypeCheckBox[i].addEventListener('change', function() {
+            //         var checkedCount = document.querySelectorAll('.searchCheckJobType:checked').length;
+
+            //         if(checkedCount > 3) {
+            //             alert('최대 3개까지 선택할 수 있습니다!');
+            //             this.checked = false; //다시 체크해제
+            //         }
+
+            //     })
+            // }
+
+            
+
+
+        </script>
+
+
+
+
+        <div class="searchTitle">
+            <h2>검색결과 보기</h2>
+        </div>
+
+        <div>
+            <div class="searchResults">
+                <ul>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                        <div class="searchResultsInfo">
+                            <p><b>월급 99999만원</b></p>
+                            <p><b>경력무관 | 학력무관 | 정규직</b></p>
+                            <p><b>프로그래밍 & 네트워크 개발자</b></p>
+                            <p><b>주 5일 | 주 120시간 근로</b></p>
+                            <p><b>미국 캐릭포니아 산타클라라 카운티 마운틴뷰 엠피씨어터 파크웨이 1600, 구글플렉스</b></p>
+                        </div>
+                
+                        <div class="searchResultsInfoMobile">
+                            <div>
+                                <div>
+                                    <img src="124708.png" alt="#">
+                                </div>
+                            </div>
+                            <div>
+                                <p class="mobileHoverCardTitle"><b>시설관리(기계, 전기), 시공관리(전기),일...</b></p>
+                                <hr>
+                                <p class="mobileHoverCardContent">프로그래밍 & 네트워크 개발자</p>
+                                
+                                <div class="moveButtonBox">
+                                    <input type="submit" value="바로가기" class="moveButton">
+                                </div>
+                    
+                            </div>     
+                            
+                        </div>
+
+                    </li>
+
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+
+                        <div class="searchResultsInfoMobile">
+                            <p><b>월급 210만원 ~ 400만원</b></p>
+                            <p><b>경력무관 | 학력무관 | 정규직</b></p>
+                            <p><b>프로그래밍 & 네트워크 개발자</b></p>
+                            <p><b>주 5일 | 주 120시간 근로</b></p>
+                            <p><b>미국 캐릭포니아 산타클라라 카운티 마운틴뷰 엠피씨어터 파크웨이 1600, 구글플렉스</b></p>
+                        </div>
+                    </li>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+
+                        <div class="searchResultsInfoMobile">
+                            <p><b>월급 210만원 ~ 400만원</b></p>
+                            <p><b>경력무관 | 학력무관 | 정규직</b></p>
+                            <p><b>프로그래밍 & 네트워크 개발자</b></p>
+                            <p><b>주 5일 | 주 120시간 근로</b></p>
+                            <p><b>미국 캐릭포니아 산타클라라 카운티 마운틴뷰 엠피씨어터 파크웨이 1600, 구글플렉스</b></p>
+    
+                        </div>
+                    </li>
+                
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                    <li>
+                        <p>시설관리(기계, 전기), 시공관리(전기),일...</p>
+                        <img src="124708.png" alt="#">
+                    </li>
+                </ul>
+            </div>
+            
+
+        </div>
+
+        <script>
+        //     document.querySelectorAll('.searchResults li').forEach(li => {
+        //     li.addEventListener('mouseenter', function () {
+        //         const info = document.querySelector('.searchResultsInfoMobile');
+        //         const rect = li.getBoundingClientRect(); // li의 브라우저 내 위치
+
+        //         // 위치와 크기 설정
+        //         info.style.position = 'fixed';
+        //         info.style.top = `${rect.top}px`;
+        //         info.style.left = `${rect.left}px`;
+        //         info.style.width = `${rect.width}px`;
+        //         info.style.height = `${rect.height}px`; // 원래 크기부터 시작, 아래서 scale로 확장
+        //         info.style.transform = 'scale(0)';
+        //         info.style.transformOrigin = 'top left'; // 왼쪽 위 기준으로 커지게
+        //         info.style.zIndex = '999';
+
+        //         // 약간의 delay로 애니메이션 자연스럽게
+        //         setTimeout(() => {
+        //             info.style.transform = 'scale(1)';
+        //         }, 10); // 작은 딜레이가 transition 트리거됨
+        //     });
+
+        //     li.addEventListener('mouseleave', function () {
+        //         const info = document.querySelector('.searchResultsInfoMobile');
+        //         info.style.transform = 'scale(0)';
+
+        //         // 애니메이션 끝난 후 위치 제거
+        //         setTimeout(() => {
+        //             info.style.zIndex = '-1';
+        //         }, 300); // CSS transition과 동일하게 맞추기
+        //     });
+        // });
+
+
+
+
+        </script>
+
+
+
+
+
+
+
+
+        <div class="bottomPageChangeButtonBox">
+
+            <div class="pageChange">
+                <span class="pageChangeLeftArrow"></span>
+                <div>
+                    
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    
+                    
+                </div>
+                <span class="pageChangeRightArrow"></span>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+</html>

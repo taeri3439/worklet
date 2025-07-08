@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/board/qna_write.css">
+
+</head>
+<body>
+
+    <div th:replace="include/header :: headerFragment"></div>
+
+
+
+    <div id="wrap">
+        <header class="imgbox">
+            <div class="imgbox_title">
+                <div class="imgbox_inner">
+                    <p class="oneToOneQna">1:1 고객 게시판</p>
+                    <p class="title_Board">Board</p>
+                </div>
+            </div>
+        </header>
+        <section class="qna_write_page">
+            <div class="write_pagebox">
+                <div class="qna_write_page_inner">
+                    <div class="qna_write_page_inner_title">1:1 문의</div>
+                    <div class="qna_write_page_inner_mid">
+                        <p class="leftbox">문의하기</p>
+                        <p class="rightbox">고객님께서 소중한 의견을 작성해주시면 문의주신 내용을 바탕으로 답변해드리겠습니다. </p>
+                    </div>
+                    <div class="qna_write_page_inner_form">
+                        <form th:action="@{/qna/qnaForm}" method="post" th:object="${qnaVO}">
+                            <div class="formUpper">
+                                <p class="qnaTitleWrap"><span class="pilsoo">*</span>제목</p>
+                                <input type="text" class="qnaTitle" name="inquiryTitle" placeholder="제목을 입력해 주세요" required><br>
+                            </div>
+                            <div class="formMid">
+                                <p class="qnaContentWrap"><span class="pilsoo">*</span>내용</p>
+                                <textarea class="qnaContent" name="inquiryContent" placeholder="내용을 입력해주세요"></textarea><br>
+                            </div>
+                            <input type="submit" value="등록" class="qna_submit_btn">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+ <div th:replace="include/footer :: footerFragment"></div>
+
+
+    <script>
+        var key = window.event.keyCode;
+        if (key === 13) {
+            event.preventDefault();
+            document.getElementById("qnaContent").value = document.getElementById("qnaContent").value + "\n*";
+            return false;
+        }
+        else {
+            return true;
+        }
+        var submitBtn = document.querySelector(".qna_submit_btn")
+        submitBtn.addEventListener("click", function () {
+        })
+
+
+
+    </script>
+
+
+<script th:src="@{/css/js/header.js}"></script>
+
+</body>
+</html>

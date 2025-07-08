@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/mypage.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <link rel="stylesheet" th:href="@{/css/calendar/myCalendar.css}">
+
+</head>
+
+<style>
+    #calendar {
+         max-width: 100%;
+         margin: 0;
+         height: auto;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+
+        <div th:replace="include/header :: headerFragment"></div>
+
+        <section class="sec01 flex">
+            <div class="left">
+                <div class="gotoresume">
+                    <h3>이력서를 작성하고<br>
+                        <span style="color: var(--main-color1);">추천공고</span>를 살펴보세요
+                    </h3>
+                    <button type="button" class="resumeBtn">
+                        <p>이력서 쓰러가기</p>
+                        <figure>
+                            <img src="../image/Arrow-white.png" alt="">
+                        </figure>
+                    </button>
+                </div>
+                <div class="profile">
+                    <h3 class="name" th:if="${userVO != null}" th:text="${userVO.userName}">이름</h3>
+                    <ul class="email">
+                        <li th:text="${userVO.userEmail}">이메일</li>
+                        <li th:text="${userVO.userPhone}">전화번호</li>
+                    </ul>
+                    <div class="HopefulEmployment">
+                        <p>희망고용형태</p>
+                        <ul class="flex">
+                            <li th:each="job : ${userVO.wantJobType}" th:text="${job}">고용형태</li>
+                        </ul>
+                    </div>
+                    <div class="my-inquiry">
+                        <ul class="flex">
+                            <li>
+                                <span>찜</span>
+                                <b>2</b>
+                            </li>
+                            <li>
+                                <span>내 문의</span>
+                                <b>2</b>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button type="button" class="userModify">
+                        <p>내 프로필 수정</p>
+                        <figure>
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+                    </button>
+                </div>
+            </div>
+            <div class="right">
+                <div id='external-events'>
+
+                </div>
+
+
+                <div id="titleToolTip"></div>
+                <div id="explanationToolTip" style="display: none; position:absolute; border:none; padding: 10px; z-index:10000;
+                                        left: 1400px">
+
+                </div>
+
+                <div id="calendar" style="padding: 20px; max-height: 70vh; overflow-y: auto;"></div>
+            </div>
+        </section>
+
+<!--    캘린더    -->
+        <script th:src="@{/css/js/calendar.js}"></script>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                var Calendar = FullCalendar.Calendar;
+                var Draggable = FullCalendar.Draggable;
+
+                var containerEl = document.getElementById('external-events');
+                var calendarEl = document.getElementById('calendar');
+                var tooltip = document.getElementById('titleToolTip');
+
+                if (tooltip && tooltip.parentNode !== document.body) {
+                    document.body.appendChild(tooltip);
+                }
+
+                var currentEventMode = null;
+
+                // initialize the external events
+                // -----------------------------------------------------------------
+
+                //외부 이벤트 초기화
+                new Draggable(containerEl, {
+                    itemSelector: '.fc-event',
+                    eventData: function(eventEl) {
+                        return {
+                            title: eventEl.innerText
+                        };
+                    }
+                });
+
+
+
+
+                // function initializeCalendar(events) {
+                var customButtons = {
+                    startDay: {
+                        text: '시작일',
+                        className: 'startDay',
+                        click: function () {
+                            ButtonClick('startDay');
+
+                        }
+                    },
+                    endDay: {
+                        text: '종료일',
+                        className: 'endDay',
+                        click: function () {
+                            ButtonClick('endDay');
+                        }
+                    },
+
+                    allPosting: {
+                        text: '전체',
+                        className: 'allPosting',
+                        click: function () {
+                            ButtonClick('allPosting');
+                        }
+                    },
+                    allCalendar: {
+                        text: '전체달력',
+                        className: 'allCalendar',
+                        click: function () {
+                            location.href = "/calendar/calendar";  // 원하는 페이지로 변경 //mycalendar 페이지로 이동
+                        }
+                    }
+                };
+
+
+
+                function ButtonClick(e) {
+
+                    currentEventMode = e; //현재 모드 저당
+
+                    var buttonClasses = ['fc-startDay-button', 'fc-endDay-button', 'fc-allCalendar-button'];
+
+                    for (var i = 0; i < buttonClasses.length; i++) {
+                        var btn = document.querySelector('.' + buttonClasses[i]);
+                        if (btn) {
+                            if (buttonClasses[i] === 'fc-' + e + '-button') {
+                                btn.classList.add('bottomline');
+                            } else {
+                                btn.classList.remove('bottomline');
+                            }
+                        }
+                    }
+
+
+
+                    if(e === 'startDay') {
+                        calendar.removeAllEventSources();
+                        calendar.addEventSource({ url: '/mycalendar/eventsStartDay', method: 'GET' });
+
+                    } else if(e === 'endDay') {
+                        calendar.removeAllEventSources();
+                        calendar.addEventSource({ url: '/mycalendar/eventsEndDay', method: 'GET' });
+
+                    } else if(e === 'allPosting') {
+                        calendar.removeAllEventSources();
+                        calendar.addEventSource({ url: '/mycalendar/favoriteList', method: 'GET' });
+
+                    } else {
+
+                        calendar.setOption('events', []);
+                    }
+                }
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    locale: 'ko',
+                    customButtons: customButtons,
+                    headerToolbar: {
+
+                        //테스트
+                        left:'allPosting,startDay,endDay',
+                        center:'prev,title,next',
+                        right:'allCalendar'
+                        // left:'prev,next',
+                        // center:'title',
+                        // right:'prev,next'
+
+                    },
+                    initialView: 'dayGridMonth',
+                    dayCellContent: function (arg) {
+                        return arg.date.getDate();
+                    },
+
+                    events: [], //초기엔 아무것도 불러오지 않음
+                    dayMaxEvents: true, // 또는 숫자로: dayMaxEvents: 3 //칸 이상은 + 처리
+
+                    //일정 스타일
+                    eventDidMount: function (info) {
+                        console.log(info.event.extendedProps);
+
+                        var mainEl = info.el.querySelector('.fc-event-main');
+                        if (!mainEl) return;
+
+                        mainEl.style.display = 'flex';
+                        mainEl.style.alignItems = 'center';
+                        mainEl.style.justifyContent = 'space-between';
+                        mainEl.style.border = 'none';
+                        mainEl.style.backgroundColor = '#fff';
+                        mainEl.style.marginTop = '3px';
+
+                        var titleSpan = document.createElement('span');
+                        titleSpan.textContent = info.event.title;
+                        titleSpan.style.color = '#000';
+
+                        titleSpan.style.flex = '1';
+                        titleSpan.style.overflow = 'hidden';
+                        titleSpan.style.textOverflow = 'ellipsis';
+                        titleSpan.style.whiteSpace = 'nowrap';
+                        titleSpan.style.minWidth = '0';
+
+                        var heart = document.createElement('span');
+                        heart.style.marginLeft = '8px';
+                        heart.style.cursor = 'pointer';
+
+                        var isFav = info.event.extendedProps.favorite;
+                        heart.innerHTML = isFav ? '❤️' : '🤍';
+                        heart.setAttribute('data-favorited', isFav ? 'true' : 'false');
+
+                        heart.addEventListener('click', function (e) {
+                            e.stopPropagation();
+
+                            var userId = sessionStorage.getItem('userId');
+                            if (!userId) {
+                                if(confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+                                    location.href = '/user/login';
+                                }
+                                return;
+                            }
+
+                            var isNowFav = heart.getAttribute('data-favorited') === 'true';
+                            var empSeqNo = Number(info.event.extendedProps.empSeqNo);
+
+                            heart.innerHTML = isNowFav ? '🤍' : '❤️';
+                            heart.setAttribute('data-favorited', (!isNowFav).toString());
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('post', isNowFav ? '/mycalendar/favorite/remove' : '/mycalendar/favorite/add', true);
+                            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                            xhr.send(JSON.stringify({
+                                empSeqNo: empSeqNo,
+                                userId: userId
+                            }));
+                        });
+
+                        //마우스 호버역할
+                        titleSpan.addEventListener('mouseenter', function () {
+                            var rect = titleSpan.getBoundingClientRect();
+
+                            tooltip.innerHTML = info.event.title;
+                            tooltip.style.position = 'absolute';
+                            tooltip.style.setProperty('z-index', '2147483647', 'important');
+                            tooltip.style.top = (rect.top + window.scrollY) + 'px';
+                            tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                            tooltip.style.minWidth = rect.width + 'px';
+                            tooltip.style.backgroundColor = 'var(--sub-color2)';
+                            tooltip.style.color = '#000';
+                            tooltip.style.display = 'block';
+
+                            titleSpan.style.cursor = 'pointer';
+
+                            setTimeout(function () {
+                                var popovers = document.querySelectorAll('.fc-popover');
+                                for (var i = 0; i < popovers.length; i++) {
+                                    popovers[i].style.zIndex = '1000';
+                                }
+                            }, 0);
+                        });
+
+                        titleSpan.addEventListener('mouseleave', function () {
+                            tooltip.style.display = 'none';
+                        });
+
+                        titleSpan.addEventListener('click', function () {
+                            var homepgDetail = info.event.extendedProps.empWantedHomepgDetail;
+                            if (homepgDetail) {
+                                window.open(homepgDetail, '_blank');
+                            } else {
+                                alert('현재 해당 공고의 상세페이지로 접근할 수 없습니다!');
+                            }
+                        });
+
+                        mainEl.innerHTML = '';
+
+                        if (currentEventMode === 'allPosting') {
+                            var allWrapper = document.createElement('div');
+                            allWrapper.style.display = 'flex';
+                            allWrapper.style.alignItems = 'center';
+                            allWrapper.style.flex = '1';
+                            allWrapper.style.overflow = 'hidden';
+
+                            titleSpan.style.marginLeft = '5px'; // 하트와 제목 사이 여백
+
+                            var bgColor = info.event.extendedProps.color;
+                            if(bgColor) {
+                                mainEl.style.backgroundColor = bgColor;
+                            } else {
+                                mainEl.style.backgroundColor = 'rgba(255, 255, 255, 0)';
+                            }
+
+                            mainEl.style.borderRadius = "7px";
+                            mainEl.style.paddingTop = "3px";
+                            mainEl.style.paddingBottom = "3px";
+
+                            allWrapper.appendChild(heart);
+                            allWrapper.appendChild(titleSpan);
+                            mainEl.appendChild(allWrapper);
+
+                        } else {
+                            // 시작일/종료일 모드
+                            var colorDot = document.createElement('span');
+                            colorDot.style.display = 'inline-block';
+                            colorDot.style.width = '8px';
+                            colorDot.style.height = '8px';
+                            colorDot.style.borderRadius = '50%';
+                            colorDot.style.marginRight = '5px';
+
+
+                            if (currentEventMode === 'startDay') {
+                                colorDot.style.backgroundColor = 'green';
+                            } else if (currentEventMode === 'endDay') {
+
+                                colorDot.style.backgroundColor = 'red';
+                            }
+
+                            var titleWrapper = document.createElement('div');
+                            titleWrapper.style.display = 'flex';
+                            titleWrapper.style.alignItems = 'center';
+                            titleWrapper.style.flex = '1';
+                            titleWrapper.style.overflow = 'hidden';
+
+                            titleWrapper.appendChild(colorDot);
+                            titleWrapper.appendChild(titleSpan);
+
+                            mainEl.appendChild(titleWrapper);
+                            mainEl.appendChild(heart);
+                        }
+                    }
+
+                });
+
+                calendar.render();
+
+
+            });
+
+
+        </script>
+
+
+
+
+
+
+        <section class="sec02">
+            <h3>스크랩 공고</h3>
+            <div class="sec02-slide">
+                <div class="sec02_pc_slide">
+                    <div class="swiper-wrapper-mask">
+                        <div class="swiper mySwiper5">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" th:each="vo, status:${list}" th:data-url="${vo.empWantedHomepgDetail}"
+                                     th:onclick="|window.location.href=this.getAttribute('data-url');|">
+                                        <div class="flex">
+                                            <p>[[${vo.empBusiNm}]]</p>
+                                            <h3>[[${vo.empWantedTitle}]]</h3>
+                                            <span>~<b th:text="${#temporals.createDate(vo.empWantedEndt, 'yyyyMMdd')}"></b></span>
+                                        </div>
+                                        <figure class="slide_logo">
+                                            <img th:src="@{${vo.regLogImgNm}}" alt="#">
+                                        </figure>
+                                </div>
+                            </div>
+                            <div class="swiper-scrollbar"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+                <div class="sec02_mobile_slide">
+                    <div class="swiper-wrapper-mask">
+                        <div class="swiper mySwiper6">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" th:each="vo, status:${list}" th:data-url="${vo.empWantedHomepgDetail}"
+                                     th:onclick="|window.location.href=this.getAttribute('data-url');|">
+                                    <div class="flex">
+                                        <p>[[${vo.empBusiNm}]]</p>
+                                        <h3>[[${vo.empWantedTitle}]]</h3>
+                                        <span>~<b th:text="${#temporals.createDate(vo.empWantedEndt, 'yyyyMMdd')}"></b></span>
+                                    </div>
+                                    <figure class="slide_logo">
+                                        <img th:src="@{${vo.regLogImgNm}}" alt="#">
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="swiper-scrollbar"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec03">
+            <div class="sec03-title flex">
+                <p>ㅇㅇㅇ 님의 이력서</p>
+                <div class="plus flex">
+                    <img src="../image/plus.png" alt="">
+                    추가
+                </div>
+            </div>
+            <div class="resume">
+                <ul>
+
+                        <li th:each="resume : ${resumeList}">
+                            <div class="content">
+                                <h4 th:text="${resume.title}">이력서 제목</h4>
+                                <span th:text="${#temporals.format(resume.updatedAt != null ? resume.updatedAt : T(java.time.LocalDateTime).now(), 'yyyy.MM.dd HH:mm')}">수정일 없음</span>
+
+                            </div>
+                            <div class="edit">
+                                <form>
+                                     <button type="button" th:onclick="|location.href='/user/resume?uniqueTime=${resume.resumeId}'|">수정하기</button>
+                                </form>
+                                <form th:action="@{/user/deleteResume}" method="post" style="display:inline;">
+                                    <input type="hidden" name="resumeId" th:value="${resume.resumeId}" />
+                                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제하기</button>
+                                </form>
+                            </div>
+                        </li>
+
+                </ul>
+
+            </div>
+        </section>
+
+        <section class="sec04">
+            <h3>나만의 추천 공고</h3>
+            <p>희망직종을 선택하여서 ai가 추천해주는 공고를 찾아보세요! </p>
+            <ul class="flex">
+                <li th:each="vo, status:${recList}">
+                    <div class="sec04_img">
+                        <img th:src="@{${vo.regLogImgNm}}" alt="#">
+                    </div>
+                    <p class="title">[[${vo.empWantedTitle}]]</p>
+                    <p class="name">[[${vo.empBusiNm}]]</p>
+                    <p class="date">~<b th:text="${#temporals.createDate(vo.empWantedEndt, 'yyyyMMdd')}"></b></p>
+                    <button type="button" th:data-url="${vo.empWantedHomepgDetail}" th:onclick="|window.location.href=this.getAttribute('data-url');|">
+                        <p>보러가기</p>
+                        <figure> 
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+
+                    </button>
+                </li>
+            </ul>
+            <button type="button">
+                <figure>
+                    <img src="../image/plus.png" alt="">
+                </figure>
+                <p>희망직종 추가, 수정</p>
+            </button>
+        </section>
+
+        <section class="sec05">
+            <h3>내 나이대 직업 살펴보기</h3>
+            <p>내 나이대 사람들은 무슨 일을 하고 있을까? worklet에서 살펴보세요!</p>
+            <ul class="flex">
+                <li>
+                    <div class="sec04_img">
+                        <img src="../image/slideLogo.png" alt="">
+                    </div>
+                    <p class="title">2025년 상반기 동원그룹 신입사원 모집</p>
+                    <p class="name">동원산업(주)</p>
+                    <p class="date">~05/30 (수)</p>
+                    <button type="button">
+                        <p>보러가기</p>
+                        <figure> 
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+
+                    </button>
+                </li>
+                <li>
+                    <div class="sec04_img">
+                        <img src="../image/slideLogo.png" alt="">
+                    </div>
+                    <p class="title">2025년 상반기 동원그룹 신입사원 모집</p>
+                    <p class="name">동원산업(주)</p>
+                    <p class="date">~05/30 (수)</p>
+                    <button type="button">
+                        <p>보러가기</p>
+                        <figure> 
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+                    </button>
+                </li>
+                <li>
+                    <div class="sec04_img">
+                        <img src="../image/slideLogo.png" alt="">
+                    </div>
+                    <p class="title">2025년 상반기 동원그룹 신입사원 모집</p>
+                    <p class="name">동원산업(주)</p>
+                    <p class="date">~05/30 (수)</p>
+                    <button type="button">
+                        <p>보러가기</p>
+                        <figure> 
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+                    </button>
+                </li>
+                <li>
+                    <div class="sec04_img">
+                        <img src="../image/slideLogo.png" alt="">
+                    </div>
+                    <p class="title">2025년 상반기 동원그룹 신입사원 모집</p>
+                    <p class="name">동원산업(주)</p>
+                    <p class="date">~05/30 (수)</p>
+                    <button type="button">
+                        <p>보러가기</p>
+                        <figure> 
+                            <img src="../image/Arrow-blue.png" alt="">
+                        </figure>
+                    </button>
+                </li>
+            </ul>
+        </section>
+
+
+        <div th:replace="include/footer :: footerFragment"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="../css/js/header.js"></script>
+    <script src="../css/js/mypage.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이디 찾기</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/user/id.css">
+
+<body>
+
+<div th:replace="include/header :: headerFragment"></div>
+
+  <div class="wrap">
+    <div class="find-id-container">
+      <div>
+        <h2 class="title">WORKLET</h2>
+      </div>
+      <h2 style="color: #333;">아이디 찾기</h2>
+      <form class="find-id-form">
+        <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+
+        <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+
+        <button type="submit">아이디 찾기</button>
+      </form>
+    </div>
+  </div>
+
+<script src="../css/js/header.js"></script>
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+
+</html>

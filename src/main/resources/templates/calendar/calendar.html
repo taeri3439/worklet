@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/calendar/calendar.css}">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" /> -->
+
+
+    <title>Document</title>
+
+
+</head>
+<body>
+
+<div th:replace="~{include/header :: headerFragment}"></div>
+
+
+
+    <div id="mobileCalendarButton" >
+        <div>
+            <button type="button" id="allPosting">전체</button>
+            <button type="button" id="mobileOpenJobPosting">공채정보</button>
+            <button type="button" id="mobileJobPosting">채용정보</button>
+            <button type="button" id="mobileStartDate">시작일</button>
+            <button type="button" id="mobileEndDate">종료일</button>
+        </div>
+    </div>
+
+    <div id='external-events'></div>
+
+
+    <div id="titleToolTip"></div>
+    <div id="explanationToolTip">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background-color: green"></span>
+        <span style="display: inline-block">: 공고 시작일</span>
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; margin-left: 10px; background-color: red"></span>
+        <span style="display: inline-block">: 공고 종료일</span>
+    </div>
+    <div id='calendar'></div>
+
+
+
+
+    <script th:src="@{/css/js/calendar.js}"></script>
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendar.Draggable;
+
+    var containerEl = document.getElementById('external-events');
+    var calendarEl = document.getElementById('calendar');
+    var tooltip = document.getElementById('titleToolTip');
+    var explanationToolTip = document.getElementById('explanationToolTip');
+
+        if (tooltip && tooltip.parentNode !== document.body) {
+            document.body.appendChild(tooltip);
+        }
+
+    // initialize the external events
+    // -----------------------------------------------------------------
+
+    new Draggable(containerEl, {
+        itemSelector: '.fc-event',
+        eventData: function(eventEl) {
+        return {
+            title: eventEl.innerText
+        };
+        }
+    });
+
+    // initialize the calendar11
+    // -----------------------------------------------------------------
+
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("get", "/events", true);
+        //
+        //
+        // xhr.onload = function() {
+        //     if (xhr.status === 200) {
+        //         //서버에서 받은 데이터를 json으로 파싱
+        //         var data = JSON.parse(xhr.responseText);
+        //         initializeCalendar(events);
+        //     } else {
+        //         console.error('에러입니다 ', xhr.status);
+        //     }
+        // };
+        //
+        // xhr.onerror = function() {
+        //     console.error('request failed');
+        // };
+        // xhr.send();
+
+
+
+    // function initializeCalendar(events) {
+        var customButtons = {
+            startDay: {
+                text: '시작일',
+                className: 'startDay',
+                click: function () {
+                    ButtonClick('startDay');
+
+                }
+            },
+            endDay: {
+                text: '종료일',
+                className: 'endDay',
+                click: function () {
+                    ButtonClick('endDay');
+                }
+            },
+            openJobPosting: {
+                text: '공채정보',
+                className: 'openJobPosting',
+                click: function () {
+                    ButtonClick('openJobPosting');
+                }
+            },
+            jobPosting: {
+                text: '채용정보',
+                className: 'jobPosting',
+                click: function () {
+                    ButtonClick('jobPosting');
+                }
+            },
+            allPosting: {
+                text: '전체',
+                className: 'allPosting',
+                click: function () {
+                    ButtonClick('allPosting');
+                }
+            },
+            myCalendar: {
+                text: '내 달력',
+                className: 'myCalendar',
+                click: function () {
+                    if (sessionStorage.getItem('userId') != null) {
+                        location.href = "/mycalendar/mycalendar"
+                    } else {
+                        if (confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+                            location.href = '/user/login';
+                        }
+                    }
+                }
+            },
+            // explanation: {
+            //     text: '?',
+            //     className: 'explanation',
+            //     click: function () {
+            //         var clickButton = event.target.getBoundingClientRect();
+            //
+            //         explanationToolTip.style.display = 'block';
+            //         explanationToolTip.style.top = (clickButton.top + window.scrollY - explanationToolTip.offsetHeight / 2 - 132) + 'px';
+            //         explanationToolTip.style.left = (clickButton.left + window.scrollX + clickButton.width - 300) + 'px'; // 왼쪽에 표시
+            //     }
+            //
+            //
+            //
+            // }
+
+
+
+        };
+
+        function ButtonClick(e) {
+            var buttonClasses = ['fc-startDay-button', 'fc-endDay-button', 'fc-openJobPosting-button', 'fc-jobPosting-button', 'fc-allPosting-button'];
+
+            for (var i = 0; i < buttonClasses.length; i++) {
+                var btn = document.querySelector('.' + buttonClasses[i]);
+                if (btn) {
+                    if (buttonClasses[i] === 'fc-' + e + '-button') {
+                        btn.classList.add('bottomline');
+                    } else {
+                        btn.classList.remove('bottomline');
+                    }
+                }
+            }
+
+            if(e === 'startDay') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/calendar/eventsStartDay', method: 'GET' });
+
+            } else if(e === 'endDay') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/calendar/eventsEndDay', method: 'GET' });
+
+            } else if(e === 'allPosting') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/calendar/eventsStartDay', method: 'GET' });
+                calendar.addEventSource({ url: '/calendar/eventsEndDay', method: 'GET' });
+
+            } else if(e === 'openJobPosting') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/calendar/getStartDayEventsOnlyY', method: 'GET' });
+                calendar.addEventSource({ url: '/calendar/getEndDayEventsOnlyY', method: 'GET' });
+
+            } else if(e === 'jobPosting') {
+                calendar.removeAllEventSources();
+                calendar.addEventSource({ url: '/calendar/getStartDayEventsOnlyN', method: 'GET' });
+                calendar.addEventSource({ url: '/calendar/getEndDayEventsOnlyN', method: 'GET' });
+
+            } else {
+                    calendar.setOption('events', []);
+                }
+        }
+
+        var calendar = new Calendar(calendarEl, {
+
+
+            locale: 'ko',
+            headerToolbar: {
+                left: window.innerWidth < 767 ? '' : 'allPosting,openJobPosting,jobPosting,startDay,endDay',
+                center: 'prev,title,next',
+                right: 'myCalendar'
+            },
+            initialView: 'dayGridMonth',
+            customButtons: customButtons,
+            dayCellContent: function (arg) {
+                return arg.date.getDate();
+            },
+
+            events: [], //초기엔 아무것도 불러오지 않음
+            // events: '/calendar/events',
+
+
+            dayMaxEvents: true, // 또는 숫자로: dayMaxEvents: 3 //칸 이상은 + 처리
+
+            //일정 스타일
+            eventDidMount: function (info) {
+                var mainEl = info.el.querySelector('.fc-event-main');
+                if (mainEl) {
+                    mainEl.setAttribute('title', info.event.title);
+                    mainEl.style.color = '#000'
+                    mainEl.style.backgroundColor = '#fff';
+                    mainEl.style.marginTop = '3px';
+                    mainEl.style.border = 'none';
+
+                    //하나짜리 형태/앞에 점
+                    // mainEl.classList.add('fc-daygrid-event-dot');
+                    mainEl.classList.add('fc-event-title');
+
+                    //즐찾과 제목 한줄정렬
+                    mainEl.style.display = 'flex';
+                    mainEl.style.alignItems = 'center';
+                    mainEl.style.justifyContent = 'space-between';
+
+                    //시작일, 종료일 구분을 위한 colordot
+                    var colorDot = document.createElement('span');
+                    colorDot.style.display = 'inline-block';
+                    colorDot.style.width = '8px';
+                    colorDot.style.height = '8px';
+                    colorDot.style.borderRadius = '50%';
+                    colorDot.style.marginRight = '5px';
+
+                    //색깔구분
+                    if(info.event.source && info.event.source.url === '/calendar/eventsStartDay'
+                        || info.event.source && info.event.source.url === '/calendar/getStartDayEventsOnlyY'
+                        || info.event.source && info.event.source.url === '/calendar/getStartDayEventsOnlyN') {
+                        colorDot.style.backgroundColor = 'green';
+                    } else if(info.event.source && info.event.source.url === '/calendar/eventsEndDay'
+                        || info.event.source && info.event.source.url === '/calendar/getEndDayEventsOnlyY'
+                        || info.event.source && info.event.source.url === '/calendar/getEndDayEventsOnlyN') {
+                        colorDot.style.backgroundColor = 'red';
+                    }
+
+
+                    //그냥 하면 안되니까 제목 부분을 span으로 감싸서 between 먹게
+                    var titleSpan = document.createElement('span');
+                    titleSpan.textContent = info.event.title;
+                    titleSpan.style.flex = '1';
+                    titleSpan.style.overflow = 'hidden';
+                    titleSpan.style.textOverflow = 'ellipsis';
+                    titleSpan.style.whiteSpace = 'nowrap';
+                    titleSpan.classList.add('titleSpan');
+
+                    //텍스트 집어넣기
+                    mainEl.innerHTML = '';
+                    mainEl.appendChild(colorDot);
+                    mainEl.appendChild(titleSpan);
+
+                    titleSpan.addEventListener('mouseenter', function () {
+                        var rect = titleSpan.getBoundingClientRect();
+
+                        tooltip.innerHTML = info.event.title;
+                        tooltip.style.position = 'absolute';
+                        tooltip.style.setProperty('z-index', '2147483647', 'important');
+                        tooltip.style.top = (rect.top + window.scrollY - 150) + 'px';
+                        tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                        tooltip.style.minWidth = rect.width + 'px';
+                        tooltip.style.backgroundColor = 'var(--sub-color2)';
+                        tooltip.style.color = '#000';
+                        tooltip.style.display = 'block';
+
+                        titleSpan.style.cursor = 'pointer';
+
+                        setTimeout(function () {
+                            var popovers = document.querySelectorAll('.fc-popover');
+                            for (var i = 0; i < popovers.length; i++) {
+                                popovers[i].style.zIndex = '1000';
+                            }
+                        }, 0);
+
+
+                    });
+
+                    titleSpan.addEventListener('mouseleave', function () {
+                        tooltip.style.display = 'none';
+
+                        info.el.style.cursor = 'default';
+                    });
+
+                    titleSpan.addEventListener('click', function () {
+                        var homepgDetail = info.event.extendedProps.empWantedHomepgDetail;
+
+                        if (homepgDetail) {
+                            window.open(homepgDetail, '_blank');
+                        } else {
+                            alert('현재 해당 공고의 상세페이지로 접근할 수 없습니다!');
+                        }
+                    })
+
+                }
+
+                // ⭐ 즐겨찾기 하트 추가 시작
+                var heart = document.createElement('span');
+
+                var eventMain = info.el.querySelector('.fc-event-main');
+
+                heart.style.marginLeft = '8px';
+                heart.style.cursor = 'pointer';
+
+                console.log(info.event.extendedProps.favorite);
+
+                if (info.event.extendedProps.favorite) {
+                    heart.innerHTML = '❤️';
+                    heart.setAttribute('data-favorited', 'true');
+
+                    if(eventMain) {
+                        eventMain.style.color='blue';
+                        eventMain.style.fontWeight = 'bold';
+                    }
+
+
+                } else {
+                    heart.innerHTML = '🤍';
+                    heart.setAttribute('data-favorited', 'false');
+
+                    if(eventMain) {
+                        eventMain.style.color='black';
+                        eventMain.style.fontWeight = 'normal';
+                    }
+                };
+
+                heart.addEventListener('click', function (e) {
+                    e.stopPropagation(); // 상세 페이지 이동 막기
+
+                    var userId = sessionStorage.getItem('userId');
+                    if(userId == null) {
+                        if (confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) {
+                            location.href = '/user/login';
+                        }
+                        return;
+                    }
+
+
+                    var isFav = heart.getAttribute('data-favorited') === 'true';
+                    var empSeqNo = Number(info.event.extendedProps.empSeqNo);
+
+                    //getrandomcolor 함수 추가
+                    function getRandomColor() {
+                        var letters = '0123456789ABCDEF';
+                        var color = '#';
+                        for(var i = 0; i < 6; i++) {
+                            color += letters[Math.floor(Math.random() * 16)]; //랜덤색상생성
+                        }
+                        return color;
+                    }
+
+                    var randomColor = getRandomColor();
+
+
+                    if (isFav) {
+                        heart.innerHTML = '🤍';
+                        heart.setAttribute('data-favorited', 'false');
+
+                        if(eventMain) {
+                            eventMain.style.color='black';
+                            eventMain.style.fontWeight = 'normal';
+                        }
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("post", "/calendar/favorite/remove", true);
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                        //디버깅용
+                        // console.log(JSON.stringify({
+                        //     empSeqNo: empSeqNo,
+                        //     userId: sessionStorage.getItem('userId')
+                        // }))
+                        //
+                        // try {
+                        //     let payload = JSON.stringify({
+                        //         empSeqNo: empSeqNo,
+                        //         userId: userId
+                        //     });
+                        //     console.log("🔥 JSON payload", payload);
+                        // } catch (err) {
+                        //     console.error("❌ JSON.stringify 오류:", err);
+                        // }
+
+
+                        xhr.send(JSON.stringify({
+                            empSeqNo: empSeqNo,
+                            userId: sessionStorage.getItem('userId')
+
+                        }))
+
+
+
+                    } else {
+                        heart.innerHTML = '❤️';
+                        heart.setAttribute('data-favorited', 'true');
+
+                        if(eventMain) {
+                            eventMain.style.color='blue';
+                            eventMain.style.fontWeight = 'bold';
+                        }
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("post", "/calendar/favorite/add", true);
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                        // //디버깅용
+                        // console.log(JSON.stringify({
+                        //     empSeqNo: empSeqNo,
+                        //     userId: sessionStorage.getItem('userId')
+                        // }))
+                        //
+                        // try {
+                        //     let payload = JSON.stringify({
+                        //         empSeqNo: empSeqNo,
+                        //         userId: userId
+                        //     });
+                        //     console.log("🔥 JSON payload", payload);
+                        // } catch (err) {
+                        //     console.error("❌ JSON.stringify 오류:", err);
+                        // }
+
+
+                        xhr.send(JSON.stringify({
+                            empSeqNo: empSeqNo,
+                            userId: sessionStorage.getItem('userId'),
+                            color: randomColor //color 필드를 추가하여 랜덤 색상 보내기
+                        }))
+
+                    }
+
+                    // 서버로 즐겨찾기 상태 저장하고 싶으면 여기에 Ajax 요청 작성
+
+
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.send(JSON.stringify({
+                        id: info.event.id,
+                        favorite: !isFav
+                    }));
+
+                });
+
+                var eventMain = info.el.querySelector('.fc-event-main');
+                if (eventMain) {
+                    eventMain.appendChild(heart);
+                }
+                // ⭐ 즐겨찾기 하트 추가 끝
+
+
+            },
+
+            // //풀캘린더 호버 역할 하는 event - mouseenter
+
+            //
+            // eventMouseEnter: function(info) {
+            //     var titleSpan = document.querySelector('.titleSpan');
+            //     var el = info.el;
+            //     var title = info.event.title;
+            //
+            //     // 위치 계산
+            //     var rect = el.getBoundingClientRect();
+            //
+            //     tooltip.innerHTML = title;
+            //     tooltip.style.position = 'absolute';
+            //     // tooltip.style.zIndex = '9999' ;
+            //     tooltip.style.top = (rect.top + window.scrollY - 150) + 'px';
+            //     tooltip.style.left = (rect.left + window.scrollX) + 'px';
+            //     tooltip.style.minWidth = rect.width + 'px';
+            //     tooltip.style.backgroundColor = '#e4e4e4';
+            //     tooltip.style.color='#000';
+            //
+            //     tooltip.style.display = 'block';
+            //
+            //     el.style.cursor = 'pointer'
+            // },
+            //
+            // eventMouseLeave: function(info) {
+            //
+            //     tooltip.style.display = 'none';
+            //
+            //     info.el.style.cursor = 'default';
+            // },
+            //
+            // eventClick: function(info) {
+            //     var homepgDetail = info.event.extendedProps.empWantedHomepgDetail;
+            //
+            //     if(homepgDetail) {
+            //         window.location.href = homepgDetail;
+            //     } else {
+            //         alert('현재 해당 공고의 상세페이지로 접근할 수 없습니다!');
+            //     }
+            //
+            // },
+
+
+            // dateClick: function(info) {
+            // var date = info.date; //선택한 날짜를 date에 넣어서 날짜 구하는 거
+            // var year = date.getFullYear();
+            // var month = date.getMonth() + 1;
+            // var day = date.getDate();
+            //
+            // //날짜 정돈시켜서 두자릿수로
+            // if(month < 10) month = '0' + month;
+            // if(day < 10) day = '0' + day;
+            //
+            // //한글로
+            // var clickDateIndicate = year + '년 ' + month + '월 ' + day + '일';
+            //
+            // //div 에 표시하기
+            // document.querySelector('.selectDate').textContent=clickDateIndicate;
+            //
+            // // 이전 선택된 셀에서 색 제거
+            // document.querySelectorAll('.fc-daygrid-day').forEach(function(cell) {
+            //     cell.classList.remove('selectedDateColor');
+            // });
+            //
+            // // 클릭한 날짜 셀에 색 입히기
+            // var clickedCell = document.querySelector('[data-date="' + info.dateStr + '"]');
+            // if (clickedCell) {
+            //     clickedCell.classList.add('selectedDateColor');
+            //     }
+            // },
+
+        });
+
+        calendar.render();
+
+
+    });
+
+
+    /*
+    * 현재는 window.innerWidth로 초기값만 잡고 있기 때문에 화면 크기 변경 시 버튼 업데이트 안 됨.
+이걸 동적으로 바꾸고 싶다면 window.resize 이벤트에 calendar.setOption()이나 calendar.destroy() → new Calendar() 방식 써야 해.
+
+하지만 지금은 그게 목적 아니니까 위 코드만 수정하면 PC에서 버튼 문제 해결돼!
+
+필요하면 resize 처리도 같이 도와줄게
+    *
+    *
+    * */
+
+
+    </script>
+
+
+<script th:src="@{/css/js/header.js}"></script>
+
+
+<div class="selectDate"></div>
+
+<div class="blankBox">
+
+    <div class="calendarJobPost ">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+    <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+    <div class="calendarJobPost">
+        악덕기업
+        <div>주5일 120시간 연봉 1200만원 프로그래머</div>
+    </div>
+
+</div>
+
+
+<div class="goPostingPageBox">
+    <button type="button" id="goPostingPage">상세검색</button>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const goPostingPage = document.getElementById('goPostingPage');
+        goPostingPage.addEventListener('click', function () {
+            event.preventDefault();
+            location.href = "/jobposting";
+        });
+    });
+
+</script>
+
+
+<div th:replace="~{include/footer :: footerFragment}"></div>
+
+</body>
+</html>

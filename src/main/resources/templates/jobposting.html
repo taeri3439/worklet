@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/JobPosting.css}">
+
+    <script src="/bootstrap-3.4.1-dist/js/jquery-3.7.1.min.js"></script>
+    <script src="/bootstrap-3.4.1-dist/js/bootstap.js"></script>
+    <script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+
+
+    <!--    <link rel="stylesheet" href="JobPosting_mobile.css">-->
+
+</head>
+<body>
+
+<div th:replace="~{include/header :: headerFragment}"></div>
+<div class="forMargin">
+
+
+    <div class="searchTitle">
+        <h2><a href="/jobposting" style="text-decoration: none">모집공고 보기</a></h2>
+    </div>
+
+    <div class="searchCheckBoxRemake"> <!--검색 카테고리-->
+        <div>
+            <div class="searchToggleButton"><button class="searchToggleButtonLegion" tabindex="0">지역별</button></div>
+            <div class="searchToggleButton"><button class="searchToggleButtonJobType" tabindex="0">직종별</button></div>
+        </div>
+
+        <hr class="legionUnderBar"><hr class="jobTypeUnderBar">
+
+        <form name="jobsearch" action="jobposting" method="get">
+
+            <div class="searchCheckBoxLegion"> <!--검색 세부 3개까지 / 가로 7 세로 3-->
+                <div><input type="checkbox" class="searchCheckLegion" value="서울" name="searchRegion">서울</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="경기" name="searchRegion">경기</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="인천" name="searchRegion">인천</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="대전" name="searchRegion">대전</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="세종" name="searchRegion">세종</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="충남" name="searchRegion">충남</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="충북" name="searchRegion">충북</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="광주" name="searchRegion">광주</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="전남" name="searchRegion">전남</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="전북" name="searchRegion">전북</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="대구" name="searchRegion">대구</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="경남" name="searchRegion">경남</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="경북" name="searchRegion">경북</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="부산" name="searchRegion">부산</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="울산" name="searchRegion">울산</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="강원" name="searchRegion">강원</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="제주" name="searchRegion">제주</div>
+                <div><input type="checkbox" class="searchCheckLegion" value="전국" name="searchRegion">전국</div>
+
+
+
+
+
+            </div>
+
+            <div class="searchCheckBoxJobType"> <!--검색 세부 3개까지 / 가로 7 세로 3-->
+                <div class="searchCheckTopCategoryJobType" id="topCategoryList">
+
+
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="01"><span>경영·사무·금융·보험</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="02"><span>연구 및 공학기술</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="03"><span>교육·법률·사회복지·경찰·소방 및 군인</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="04"><span>보건·의료</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="05"><span>예술·디자인·방송·스포츠</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="06"><span>미용·여행·숙박·음식·경비·돌봄·청소</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="07"><span>영업·판매·운전·운송</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="08"><span>건설·채굴</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="09"><span>설치·정비·생산-기계·금속·재료</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="10"><span>설치·정비·생산-전기·전자·정보통신</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="11"><span>설치·정비·생산-화학·환경·섬유·의복·식품가공</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="12"><span>설치·정비·생산-인쇄·목재·공예 및 제조 단순</span></div>
+                    <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="13"><span>농림어업직</span></div>
+
+
+                </div>
+                <div class="searchCheckUnderCategoryJobType" id="underCategoryList">
+
+                    <!--
+                    <div><input type="checkbox" class="searchCheckJobType"><span>행정·경영·금융·보험 관리직</span></div>
+
+                    -->
+
+                </div>
+
+
+            </div>
+
+            <hr>
+
+            <div>
+                <div>
+                    <div class="searchSubmitButtonBox lastBox">
+                        <button type="submit" class="searchSubmitButton">검색</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+
+    <script>
+        var searchToggleButton = document.querySelectorAll('.searchToggleButton');
+        var searchToggleButtonLegion = document.querySelector('.searchToggleButtonLegion');
+        var searchToggleButtonJobType = document.querySelector('.searchToggleButtonJobType');
+        var LegionBox = document.querySelector('.searchCheckBoxLegion');
+        var jobTypeBox = document.querySelector('.searchCheckBoxJobType');
+        var LegionCheckBox = document.querySelectorAll('.searchCheckLegion');
+        var jobTypeCheckBox = document.querySelectorAll('.searchCheckJobType');
+
+        var legionUnderBar = document.querySelector('.legionUnderBar');
+        var jobTypeUnderBar = document.querySelector('.jobTypeUnderBar');
+
+        var fakeCheckBoxLegion = document.querySelectorAll('.searchCheckBoxLegion > div')
+        var fakeCheckBoxJobType = document.querySelectorAll('.searchCheckUnderCategoryJobType > div')
+
+        var topCategoryCheckJobType = document.querySelectorAll('.topCategoryCheckJobType')
+        var searchCheckTopCategoryJobType = document.querySelectorAll('.searchCheckTopCategoryJobType > div')
+        var searchCheckUnderCategoryJobType = document.querySelector('.searchCheckUnderCategoryJobType')
+
+        //지역, 직종 토글
+        for(var i = 0 ; i < 2; i++) {
+            searchToggleButton[i].addEventListener('touchstart', handleToggle);
+            searchToggleButton[i].addEventListener('click', handleToggle);
+
+            function handleToggle(event) {
+                var toggleButtonName = this.innerText;
+
+                if(toggleButtonName === '지역별') {
+                    LegionBox.style.display = 'flex';
+                    searchToggleButtonLegion.style.fontWeight = 'bold';
+                    legionUnderBar.style.backgroundColor = '#000'
+                    jobTypeBox.style.display = 'none';
+                    searchToggleButtonJobType.style.fontWeight = 'normal';
+                    jobTypeUnderBar.style.backgroundColor = '#D0D0D0';
+
+                    for(var j = 0; j < topCategoryCheckJobType.length; j++) {
+                        topCategoryCheckJobType[j].checked = false;
+                    }
+
+                    for(var j = 0; j<jobTypeCheckBox.length; j++ ) {
+                        jobTypeCheckBox[j].checked = false;
+                        jobTypeCheckBox[j].parentElement.style.borderColor = '#D0D0D0';
+                        jobTypeCheckBox[j].parentElement.style.backgroundColor = '#ffffff';
+                        jobTypeCheckBox[j].parentElement.style.color = '#000000';
+
+                    }
+
+
+
+                } else if(toggleButtonName === '직종별') {
+                    LegionBox.style.display = 'none';
+                    searchToggleButtonJobType.style.fontWeight = 'bold';
+                    jobTypeUnderBar.style.backgroundColor = '#000'
+                    jobTypeBox.style.display = 'flex';
+                    searchToggleButtonLegion.style.fontWeight = 'normal';
+                    legionUnderBar.style.backgroundColor = '#D0D0D0';
+
+                    // for(var j = 0; j<LegionCheckBox.length; j++) {
+                    //     LegionCheckBox[j].checked=false;
+                    //     LegionCheckBox[j].parentElement.style.borderColor = '#D0D0D0';
+                    //     LegionCheckBox[j].parentElement.style.backgroundColor = '#ffffff';
+                    //     LegionCheckBox[j].parentElement.style.color = '#000000';
+                    // }
+
+
+
+                }
+
+            }
+        }
+
+        //지역별 - 3개까지 체크
+        for (var i = 0; i< 18; i++) {
+            (function(index) {
+                fakeCheckBoxLegion[index].addEventListener('click', function() {
+                    var checkbox = fakeCheckBoxLegion[index].querySelector('.searchCheckLegion')
+
+                    if(checkbox.checked) {
+                        checkbox.checked = false;
+                        this.style.borderColor = '#D0D0D0'
+                        this.style.backgroundColor = '#ffffff'
+                        this.style.color = '#000000'
+
+                    } else {
+                        var checkedCount = document.querySelectorAll('.searchCheckLegion:checked').length;
+
+                        if(checkedCount > 2) {
+                            alert('최대 3개까지 선택할 수 있습니다!');
+                            this.checked = false; //다시 체크해제
+                            return;
+                        }
+
+                        checkbox.checked = true;
+                        this.style.borderColor = '#ffffff'
+                        this.style.backgroundColor = '#255EEE'
+                        this.style.color = '#ffffff'
+
+                        // ✅ hidden input 추가
+                        const form = document.forms["jobsearch"];
+                        const existingHidden = form.querySelectorAll('input[type="hidden"][name="searchRegion"]');
+                        existingHidden.forEach(h => h.remove()); // 기존 값 제거
+
+                        // 현재 체크된 값만 hidden input으로 추가
+                        const selected = document.querySelectorAll('.searchCheckLegion:checked');
+                        selected.forEach(cb => {
+                            const hidden = document.createElement("input");
+                            hidden.type = "hidden";
+                            hidden.name = "searchRegion";
+                            hidden.value = cb.value;
+                            form.appendChild(hidden);
+                        });
+
+                    }
+
+                });
+            })(i);
+
+            // LegionCheckBox[i].addEventListener('click', function() {
+
+            //     if(LegionCheckBox.checked) {
+            //         LegionCheckBox.checked = false;
+            //         this.style.borderColor = '#D0D0D0'
+            //         this.style.color = '#000000'
+
+            //     } else {
+            //         LegionCheckBox.checked = true;
+            //         this.style.borderColor = '#255EEE'
+            //         this.style.color = '#255EEE'
+            //     }
+
+            // })
+        }
+
+        //대분류
+        for(var i = 0; i<searchCheckTopCategoryJobType.length; i++ ) {
+            (function(index) {
+                searchCheckTopCategoryJobType[index].addEventListener('click', function() {
+
+                    for(var j=0; j< searchCheckTopCategoryJobType.length; j++) {
+                        searchCheckTopCategoryJobType[j].style.borderColor='#d0d0d0';
+                        searchCheckTopCategoryJobType[j].style.backgroundColor='#ffffff';
+                        searchCheckTopCategoryJobType[j].style.color='#000000'
+                    }
+
+                    var radioBox = searchCheckTopCategoryJobType[index].querySelector('.topCategoryCheckJobType')
+
+                    radioBox.checked = true;
+
+
+                    searchCheckTopCategoryJobType[index].style.borderColor = '#ffffff';
+                    searchCheckTopCategoryJobType[index].style.backgroundColor = '#255EEE';
+                    searchCheckTopCategoryJobType[index].style.color = '#ffffff';
+
+
+
+                    searchCheckUnderCategoryJobType.style.display = 'inline-block';
+
+                    //대분류 나타내기
+                    // ✅ 여기에 넣으면 됩니다
+                    var selectedCategoryNum = radioBox.value; // 대분류 번호
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/api/category/secondary?primary=' + selectedCategoryNum, true);
+
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) { //서버에서 응답이 오면 호출되는 콜백 //4는 요청완료 200은 응답성공
+                            var responseData = JSON.parse(xhr.responseText); //json 문자열 객체 변환
+
+                            // 👉 여기에 중분류 HTML을 렌더링하는 코드를 추가하면 됩니다
+                            searchCheckUnderCategoryJobType.innerHTML = ''; // 기존 것 지우고
+
+                            for (var k = 0; k < responseData.length; k++) {
+                                var item = responseData[k];
+
+                                //빈 컬럼이면 skip
+                                if (!item.secondaryCategoryName || item.secondaryCategoryName.trim() === '') {
+                                    continue;
+                                }
+
+                                var article = document.createElement('article');
+                                article.innerHTML = '<input type="checkbox" name="searchJob" class="searchCheckJobType" value="' + item.secondaryCategoryNum + '">' +
+                                    '<span>' + item.secondaryCategoryName + '</span>';
+                                searchCheckUnderCategoryJobType.appendChild(article);
+                            }
+                        }
+                    };
+                    xhr.send();
+
+
+
+
+
+                });
+
+            })(i);
+
+        }
+
+
+        //중분류 3개까지
+
+        searchCheckUnderCategoryJobType.addEventListener('click', function(e) {
+
+
+
+            // 클릭한 대상이 체크박스를 포함하는 div인지 확인
+            var div = e.target.closest('article');
+
+            // 체크박스가 있는 div만 처리
+            // if (!fakeCheckBoxJobType) {
+            //     return;
+            // }
+
+            var checkbox = div.querySelector('input[type="checkbox"]');
+
+
+
+
+
+
+
+
+            // 클릭한 체크박스가 이미 체크되어 있으면 해제
+            if (checkbox.checked) {
+                checkbox.checked = false;
+                div.style.borderColor = '#D0D0D0';  // 기본 스타일로 복원
+                div.style.backgroundColor = '#ffffff';
+                div.style.color = '#000000';
+            } else {
+                var checkedCount = document.querySelectorAll('.searchCheckJobType:checked').length;
+                //console.log(checkbox);
+
+                // 최대 3개까지 선택하도록 제한
+                if (checkedCount >= 3) {
+                    alert('최대 3개까지 선택할 수 있습니다!');
+                    return;
+                }
+
+                checkbox.checked = true;
+                div.style.borderColor = '#ffffff';  // 선택된 스타일 적용
+                div.style.backgroundColor = '#255EEE';
+                div.style.color = '#ffffff';
+            }
+        });
+
+        // for (var i = 0; i< jobTypeCheckBox.length; i++) {
+        //     (function(index) {
+        //         fakeCheckBoxJobType[index].addEventListener('click', function() {
+        //             var checkbox = fakeCheckBoxJobType[index].querySelector('.searchCheckJobType')
+
+
+
+        // jobTypeCheckBox[i].addEventListener('click', function() {
+
+        //     if(jobTypeCheckBox.checked) {
+        //         jobTypeCheckBox.checked = false;
+        //         this.style.borderColor = '#D0D0D0'
+        //         this.style.color = '#000000'
+
+        //     } else {
+        //         jobTypeCheckBox.checked = true;
+        //         this.style.borderColor = '#255EEE'
+        //         this.style.color = '#255EEE'
+        //     }
+
+        // })
+
+
+
+
+
+
+
+        // for(var i =0; i<LegionCheckBox.length; i++) {
+        //     LegionCheckBox[i].addEventListener('change', function() {
+        //         var checkedCount = document.querySelectorAll('.searchCheckLegion:checked').length;
+
+        //         if(checkedCount > 3) {
+        //             alert('최대 3개까지 선택할 수 있습니다!');
+        //             this.checked = false; //다시 체크해제
+        //         }
+
+        //     })
+        // }
+
+        // for(var i =0; i<jobTypeCheckBox.length; i++) {
+        //     jobTypeCheckBox[i].addEventListener('change', function() {
+        //         var checkedCount = document.querySelectorAll('.searchCheckJobType:checked').length;
+
+        //         if(checkedCount > 3) {
+        //             alert('최대 3개까지 선택할 수 있습니다!');
+        //             this.checked = false; //다시 체크해제
+        //         }
+
+        //     })
+        // }
+
+
+
+
+    </script>
+
+
+
+
+    <div class="searchTitle">
+        <h2>검색결과 보기</h2>
+    </div>
+
+    <div>
+        <div class="searchResults"><input type="hidden" th:value="${userId}" th:name="userId" id="userId">
+            
+            <div th:if="${#lists.isEmpty(list)}" style="text-align: center"><p style="font-size: 16px">검색 결과가 없습니다.</p></div>
+            <ul >
+                <li th:each="vo, status:${list}"
+                    th:data-url="${vo.empWantedHomepgDetail}"
+                    class="clickable-li"
+                    th:docuName="${vo.empRecrNm}">
+                    <!-- th:onclick="|window.location.href=this.getAttribute('data-url');|"> -->
+                    <p class="titleee">[[${vo.empWantedTitle}]]</p>
+                    <img th:src="@{${vo.regLogImgNm}}" alt="#">
+                    <p th:if="${vo.isScrapped == false}" class="heart notMine"><i class="bi bi-heart"></i></p>
+                    <input type="hidden" th:value="${vo.empSeqNo}" id="empSeqNo">
+                    <p th:if="${vo.isScrapped == true}" class="heart mine"><i class="bi bi-heart-fill"></i></p>
+                    <div class="searchResultsInfo">
+                        <!--<p><b>월급 99999만원</b></p>-->
+                        <div class="searchResultsInfoInner">
+                            <p><b>[[${vo.empBusiNm}]]</b></p>
+                            <p><b>[[${vo.empRecrNm}]]</b></p>
+                            <p><b>[[${vo.empWantedTypeNm}]]</b></p>
+                            <p><b>[[${vo.empWantedCareerNm}]]</b></p>
+                            <p><b>[[${vo.workRegionNm}]]</b></p>
+                            <p><b th:text="${#temporals.createDate(vo.empWantedStdt, 'yyyyMMdd')}"></b><b>~</b><b th:text="${#temporals.createDate(vo.empWantedEndt, 'yyyyMMdd')}"></b></p>
+                        </div>
+                    </div>
+
+                    <div class="searchResultsInfoMobile">
+                        <div>
+                            <div>
+                                <img th:src="@{${vo.regLogImgNm}}" alt="#">
+                            </div>
+                        </div>
+                        <div>
+                            <p class="mobileHoverCardTitle"><b>[[${vo.empWantedTitle}]]</b></p>
+                            <hr>
+                            <p class="mobileHoverCardContent">[[${vo.empRecrNm}]]</p>
+
+                            <div class="moveButtonBox">
+                                <a th:href="@{${vo.empWantedHomepgDetail}}" target='_blank'>
+                                    <input type="button" value="바로가기" class="moveButton">
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const liItems = document.querySelectorAll(".clickable-li");
+
+            liItems.forEach(function (li) {
+                li.addEventListener("click", function () {
+                    // 하트를 클릭했으면 여기서 클릭 이벤트 중단
+                    if (event.target.closest(".heart")) {
+                        return;
+                    }
+                    if (window.innerWidth >= 768) {
+                        const url = li.getAttribute("data-url");
+                        if (url) {
+                            window.open(url, "fullscreen=yes");
+                        }
+                    } else {
+                        // 클릭한 대상이 내부 버튼이 아닌 경우에만 처리 (필요하면 조건 추가)
+                        const mobileDiv = li.querySelector(".searchResultsInfoMobile");
+
+                        if (mobileDiv) {
+                            mobileDiv.classList.toggle("proteinBar");
+                            li.classList.toggle("proteinBar2");
+
+                        }
+                    }
+                });
+
+                li.addEventListener("mouseenter", function () {
+                    if (window.innerWidth >= 768) {
+                        const childInfo = li.querySelector(".searchResultsInfo");
+                        childInfo.style.right ='-12px';
+                        const grandchildInfo = childInfo.querySelectorAll('p');
+                        grandchildInfo.forEach(function (p) {
+                            p.style.transform= 'translateY(0px)';
+                        })
+                    }
+                });
+
+                li.addEventListener("mouseleave", function () {
+                    if (window.innerWidth >= 768) {
+                        const childInfo = li.querySelector(".searchResultsInfo");
+                        childInfo.style.right ='-400px';
+                        const grandchildInfo = childInfo.querySelectorAll('p');
+                        grandchildInfo.forEach(function (p) {
+                            p.style.transform= 'translateY(-60px)';
+                        })
+                    }
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var userId = document.getElementById("userId").value;
+            var listContainer = document.querySelector(".searchResults ul"); // li들이 포함된 부모 요소 선택
+
+            listContainer.addEventListener("click", function (event) {
+                const heart = event.target.closest(".heart");
+                if (!heart) return; // 하트가 아닌 경우 무시
+
+                event.stopPropagation();
+
+                const li = heart.closest("li");
+                const empNoToScrap = li.querySelector("#empSeqNo").value;
+
+                if (!userId) {
+                    alert("로그인이 필요한 기능입니다.");
+                    window.location.href = "/user/login";
+                    return;
+                }
+
+                const heartIcon = heart.querySelector("i");
+                const isScrapped = heart.classList.contains("mine");
+
+                const params = new URLSearchParams();
+                params.append("userId", userId);
+                params.append("empNoToScrap", empNoToScrap);
+
+                if (isScrapped) {
+                    // 이미 찜한 상태 → 삭제 요청
+                    fetch("unscrap", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: params.toString()
+                    })
+                        .then(() => {
+                            heart.classList.remove("mine");
+                            heart.classList.add("notMine");
+                            heartIcon.classList.remove("bi-heart-fill");
+                            heartIcon.classList.add("bi-heart");
+                        })
+                        .catch(err => console.error("찜 삭제 실패:", err));
+                } else {
+                    // 아직 찜하지 않은 상태 → 등록 요청
+                    fetch("scrap", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: params.toString()
+                    })
+                        .then(() => {
+                            heart.classList.remove("notMine");
+                            heart.classList.add("mine");
+                            heartIcon.classList.remove("bi-heart");
+                            heartIcon.classList.add("bi-heart-fill");
+                        })
+                        .catch(err => console.error("찜 등록 실패:", err));
+                }
+            });
+        });
+
+        // var emptyHearts = document.querySelectorAll(".notMine");
+        // var userId = document.getElementById("userId").value;
+        // emptyHearts.forEach(function (heart) {
+        //     heart.addEventListener("click", function (event) {
+        //         event.stopPropagation();  // 클릭 이벤트의 부모로의 전파를 막음
+        //
+        //         if (userId == null || userId == "") {
+        //             alert("로그인이 필요한 기능입니다.");
+        //             window.location.href = "/user/login";
+        //             return;
+        //         }
+        //
+        //         var empNoToScrap = event.target.closest("li").querySelector("#empSeqNo").value;
+        //         console.log('emp값 제대로 가져와짐?' + empNoToScrap);
+        //
+        //         var params = new URLSearchParams();
+        //         params.append('userId', userId);
+        //         params.append('empNoToScrap', empNoToScrap);
+        //
+        //         fetch('scrap', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded'
+        //             },
+        //             body: params.toString()
+        //         })
+        //             .then(() => {
+        //                 // 찜 성공 시, 하트 아이콘 상태 변경 (빈 하트 -> 채워진 하트)
+        //                 heart.querySelector("i").classList.remove("bi-heart");
+        //                 heart.querySelector("i").classList.add("bi-heart-fill");
+        //                 heart.classList.remove("notMine");
+        //                 heart.classList.add("mine");
+        //             })
+        //             .catch(error => console.log('에러:', error));
+        //     });
+        // });
+        //
+        // var fullHearts = document.querySelectorAll(".mine");
+        // fullHearts.forEach(function (heart) {
+        //     heart.addEventListener("click", function (event) {
+        //         event.stopPropagation();
+        //
+        //         var empNoToScrap = event.target.closest("li").querySelector("#empSeqNo").value;
+        //         console.log('emp값 제대로 가져와짐? 이번엔 찜삭제임' + empNoToScrap);
+        //
+        //         var params = new URLSearchParams();
+        //         params.append('userId', userId);
+        //         params.append('empNoToScrap', empNoToScrap);
+        //
+        //         fetch('unscrap', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded'
+        //             },
+        //             body: params.toString()
+        //         })
+        //             .then(() => {
+        //                 // 찜 삭제 성공 시, 하트 아이콘 상태 변경 (채워진 하트 -> 빈 하트)
+        //                 heart.querySelector("i").classList.remove("bi-heart-fill");
+        //                 heart.querySelector("i").classList.add("bi-heart");
+        //                 heart.classList.remove("mine");
+        //                 heart.classList.add("notMine");
+        //             })
+        //             .catch(error => console.log('에러:', error));
+        //     });
+        // })
+
+        //     document.querySelectorAll('.searchResults li').forEach(li => {
+        //     li.addEventListener('mouseenter', function () {
+        //         const info = document.querySelector('.searchResultsInfoMobile');
+        //         const rect = li.getBoundingClientRect(); // li의 브라우저 내 위치
+
+        //         // 위치와 크기 설정
+        //         info.style.position = 'fixed';
+        //         info.style.top = `${rect.top}px`;
+        //         info.style.left = `${rect.left}px`;
+        //         info.style.width = `${rect.width}px`;
+        //         info.style.height = `${rect.height}px`; // 원래 크기부터 시작, 아래서 scale로 확장
+        //         info.style.transform = 'scale(0)';
+        //         info.style.transformOrigin = 'top left'; // 왼쪽 위 기준으로 커지게
+        //         info.style.zIndex = '999';
+
+        //         // 약간의 delay로 애니메이션 자연스럽게
+        //         setTimeout(() => {
+        //             info.style.transform = 'scale(1)';
+        //         }, 10); // 작은 딜레이가 transition 트리거됨
+        //     });
+
+        //     li.addEventListener('mouseleave', function () {
+        //         const info = document.querySelector('.searchResultsInfoMobile');
+        //         info.style.transform = 'scale(0)';
+
+        //         // 애니메이션 끝난 후 위치 제거
+        //         setTimeout(() => {
+        //             info.style.zIndex = '-1';
+        //         }, 300); // CSS transition과 동일하게 맞추기
+        //     });
+        // });
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+    <div class="bottomPageChangeButtonBox">
+
+        <div class="pageChange">
+            <!--                <span class="pageChangeLeftArrow"></span>-->
+            <ul>
+                <li class="pageChangeLeftArrow" th:if="${pageVO.realEnd} != 0">
+                    <a th:href="@{jobposting(page=1,
+                          amount=${pageVO.amount},
+                          searchRegion=${pageVO.cri.searchRegion},
+                          searchJob=${pageVO.cri.searchJob})}">
+                    <i class="bi bi-chevron-double-left"></i>
+                </a></li>
+                <th:block th:if="${pageVO.prev}">
+                    <li style="margin-right:5px;">
+                        <a th:href="@{jobposting(page=${(pageVO.start)-1},
+                                            amount=${pageVO.amount},
+                                            searchRegion=${pageVO.cri.searchRegion},
+                                            searchJob=${pageVO.cri.searchJob})}">
+                            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </th:block>
+
+                <th:block th:each="page:${pageVO.pageList}">
+                    <li th:class="${pageVO.page == page? 'currentPage':''}">
+                        <a th:href="@{jobposting(page=${page},
+                                            amount=${pageVO.amount},
+                                            searchRegion=${pageVO.cri.searchRegion},
+                                            searchJob=${pageVO.cri.searchJob})}">[[${page}]]
+                        </a>
+                    </li>
+                </th:block>
+
+                <th:block th:if="${pageVO.next}">
+                    <li style="margin-left:5px;">
+                        <a th:href="@{jobposting(page=${pageVO.end+1},
+                                           amount=${pageVO.amount},
+                                           searchRegion=${pageVO.cri.searchRegion},
+                                                searchJob=${pageVO.cri.searchJob})}">
+                            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                </th:block>
+                <li class="pageChangeRightArrow" th:if="${pageVO.realEnd} != 0">
+                    <a th:href="@{jobposting(page=${pageVO.realEnd},
+                         amount=${pageVO.amount},
+                         searchRegion=${pageVO.cri.searchRegion},
+                         searchJob=${pageVO.cri.searchJob})}">
+                    <i class="bi bi-chevron-double-right" aria-hidden="true">
+                    </i></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<script src="/css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+
+</body>
+</html>

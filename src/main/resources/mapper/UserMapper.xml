@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+     <mapper namespace="com.project2.worklet.user.service.UserMapper">
+        <insert id="insertUser" parameterType="com.project2.worklet.component.UserVO">
+            INSERT INTO member (
+                user_num,
+                user_id,
+                user_pw,
+                user_name,
+                user_gender,
+                user_phone,
+                user_email,
+                user_address,
+                user_birthday,
+                want_job_num,
+                want_job_type1,
+                want_job_type2,
+                want_job_type3,
+                want_job_workexp,
+                want_job_workexp_howlong,
+                join_date,
+                preferred_job_type_1,
+                preferred_job_type_2,
+                preferred_job_type_3
+            )
+            VALUES (
+                       #{userNum},
+                       #{userId},
+                       #{userPw},
+                       #{userName},
+                       #{userGender},
+                       #{userPhone},
+                       #{userEmail},
+                       #{userAddress},
+                       #{userBirthday},
+                       #{wantJobNum},
+                       #{wantJobType1},
+                       #{wantJobType2},
+                       #{wantJobType3},
+                       #{wantJobWorkexp},
+                       #{wantJobWorkexpHowlong},
+                       #{joinDate},
+                       #{preferredJobType1, jdbcType=VARCHAR},
+                       #{preferredJobType2, jdbcType=VARCHAR},
+                       #{preferredJobType3, jdbcType=VARCHAR}
+                   )
+        </insert>
+
+
+
+
+    <select id="loginUser" resultType="com.project2.worklet.component.UserVO">
+        select *
+        from member
+        where user_id = #{userId} and user_pw = #{userPw} LIMIT 1
+    </select>
+
+    <select id="getUserById" resultType="com.project2.worklet.component.UserVO">
+        SELECT * FROM member WHERE user_id = #{userId}
+    </select>
+
+
+    <!--  아이디 찾기  -->
+    <select id="existsByUserId" resultType="int">
+        SELECT COUNT(*) FROM member WHERE user_id = #{userId}
+    </select>
+
+
+    <!--  사용자 아이디 찾기  -->
+    <select id="findUserByUserId" resultType="com.project2.worklet.component.UserVO">
+        SELECT user_id, user_name, join_date
+        FROM member
+        WHERE user_email = #{userEmail} AND user_phone = #{userPhone}
+    </select>
+
+
+    <!--  사용자 아이디 찾기  -->
+    <select id="findUserByUserPw" resultType="com.project2.worklet.component.UserVO">
+        SELECT user_pw, user_name, join_date, user_id
+        FROM member
+        WHERE user_id= #{userId} AND user_email = #{userEmail}
+    </select>
+
+    <!--  비밀번호 바꾸기  -->
+    <update id="updatePw" parameterType="com.project2.worklet.component.UserVO">
+    UPDATE member SET user_pw = #{userPw} WHERE user_id = #{userId}
+    </update>
+
+    <!-- 학력 추가 -->
+    <insert id="insertEdu" parameterType="com.project2.worklet.component.EduVO" useGeneratedKeys="true" keyProperty="educationId">
+        INSERT INTO education (
+            user_num,
+            school_name,
+            major,
+            part,
+            degree_type,
+            graduation_status,
+            graduation_date,
+            created_at,
+            updated_at,
+                               RESUME_ID
+        ) VALUES (
+                     #{userNum},
+                     #{schoolName},
+                     #{major},
+                     #{part},
+                     #{degreeType},
+                     #{graduationStatus},
+                     #{graduationDate},
+                     NOW(),
+                     NOW(),
+                  #{resumeId}
+                 );
+    </insert>
+
+
+
+
+    <!-- 학력 수정 -->
+    <update id="updateEdu" parameterType="com.project2.worklet.component.EduVO">
+        UPDATE education
+        SET
+            school_name = #{schoolName},
+            major = #{major},
+            part = #{part},
+            degree_type = #{degreeType},
+            graduation_status = #{graduationStatus},
+            graduation_date = #{graduationDate},
+            updated_at = NOW()
+        WHERE
+            education_id = #{educationId}
+    </update>
+
+    <!-- 경력 추가 -->
+    <insert id="insertCareer" parameterType="com.project2.worklet.component.CareerVO"  useGeneratedKeys="true" keyProperty="careerId">
+        INSERT INTO career (
+            user_num,
+            company_name,
+            department,
+            position,
+            join_date,
+            quit_date,
+            job_description,
+            created_at,
+            updated_at,
+            RESUME_ID
+        ) VALUES (
+                     #{userNum},
+                     #{companyName},
+                     #{department},
+                     #{position},
+                     #{joinDate},
+                     #{quitDate},
+                     #{jobDescription},
+                     NOW(),
+                     NOW(),
+                     #{resumeId}
+                 );
+    </insert>
+
+    <!-- 경력 수정 -->
+    <update id="updateCareer" parameterType="com.project2.worklet.component.CareerVO">
+        UPDATE career
+        SET
+            company_name = #{companyName},
+            department = #{department},
+            position = #{position},
+            join_date = #{joinDate},
+            quit_date = #{quitDate},
+            job_description = #{jobDescription},
+            updated_at = NOW()
+        WHERE user_num = #{userNum} AND career_id = #{careerId};
+    </update>
+
+    <select id="getUserEducation" resultType="com.project2.worklet.component.EduVO">
+        SELECT * FROM education WHERE user_num = #{userNum} AND RESUME_ID = #{resumeId}
+    </select>
+
+
+    <select id="getUserCareer" resultType="com.project2.worklet.component.CareerVO">
+        SELECT * FROM career WHERE user_num = #{userNum} AND RESUME_ID = #{resumeId}
+    </select>
+
+
+    <delete id="deleteEducation" parameterType="long">
+        DELETE FROM education WHERE education_id = #{educationId}
+    </delete>
+
+    <delete id="deleteCareer" parameterType="long">
+        DELETE FROM career WHERE career_id = #{careerId}
+    </delete>
+
+    <!--  회원 수정  -->
+    <update id="updateUser" parameterType="com.project2.worklet.component.UserVO">
+        UPDATE member SET
+            user_pw = #{userPw},
+            user_name = #{userName},
+            user_gender = #{userGender},
+            user_birthday = #{userBirthday},
+            user_phone = #{userPhone},
+            user_email = #{userEmail},
+            user_address = #{userAddress},
+            want_job_type1 = #{wantJobType1},
+            want_job_type2 = #{wantJobType2},
+            want_job_type3 = #{wantJobType3},
+            want_job_workexp_howlong = #{wantJobWorkexpHowlong},
+            join_date = #{joinDate},
+            preferred_job_type_1 = #{preferredJobType1},
+            preferred_job_type_2 = #{preferredJobType2},
+            preferred_job_type_3 = #{preferredJobType3}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--  자격증 추가  -->
+    <insert id="insertLicense" parameterType="com.project2.worklet.component.LicenseVO" useGeneratedKeys="true" keyProperty="licenseId">
+        INSERT INTO license (
+            user_num,
+            license_name,
+            license_org,
+            acquisition,
+            expiration,
+            RESUME_ID
+        ) VALUES (
+                     #{userNum},
+                     #{licenseName},
+                     #{licenseOrg},
+                     #{acquisition},
+                     #{expiration},
+                     #{resumeId}
+                 )
+    </insert>
+
+    <select id="getUserLicenses" resultType="com.project2.worklet.component.LicenseVO">
+        SELECT * FROM license WHERE user_num = #{userNum} AND RESUME_ID = #{resumeId}
+    </select>
+
+    <!--  자격증 수정  -->
+    <update id="updateLicense" parameterType="com.project2.worklet.component.LicenseVO">
+        UPDATE license
+        SET
+            license_name = #{licenseName},
+            license_org = #{licenseOrg},
+            acquisition = #{acquisition},
+            expiration = #{expiration},
+            updated_at = NOW()
+        WHERE license_id = #{licenseId}
+    </update>
+
+    <!--  자격증 삭제  -->
+    <delete id="deleteLicense" parameterType="long">
+        DELETE FROM license WHERE license_id = #{licenseId}
+    </delete>
+
+    <!--  스크랩공고-->
+<!--    <select id="getScrappedJob" resultType="com.project2.worklet.component.JobPostingVO2">-->
+<!--        select emp_wanted_homepg_detail, emp_wanted_title,-->
+<!--               reg_log_img_nm, emp_busi_nm, emp_wanted_endt-->
+<!--        from job_postings as j right join select * from job_postings; as c-->
+<!--                                          on j.emp_seq_no = c.emp_seq_no-->
+<!--        where c.user_id = #{userId};-->
+<!--    </select>-->
+
+    <!--  스크랩공고-->
+    <select id="getScrappedJob" resultType="com.project2.worklet.component.JobPostingVO2">
+        SELECT j.emp_wanted_homepg_detail,
+               j.emp_wanted_title,
+               j.reg_log_img_nm,
+               j.emp_busi_nm,
+               j.emp_wanted_endt
+        FROM job_postings AS j
+                 RIGHT JOIN my_calendar AS c
+                            ON j.emp_seq_no = c.emp_seq_no
+        WHERE c.user_id = #{userId};
+    </select>
+
+
+    <!-- 추천공고-->
+    <select id="getRecommendedJob" resultType="com.project2.worklet.component.JobPostingVO2">
+        SELECT j1.emp_wanted_title, j1.emp_busi_nm, j1.emp_wanted_endt,
+        j1.reg_log_img_nm, j1.emp_wanted_homepg_detail from job_postings as j1
+        right join (
+        select emp_seq_no, emp_recr_nm, emp_wanted_career_nm, work_region_nm, jobs_cd, jobs_cd_kor_nm, secondary_category_num, secondary_category_name
+        from job_postings_detail as j2
+        left join category as c1
+        on j2.jobs_cd = c1.tertiary_category_num
+        ) as c
+        on j1.emp_seq_no = c.emp_seq_no
+        WHERE <![CDATA[ curdate() <= j1.emp_wanted_endt ]]>
+        AND c.secondary_category_num IN
+        (<foreach item="preferredJob" collection="preferredJobTypes" open="" separator=" OR " close="">
+            #{preferredJob}
+        </foreach>)
+
+        order by j1.emp_seq_no desc
+        limit 0, 4;
+    </select>
+
+
+    <!-- 사진 경로 업데이트 -->
+    <update id="updatePhotoPath" parameterType="map">
+        UPDATE resume
+        SET
+            photo_path = #{photoPath}
+        WHERE resume_id = #{resumeId}
+    </update>
+
+
+</mapper>

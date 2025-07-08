@@ -1,0 +1,49 @@
+
+    <div th:fragment="headerFragment">
+
+        <header class="flex">
+            <h1 class="headerLogo"><a href="#"><img src="../image/WORKLET_logo.png" alt="logo"></a></h1>
+            <ul class="flex menu">
+                <li><a href="/user/info">기업소개</a></li>
+
+
+                <li><a href="/notice/notice_list">공지사항</a></li>
+                <li style="display: none"></li>
+                <li><a href="/calendar/calendar">채용공고</a></li>
+
+                <li><a href="/qna/qna_list">문의사항</a></li>
+            </ul>
+            <ul class="flex logout" th:if="${session.loginUser != null}">
+                <li><a href="/user/mypage" style="color: var(--main-color1); font-weight: bold;">마이페이지</a></li>
+                <li><a href="/user/logout" onclick="logout()">로그아웃</a></li>
+            </ul>
+
+            <ul class="flex login" th:unless="${session.loginUser != null}">
+                <li><a href="/user/login" style="color: var(--main-color1); font-weight: bold;">로그인</a></li>
+                <li><a href="/user/regist">회원가입</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="ham-menu">
+                <ul class="menu-list">
+                    <li><a href="/user/info">기업소개</a></li>
+                    <li><a href="#">공지사항</a></li>
+                    <li><a href="/calendar/calendar">채용공고</a></li>
+                    <li><a href="#">문의사항</a></li>
+                </ul>
+                <ul class="ham-logout" th:if="${session.loginUser != null}">
+                    <li><a href="#" style="color: var(--main-color1); font-weight: bold;">마이페이지</a></li>
+                    <li><a href="/user/logout" onclick="logout()">로그아웃</a></li>
+                </ul>
+
+                <ul class="ham-login" th:unless="${session.loginUser != null}">
+                    <li><a href="/user/login" style="color: var(--main-color1); font-weight: bold;">로그인</a></li>
+                    <li><a href="/user/regist">회원가입</a></li>
+                </ul>
+            </div>
+        </header>
+    </div>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/board/notice_list.css}">
+    <!--    -->
+    <!--    <script src="../../static/bootstrap-3.4.1-dist/js/jquery-3.7.1.min.js"></script>-->
+    <!--    <script src="../../static/bootstrap-3.4.1-dist/js/bootstrap.js"></script>-->
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+</head>
+<body>
+
+
+
+<body>
+<div class="wrap">
+    <div th:replace="include/header :: headerFragment"></div>
+
+    <main class="content">
+        <div class="hi">
+            <div class="header_box">
+                <div class="header_box_top">공지사항</div>
+                <div class="header_box_right"><img src="../image/02june22_megaphone_icon_02 1.png" alt="확성기이미지">
+                    <div class="header_box_right_upper"><img src="../image/bell-reminder-notification-alert-alarm-icon-sign-symbol-application-website-ui-white-background-3d-rendering-illustration 1.png" alt="종이미지"></div>
+                </div>
+                <div class="header_box_mid">
+                    WORKLET 에서<br>
+                    공지사항을 안내해드려요.
+                </div>
+                <div class="header_box_search">
+                    <form th:action="@{/notice/notice_list}" method="get">
+                        <div class="search-wrapper">
+                            <img src="../image/Search.png" alt="검색" class="search-icon">
+                            <input type="text" class="search-input" name="keyword" placeholder="키워드를 검색하세요." th:value="${keyword}">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <section>
+            <div class="notice_card">
+                <!-- 총 개수 출력 -->
+                <div class="notice_card_upper">
+                    총 <span th:text="${total}">0</span>개
+                </div>
+
+                <!-- 공지 리스트 반복 출력 -->
+                <div class="notice_card_row" th:each="notice : ${noticeList}">
+                    <div class="notice_card_title">
+                        <span class="title_cont num" th:text="${notice.noticeId}">번호</span>
+                        <span class="title_cont title" th:text="${notice.noticeTitle}">제목</span>
+                        <span class="title_cont writer">운영자</span>
+                        <span class="title_cont regdate" th:text="${#temporals.format(notice.noticeCreatedAt, 'yyyy-MM-dd')}">등록일</span>
+                        <span class="title_cont down">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+                    </div>
+                    <div class="notice_card_content" th:text="${notice.noticeContent}">공지 내용</div>
+                </div>
+            </div>
+
+
+            <!-- 페이징 처리 -->
+            <div class="pagenation">
+                <p th:if="${currentPage > 1}">
+                    <a th:href="@{/notice/notice_list(page=1, amount=${amount}, keyword=${keyword})}">
+                        <i class="bi bi-chevron-double-left pg"></i>
+                    </a>
+                </p>
+                <p th:if="${currentPage > 1}">
+                    <a th:href="@{/notice/notice_list(page=${currentPage - 1}, amount=${amount}, keyword=${keyword})}">
+                        <i class="bi bi-chevron-left pg"></i>
+                    </a>
+                </p>
+
+                <!-- 동적 페이지 번호 생성 -->
+                <p th:each="i : ${#numbers.sequence((currentPage - 2) > 0 ? currentPage - 2 : 1, (currentPage + 2) < (total / amount + 1) ? currentPage + 2 : (total / amount + 1))}">
+                    <a th:href="@{/notice/notice_list(page=${i}, amount=${amount}, keyword=${keyword})}"
+                       th:classappend="${i == currentPage} ? 'active'"
+                       th:text="${i}">1</a>
+                </p>
+
+                <p th:if="${currentPage < total / amount}">
+                    <a th:href="@{/notice/notice_list(page=${currentPage + 1}, amount=${amount}, keyword=${keyword})}">
+                        <i class="bi bi-chevron-right pg"></i>
+                    </a>
+                </p>
+                <p th:if="${currentPage < total / amount}">
+                    <a th:href="@{/notice/notice_list(page=${(total / amount) + 1}, amount=${amount}, keyword=${keyword})}">
+                        <i class="bi bi-chevron-double-right pg"></i>
+                    </a>
+                </p>
+            </div>
+
+
+        </section>
+    </main>
+
+    <div th:replace="include/footer :: footerFragment"></div>
+</div>
+</body>
+
+
+
+
+
+
+
+    <script>
+        const noticeTitles = document.querySelectorAll('.notice_card_title');
+
+        noticeTitles.forEach(title => {
+            title.addEventListener('click', function() {
+                const content = title.nextElementSibling; // 해당 제목 바로 아래의 내용을 찾음
+                content.classList.toggle('active'); // 내용에 .active 클래스 토글
+            });
+        });
+
+
+    </script>
+
+
+
+
+<script th:src="@{/css/js/header.js}"></script>
+
+</body>
+</html>

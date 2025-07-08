@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project2.worklet.qna.service.QnaMapper">
+
+    <!-- Q&A 등록 -->
+    <insert id="qnaForm" parameterType="com.project2.worklet.component.QnaVO">
+        INSERT INTO inquiry (
+            user_num,
+            inquiry_title,
+            inquiry_content,
+            inquiry_status,
+            inquiry_create_at,
+            inquiry_update_at,
+            inquiry_reply
+        ) VALUES (
+                     #{userNum},
+                     #{inquiryTitle},
+                     #{inquiryContent},
+                     #{inquiryStatus},
+                     #{inquiryCreateAt},
+                     #{inquiryUpdateAt},
+                     #{inquiryReply}
+                 )
+    </insert>
+
+    <!-- Q&A 리스트 조회 -->
+    <select id="qnalist" resultType="com.project2.worklet.component.QnaVO">
+        SELECT
+            inquiry_id,
+            user_num,
+            inquiry_title,
+            inquiry_content,
+            inquiry_status,
+            inquiry_create_at,
+            inquiry_update_at,
+            inquiry_reply
+        FROM inquiry
+        ORDER BY inquiry_create_at DESC
+    </select>
+
+    <!-- Q&A 답변 등록 (업데이트) -->
+    <update id="updateReply" parameterType="com.project2.worklet.component.QnaVO">
+        UPDATE inquiry
+        SET
+            inquiry_reply = #{inquiryReply},
+            inquiry_status = #{inquiryStatus},
+            inquiry_update_at = #{inquiryUpdateAt}
+        WHERE inquiry_id = #{inquiryId}
+    </update>
+
+    <update id="qnaReply" parameterType="com.project2.worklet.component.QnaVO">
+        UPDATE inquiry
+        SET inquiry_reply = #{inquiryReply},
+            inquiry_update_at = #{inquiryUpdateAt},
+            inquiry_status = '답변완료'
+        WHERE inquiry_id = #{inquiryId}
+    </update>
+
+    <select id="getQnaById" parameterType="Integer" resultType="com.project2.worklet.component.QnaVO">
+        SELECT * FROM inquiry WHERE inquiry_id = #{inquiryId}
+    </select>
+
+    <select id="getQnaListByUserNum" parameterType="int" resultType="com.project2.worklet.component.QnaVO">
+        SELECT *
+        FROM inquiry
+        WHERE user_num = #{userNum}
+        ORDER BY inquiry_create_at DESC
+    </select>
+
+    <select id="searchQnaList" resultType="com.project2.worklet.component.QnaVO">
+        SELECT *
+        FROM inquiry
+        WHERE (inquiry_title LIKE CONCAT('%', #{keyword}, '%') OR inquiry_content LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY inquiry_createat DESC
+    </select>
+
+
+
+</mapper>

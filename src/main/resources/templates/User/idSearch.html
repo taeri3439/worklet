@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/idSearch.css">
+</head>
+
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+
+    <div class="wrap">
+        <div class="header">
+            <h1><img src="../image/logo-white.png" alt=""></h1>
+            <p>아이디 찾기</p>
+        </div>
+
+        <div class="card">
+            <h2><strong  th:text="${userVO != null ? userVO.userName : '사용자 정보 없음'}"></strong>님의 정보와<br />일치하는 아이디 입니다.</h2>
+            <a href="#"  th:text="${userVO != null ? userVO.userId : '아이디 없음'}">djl3242</a>
+            <div class="date">가입일&nbsp;&nbsp;<strong  th:text="${userVO != null && userVO.joinDate != null ? #temporals.format(userVO.joinDate, 'yyyy.MM.dd') : '가입일 없음'}">2025.12.01</strong>
+            </div>
+            <div class="buttons">
+                <button class="btn-secondary">비밀번호 찾기</button>
+                <button class="btn-primary">로그인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../css/js/header.js"></script>
+
+    <div th:replace="include/footer :: footerFragment"></div>
+
+    <script>
+        let pwSearchBtn=document.querySelector(".btn-secondary");
+        pwSearchBtn.addEventListener('click',function (){
+            location.href="/user/pwOk";
+        })
+
+    </script>
+
+</body>
+
+</html>

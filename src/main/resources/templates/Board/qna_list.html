@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/Board/qna_list.css">
+    <script src="../../static/bootstrap-3.4.1-dist/js/jquery-3.7.1.min.js"></script>
+    <script src="../../static/bootstrap-3.4.1-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+</head>
+<body>
+
+<div th:replace="include/header :: headerFragment"></div>
+
+<main>
+    <div class="hi">
+        <div class="header_box">
+            <p class="header_box_left"><img src="../image/free-icon-chat-16689507 1.png" alt="채팅이미지"></p>
+            <p class="header_box_mid">무엇을 도와드릴까요?</p>
+            <p class="header_box_right"><img src="../image/free-icon-consulting-services-12285773 1.png" alt="헤드셋이미지지"></p>
+        </div>
+    </div>
+
+    <section>
+        <div class="section_upper">
+            <div class="section_upper_left">1:1 문의</div>
+            <div class="section_upper_right">
+                <div class="search_box_container">
+                    <input type="text" id="searchBox" class="search_box" placeholder="키워드 검색">
+                    <img src="../image/Search.png" alt="검색" class="search_icon" id="searchBtn">
+                </div>
+            </div>
+        </div>
+
+        <div class="section_under">
+            <!-- 질문 목록 -->
+            <ul id="qnaList" class="question" th:each="qna : ${qnaList}" th:attr="data-usernum=${qna.userNum}">
+                <li class="li_title">
+                    <div class="question_title_box">
+                        <p class="question_title" th:text="${qna.inquiryTitle}">제목</p>
+                        <p class="question_date" th:text="${#temporals.format(qna.inquiryCreateAt, 'yyyy-MM-dd HH:mm')}">작성일</p>
+                    </div>
+                    <div class="question_isanswered_date"
+                         th:text="${#strings.equals(qna.inquiryStatus, '답변완료') ? #temporals.format(qna.inquiryUpdateAt, 'yyyy-MM-dd HH:mm') : ''}"></div>
+                    <div class="question_isanswered"
+                         th:text="${qna.inquiryStatus}"
+                         th:style="${qna.inquiryStatus == '답변완료' ? 'color:#255EEE;' : 'color:#eea825;'}"></div>
+                </li>
+                <li>
+                    <div class="question_content tohide" th:text="${qna.inquiryContent}">내용</div>
+                </li>
+                <li>
+                    <div class="question_answer_box tohide" th:if="${qna.inquiryReply != null}">
+                        <p class="question_answer_date" th:text="${#temporals.format(qna.inquiryUpdateAt, 'yyyy-MM-dd HH:mm')}">답변날짜</p>
+                        <p class="question_answer_content" th:text="${qna.inquiryReply}">답변내용</p>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- 문의하기 버튼 (로그인 여부별 분기) -->
+            <button th:if="${session.loginUser != null}" class="questionBtn" onclick="location.href='/qna/qna_write'">
+                <i class="bi bi-pencil-square"></i> 문의하기
+            </button>
+            <button th:if="${session.loginUser == null}" class="questionBtn" onclick="if(confirm('로그인이 필요한 서비스입니다. 로그인 하시겠습니까?')) location.href='/user/login'">
+                <i class="bi bi-pencil-square"></i> 문의하기
+            </button>
+
+            <!-- 페이지 네비게이션 -->
+            <div class="question_pagenation">
+                <p><i class="bi bi-chevron-left pg"></i></p>
+                <p><a href="#">1</a></p>
+                <p><a href="#">2</a></p>
+                <p><a href="#">3</a></p>
+                <p><i class="bi bi-chevron-right pg"></i></p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="include/footer :: footerFragment"></footer>
+
+<script>
+    // 검색 결과 필터링 함수
+    function searchQuestions() {
+        const searchBox = document.getElementById('searchBox');
+        const keyword = searchBox.value.toLowerCase();
+        const qnaList = document.querySelectorAll('.question');
+
+        qnaList.forEach(function(question) {
+            const title = question.querySelector('.question_title').textContent.toLowerCase();
+            const content = question.querySelector('.question_content').textContent.toLowerCase();
+
+            if (title.includes(keyword) || content.includes(keyword)) {
+                question.style.display = 'block';
+            } else {
+                question.style.display = 'none';
+            }
+        });
+    }
+
+    // 검색 버튼 클릭 이벤트
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        searchQuestions();
+    });
+
+    // 엔터키로 검색 실행
+    document.getElementById('searchBox').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            searchQuestions();
+        }
+    });
+</script>
+
+<script th:inline="javascript">
+    const isLoggedIn = [[${loginUser != null}]];
+
+    document.querySelectorAll(".question").forEach(function (questionEl) {
+        questionEl.querySelector(".li_title").addEventListener("click", function () {
+            questionEl.querySelector(".question_content")?.classList.toggle("in");
+            questionEl.querySelector(".question_answer_box")?.classList.toggle("in");
+        });
+    });
+</script>
+
+<script>
+    window.addEventListener('scroll', function () {
+        const btn = document.querySelector('.questionBtn');
+        const footer = document.querySelector('footer');
+
+        const btnBottom = btn.getBoundingClientRect().bottom;
+        const footerTop = footer.getBoundingClientRect().top;
+
+        if (btnBottom > footerTop) {
+            btn.style.bottom = (window.innerHeight - footerTop + 20) + 'px';
+        } else {
+            btn.style.bottom = '120px';
+        }
+    });
+</script>
+
+<script th:src="@{/css/js/header.js}"></script>
+
+</body>
+</html>

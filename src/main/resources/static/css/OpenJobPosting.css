@@ -1,0 +1,995 @@
+
+/* PC (데스크탑) 버전 */
+@media (min-width: 768px) {
+
+    .flex{
+        display: flex;
+    }
+
+    .wrap {
+        background-color: #FAFAFA;
+        height: 100%;
+    }
+
+    .ham-menu {
+        display: none;
+    }
+
+    header {
+        width: 100%;
+        min-width: 1200px;
+        height: 80px;
+        justify-content: space-between;
+        padding: 0 80px;
+        align-items: center;
+        backdrop-filter: blur(30px);
+        background: rgba(255, 255, 255, 0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+    }
+
+    header .logout {
+        display: none;
+    }
+
+    header h1 {
+        width: 170px;
+    }
+
+    header .hamburger {
+        display: none;
+    }
+
+    header h1 a {
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+
+    header h1 a img {
+        width: 100%;
+    }
+
+    header .menu {
+        background-color: #fff;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        height: 50px;
+        align-items: center;
+        border-radius: 50px;
+        gap: 50px;
+        padding: 20px 40px;
+        min-width: 548px;
+        justify-content: space-between;
+    }
+
+    header ul li a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 0 10px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    header .login,
+    header .logout {
+        background-color: #fff;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        height: 50px;
+        align-items: center;
+        border-radius: 50px;
+        gap: 50px;
+        padding: 20px;
+        min-width: 186px;
+    }
+
+
+
+
+    /* --------footer----------- */
+    footer {
+        width: 100%;
+        height: 250px;
+        background-color: #D9D9D9;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 100px;
+    }
+
+    footer p {
+        margin: 20px 0;
+    }
+
+    footer .footer-logo {
+        width: 300px;
+    }
+
+    footer .footer-logo img {
+        width: 100%;
+    }
+
+
+    * {
+        margin: 10px;
+        box-sizing: border-box;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    .searchTitle > h2 {
+        margin: 30px auto;
+        width: 67%;
+    }
+
+    .lastBox {
+        padding-bottom: 50px;
+    }
+
+    .searchSubmitButtonBox {
+        text-align: right;
+    }
+
+    .searchSubmitButton {
+        width: 200px;
+        height: 40px;
+        background-color: var(--main-color1);
+        color: var(--text-color3);
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .searchResults {
+        width: 80%;
+        margin: 0 auto;
+        overflow: hidden;
+        /* border: 1px solid #f32020; */
+        margin-bottom: 30px;
+        
+    }
+
+    .searchResults ul {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+        margin: 0;
+        gap: 15px;
+    }
+
+    .searchResults ul li {
+        width: 30%;
+        height: 220px;
+        border: 1px solid var(--text-color2);
+        border-radius: 20px;
+
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /*← 여기 추가 */
+        transition: box-shadow 0.3s ease;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+
+        position: relative;
+        overflow: hidden; /* 기준점 설정 */
+
+    }
+
+    .searchResults ul li > img {
+        width: 230px;
+        height: 60px;
+    }
+
+    .searchResults > ul > li > p {
+        font-size: 22px;
+    }
+
+    .bottomPageChangeButtonBox {
+        width: 70%;
+        margin: 30px auto;
+        text-align: center;
+    }
+
+    .pageChange {
+        display: flex;
+        justify-content: center; /* 좌, 중간, 우로 나누기 */
+        align-items: center;
+        width: 85%;
+        margin: 0 auto;
+        
+        
+    }
+
+    .pageChangeLeftArrow, .pageChangeRightArrow {
+        /* border-radius: 50%; */
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        /* border: 1px solid var(--text-color2); */
+        font-size: 25px;
+    }
+
+    .pageChangeLeftArrow {
+        background-size: 25%;
+        background-image: url("../image/left1.png");
+        background-repeat: no-repeat;
+        background-position: 17px;
+    }
+
+    .pageChangeRightArrow {
+        background-size: 25%;
+        background-image: url("../image/right1.png");
+        background-repeat: no-repeat;
+        background-position: 0.5px;
+    }
+
+    .pageChange > div > span {
+        width: 30px;
+        height: 30px;
+        /*padding: auto;*/
+        display: inline-block;
+        line-height: 30px;
+        margin: 0px;
+        
+    }
+
+    .searchResultsInfo {
+        overflow:hidden;
+        color: var(--text-color3);
+        background-color: rgba(42, 42, 42, 0.5);
+        position: absolute;
+        width: 80%;
+        height: 100%;
+        padding: 10px;
+        transition: .4s;
+        right: -400px;
+        backdrop-filter: blur(30px);
+    }
+
+    .searchResultsInfo > p {
+        font-size: 18px;
+    }
+
+    .searchResults:hover .searchResultsInfo {
+        right: -12px;
+    }
+
+    .searchResults:hover .searchresultsInfo > p {
+        transform: translateY(-60px);
+    }
+
+    .searchCheckBoxRemake {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+   
+
+    .searchCheckBoxRemake > div:nth-of-type(1) {
+        margin-bottom : 0px;
+    }
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div {
+        margin: 0;
+        padding: 0;
+        width: 49.5%;
+        display: inline-block;
+    }
+    
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div:nth-of-type(1) {
+        border-right: 1px solid #D0D0D0;
+    }
+
+    .jobTypeUnderBar {
+        background-color: #D0D0D0;
+        width: 49.5%;
+        border: none;
+        height: 1px;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        
+    }
+
+    .legionUnderBar {
+        background-color: #000;
+        width: 48.8%;
+        border: none;
+        height: 1px;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        margin-left: 10px;
+
+    }
+
+
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div > p {
+        text-align: center;
+    }
+
+    .searchCheckBoxLegion {
+        margin: 0 auto;
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        padding: 0;
+        box-sizing: border-box;
+        height: auto;
+        cursor: pointer;
+        text-align: center;
+        line-height: 35px;
+
+    }   
+
+    .searchCheckBoxLegion > div {
+        border: 1px solid #D0D0D0;
+        height: 35px;
+        width: 12.5%;
+        display: inline-block;
+    }
+
+    .searchCheckTopCategoryJobType > div {
+        border: 1px solid #D0D0D0;
+        height: 35px;
+        width: 43%;
+        /* min-width: 157px; */
+        display: inline-block;
+    }
+
+    .searchCheckBoxJobType {
+        margin: 0 auto;
+        display: none;
+        justify-content: start;
+        flex-wrap: wrap;
+        padding: 0;
+        box-sizing: border-box;
+        height: auto;
+        text-align: center;
+        cursor: pointer;
+        line-height: 35px;
+        
+    }
+
+    .searchCheckTopCategoryJobType {
+        width: 33%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+    }
+
+    .searchCheckUnderCategoryJobType {
+        width: 63%;
+        border-left: 1px solid #d0d0d0;
+        display: none;
+    }
+
+    .searchCheckUnderCategoryJobType > div {
+        border: 1px solid #D0D0D0;
+        height: 35px;
+        width: 100%;
+        /* min-width: 157px; */
+        display: inline-block;
+    }
+
+    .searchToggleButtonLegion {
+        font-Weight : bold;
+        cursor: pointer;
+    }
+
+    .searchToggleButtonJobType {
+        cursor: pointer;
+
+    }
+
+    .searchResultsInfo_mobile {
+        display: none;
+        overflow: hidden;
+    }
+   
+    .searchResultsInfoMobile {
+        display: none;
+    }
+
+
+
+
+}
+
+
+
+
+
+/* 미디어 쿼리 */
+/* 모바일 (최대 너비 767px까지 적용) */
+@media (max-width: 767px) {
+
+    .flex{
+        display: flex;
+    }
+
+    .wrap {
+        background-color: #FAFAFA;
+        height: 100%;
+    }
+
+    header {
+        width: 100%;
+        height: 65px;
+        justify-content: space-between;
+        padding: 0 30px;
+        align-items: center;
+        backdrop-filter: blur(30px);
+        background: rgba(255, 255, 255, 0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+
+    }
+
+    header .logout {
+        display: none;
+    }
+
+    header h1 {
+        width: 130px;
+    }
+
+    header .hamburger {
+        display: block;
+        background-color: var(--main-color1);
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    header .hamburger span {
+        width: 23px;
+        height: 1px;
+        background-color: #fff;
+        margin: 3px 0;
+        display: block;
+        transition: .4s;
+    }
+
+    header .hamburger span.on:nth-child(2) {
+        display: none;
+    }
+
+    header .hamburger span.on:nth-child(1) {
+        transform: rotate(45deg) translate(2px, 2px);
+    }
+
+    header .hamburger span.on:nth-child(3) {
+        transform: rotate(-45deg) translate(2px, -3px);
+    }
+
+    header h1 a {
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+
+    header h1 a img {
+        width: 100%;
+    }
+
+    header .menu {
+        display: none;
+    }
+
+
+    header .login,
+    header .logout {
+        display: none;
+    }
+
+    .ham-menu {
+        position: fixed;
+        top: 65px;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background-color: #fff;
+        transition: .4s;
+
+    }
+
+    /*.ham-menu ul {*/
+    /*  width: 100%;*/
+    /*  max-width: 400px;*/
+    /*  margin: 10px auto;*/
+    /*}*/
+
+    .ham-menu.on {
+        right: 0;
+    }
+
+    .ham-menu .menu-list {
+        width: 85%;
+        margin: auto;
+        margin-top: 50px;
+    }
+
+    .ham-menu .menu-list li {
+        border-bottom: 1px solid #d7d7d7;
+        padding: 20px 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .ham-menu .ham-logout {
+        display: none;
+    }
+
+    .ham-menu .ham-logout,
+    .ham-login {
+        width: 85%;
+        margin: 5cqb auto;
+    }
+
+    .ham-menu .ham-logout li,
+    .ham-login li {
+        margin: 10px 0;
+    }
+
+
+
+
+    /* --------footer----------- */
+    footer {
+        width: 100%;
+        background-color: #D9D9D9;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 50px;
+        flex-direction: column;
+    }
+
+    footer p {
+        margin: 20px 0;
+        font-size: 14px;
+    }
+
+    footer .footer-logo {
+        width: 100%
+    }
+
+    footer .footer-logo img {
+        width: 250px;
+    }
+
+    * {
+        margin: 0px;
+        /* border: none; */
+        box-sizing: border-box;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+    
+    body > div:nth-of-type(1) {
+        padding: 20px;
+    }
+
+    .searchTitle > h2 {
+        margin: 30px auto;
+        width: 85%;
+    }
+
+    .lastBox {
+        padding-bottom: 30px;
+    }
+
+    .searchSubmitButtonBox {
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .searchSubmitButton {
+        width: 200px;
+        height: 40px;
+        background-color: var(--main-color1);
+        color: var(--text-color3);
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .searchResults {
+        width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+        /* border: 1px solid #f32020; */
+        margin-bottom: 30px;
+        
+    }
+
+    .searchResults ul{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap:wrap;
+        width: 100%;
+        margin: 0;
+        
+        
+    }
+
+    .searchResults ul li {
+        width: 48%;
+        height: 180px;
+        border: 1px solid var(--text-color2);
+        border-radius: 20px;
+
+         
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+        transition: box-shadow 0.3s ease; 
+        
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+
+        position: relative;
+        /* overflow: hidden; 기준점 설정 */
+        padding: 5px;
+        z-index: 0;
+    }
+
+    .searchResults ul li > img {
+        width: 100%;
+        height: 60px;
+        z-index: -1;
+    }
+
+    .bottomPageChangeButtonBox {
+        width: 70%;
+        margin: 30px auto;
+        /* text-align: center; */
+    }
+
+    .pageChange {
+        display: flex;
+        justify-content: center; /* 좌, 중간, 우로 나누기 */
+        align-items: center;
+        width: 85%;
+        margin: 0 auto;
+        
+    }
+
+    .pageChangeLeftArrow, .pageChangeRightArrow {
+        /* border-radius: 50%; */
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        /* border: 1px solid var(--text-color2); */
+        font-size: 25px;
+    }
+
+    .pageChangeLeftArrow {
+        background-size: 25%;
+        background-image: url("../image/left1.png");
+        background-repeat: no-repeat;
+        background-position: 17px;
+    }
+
+    .pageChangeRightArrow {
+        background-size: 25%;
+        background-image: url("../image/right1.png");
+        background-repeat: no-repeat;
+        background-position: 0.5px;
+    }
+
+    .pageChange > div > span {
+        width: 30px;
+        height: 30px;
+        /*padding: auto;*/
+        display: inline-block;
+        line-height: 30px;
+        margin: 0px;
+        
+    }
+
+    .searchResults > ul > li > p {
+        margin-bottom: 20px;
+    }
+
+    .searchResultsInfo {
+        display: none;
+    }
+
+    
+
+    .searchCheckBoxRemake {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .searchCheckBoxRemake > div:nth-of-type(1) {
+        margin-bottom : 0px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div {
+        margin: 0;
+        padding: 0;
+        width: 49.5%;
+        display: inline-block;
+    }
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div:nth-of-type(1) {
+        border-right: 1px solid #D0D0D0;
+    }
+
+    .jobTypeUnderBar {
+        background-color: #D0D0D0;
+        width: 49.5%;
+        border: none;
+        height: 1px;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        
+    }
+
+    .legionUnderBar {
+        background-color: #000;
+        width: 49.5%;
+        border: none;
+        height: 1px;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .searchCheckBoxRemake > div:nth-of-type(1) > div > p {
+        text-align: center;
+    }
+
+    .searchCheckBoxLegion {
+        margin: 0 auto;
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        padding: 0;
+        box-sizing: border-box;
+        height: auto;
+        cursor: pointer;
+    }
+
+    .searchCheckBoxLegion > div:nth-of-type(1), div:nth-of-type(2), div:nth-of-type(3) {
+        margin-top: 5px;
+    }
+
+    .searchCheckBoxLegion > div:nth-of-type(18), div:nth-of-type(17), div:nth-of-type(16) {
+        margin-bottom: 15px;
+    }
+
+    .searchCheckBoxLegion > div {
+        border: 1px solid #D0D0D0;
+        height: 44px;
+        width: 32%;
+        min-width: 120px;
+        margin-bottom: 5px;
+        display: inline-block;
+        padding: 12px;
+        text-align: center;
+        
+    }
+
+    .searchCheckBoxLegion > div > input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    .searchCheckBoxJobType > div:nth-of-type(1), div:nth-of-type(2) {
+        margin-top: 5px;
+    }
+
+    .searchCheckBoxJobType > div:nth-of-type(9) {
+        margin-bottom: 15px;
+    }
+
+    .searchCheckTopCategoryJobType > div {
+        border: 1px solid #D0D0D0;
+        height: 44px;
+        width: 48%;
+        min-width: 120px;
+        margin-bottom: 5px;
+        display: inline-block;
+        padding: 12px;
+        font-size: 16px;
+        text-align: center;
+
+    }
+
+    .searchCheckBoxJobType > div > input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .searchCheckUnderCategoryJobType {
+        display:none;
+        border-top: 1px solid #d0d0d0;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .searchCheckUnderCategoryJobType > div {
+        border: 1px solid #D0D0D0;
+        height: 44px;
+        width: 100%;
+        min-width: 120px;
+        margin-bottom: 5px;
+        display: inline-block;
+        padding: 12px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .searchCheckBoxJobType {        
+        margin: 0 auto;
+        display: none;
+        justify-content: start;
+        flex-wrap: wrap;
+        padding: 0;
+        box-sizing: border-box;
+        height: auto;
+        cursor: pointer;
+        
+    }
+
+    .searchToggleButtonLegion {
+        font-Weight : bold;
+        cursor: pointer;
+    }
+
+    .searchToggleButtonJobType {
+        cursor: pointer;
+
+    }
+
+    .searchResultsInfoMobile {
+        /* display: none; */
+        
+        width: 102%;
+        height: 370px;
+        position: absolute;
+        top: -5px;
+        left: -1px;
+        opacity: 0;
+        background-color: #ffffff;
+        background-image: url('../image/logo_img.png');
+        background-size: contain;
+        color: #F5F5F0 ;
+        backdrop-filter: blur(30px);
+        z-index: -1;
+        overflow: hidden;
+        /* padding: 7px; */
+        z-index: 5;
+        border-radius:20px;
+        
+
+    }
+
+    
+
+    .searchResults>ul>li:hover {
+        z-index: 10;
+    }
+
+    .searchResults>ul>li:hover .searchResultsInfoMobile {
+        opacity: 1;    
+        
+    }
+    
+    .searchResultsInfoMobile > div:nth-of-type(1) > div {
+        width: 55%;
+        height: 45%;
+        margin: 0px;
+        bottom: -2px;
+        left: 20px;
+        position: absolute ;
+        background-color: #ffffff;
+        padding: 5px;
+        padding-bottom:1px ;
+        border: none;
+        z-index: 5;
+        border-radius: 10px 10px 0px 0px;
+        
+    }
+
+    .searchResultsInfoMobile > div:nth-of-type(1) > div > img {
+        width: 95%;
+        height: 100%;
+        margin: 0px;
+        border-radius: 10px 10px 0px 0px;
+        /* filter: brightness(0.3); */
+    }
+
+    .searchResultsInfoMobile > div:nth-of-type(1) {
+        text-align: center;
+        padding: 7px;
+        
+        padding-bottom: 0px;
+        height: 130px;
+        position: relative;
+        
+    }
+    
+    .searchResultsInfoMobile > div:nth-of-type(2) {
+        text-align: left;
+        background-color: #ffffff;
+        color: #000;
+        margin: 0;
+        padding: 7px;
+        width: 100%;
+        height: 240px;
+        font-size: 16px;
+        backdrop-filter: blur(30px);
+        text-align: center;
+
+    }
+
+    .searchResultsInfoMobile > div:nth-of-type(2) > hr {
+        border: none;
+        background-color: #e2e2e2;
+        height: 1px;
+    
+    }
+
+    .moveButtonBox {
+        text-align: center;
+    }
+
+    .moveButton {
+        width: 200px;
+        height: 40px;
+        background-color: var(--main-color1);
+        color: var(--text-color3);
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .mobileHoverCardTitle {
+        margin-top: 20px ;
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .mobileHoverCardContent {
+        margin-top: 30px;
+        margin-bottom: 30px;
+        font-size: 16px;
+        color: #969696;
+    }
+
+}

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 이력서</title>
+
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/resume.css">
+    <script src="https://kit.fontawesome.com/599a3a7868.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+
+    <div th:replace="include/header :: headerFragment"></div>
+
+    <div class="content-wrap flex">
+        <div class="width100">
+            <div class="save-sticky">
+
+                <div class="save-wrapper">
+                    <div class="save" id="saveBtn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                        <div class="popup" id="savePopup">
+                            <div class="downloadResume">
+                                <div class="downInfo">
+                                    <p>
+                                        안녕하세요. 채용 플랫폼 워클렛입니다. 📢<br>
+                                        이력서를 파일로 저장하여 쉽게 이력서를 보내세요.
+                                    </p>
+                                </div>
+                                <button id="downloadResumeBtn">이력서 파일로 저장</button>
+                            </div>
+                            <button id="saveResumeBtn">이력서 저장</button>
+                        </div>
+                    </div>
+
+                    <!-- save 내부에 popup 위치시킴 -->
+<!--                    <div class="popup" id="savePopup">-->
+<!--                        <div class="downloadResume">-->
+<!--                            <div class="downInfo">-->
+<!--                                <p>-->
+<!--                                    안녕하세요. 채용 플랫폼 워클렛입니다.<br>-->
+<!--                                    이력서를 파일로 저장하여 쉽게 이력서를 보내세요.-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                            <button id="downloadResumeBtn">이력서 파일로 저장</button>-->
+<!--                        </div>-->
+<!--                        <button id="saveResumeBtn">이력서 저장</button>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="left-sticky">
+            <div class="step-container">
+                <h2>이력서 작성</h2>
+                <div class="flex step-box">
+                    <div class="step">
+                        <div class="circle active"></div>
+                        <div class="text">
+                            <small>STEP 01</small>
+                            <span>회원정보</span>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="circle active"></div>
+                        <div class="text">
+                            <small>STEP 02</small>
+                            <span>학력</span>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="circle"></div>
+                        <div class="text">
+                            <small>STEP 03</small>
+                            <span>경력</span>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="circle"></div>
+                        <div class="text">
+                            <small>STEP 04</small>
+                            <span>자격증</span>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="circle"></div>
+                        <div class="text">
+                            <small>STEP 05</small>
+                            <span>자기소개서</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="contents">
+
+            <section class="sec01">
+                <h3>AI 이력서 작성 안내</h3>
+                <div class="sec01-box">
+                    <p>
+                        AI 자기소개서 생성 기능은 간단한 정보 입력만으로, 나만의 맞춤형 자기소개서를 자동으로 완성해주는 서비스입니다.
+                        사용자는 학력, 경력 등 핵심 정보를 입력하면, AI가 문맥에 맞게 자연스럽고 설득력 있는 문장을 작성해줍니다.
+                        WORKLET이 글쓰기 부담은 줄이고, 나를 더 잘 표현할 수 있도록 도와드립니다.
+                    </p>
+                    <figure>
+                        <img src="../image/aiGuidi_image.png" alt="">
+                    </figure>
+                </div>
+            </section>
+
+
+            <div id="content-title">
+                <h2>00</h2>
+                <p>제목</p>
+                <input type="text" id="resume-title" name="title" placeholder="이력서 제목을 작성하세요 예) 프론트엔드 개발자 이력서" th:value="${resume?.title}" required>
+
+                <div class="tag-container">
+                    <span class="tag">성실함이 강점인 경력자 같은 신입 개발자입니다!</span>
+                    <span class="tag">작지만 강한 프로젝트 경험을 가진 디자이너예요</span>
+                    <span class="tag">배움에 진심인 취업 지망생의 이력서입니다</span>
+                    <span class="tag">디자인 감각을 살려 개발하는 웹 퍼블리셔입니다</span>
+                    <span class="tag">처음이지만 끝까지 가보는 사람입니다</span>
+                    <span class="tag">함께 성장할 팀을 기다리는 예비 직장인</span>
+                </div>
+            </div>
+
+            <section class="sec02">
+                <h2>01</h2>
+                <p>회원정보</p>
+                <div class="info flex">
+                    <div class="my-info">
+                        <h3 class="name" th:text="${userVO.userName}">이름</h3>
+                        <div class="birth flex" th:if="${userVO.userBirthday != null}">
+                            <p th:text="${userVO.userBirthday}">2000-12-07</p>
+                            <span th:if="${age != null}" th:text="'만 ' + ${age} + '세'">만 24세</span>
+                        </div>
+                        <p class="gender" th:text="${userVO.userGender}">여</p>
+                        <div class="email flex">
+                            <figure>
+                                <img src="../image/email.png" alt="">
+                            </figure>
+                            <p th:text="${userVO.userEmail}">SRCF@naver.com</p>
+                        </div>
+                        <div class="phone flex">
+                            <figure>
+                                <img src="../image/phone.png" alt="">
+                            </figure>
+                            <p th:text="${userVO.userPhone}">010-1111-1111</p>
+                        </div>
+                        <div class="address flex ">
+                            <figure>
+                                <img src="../image/home.png" alt="">
+                            </figure>
+                            <p  th:text="${ userVO.userAddress}">서울특별시 강남구 어쩌고</p>
+                        </div>
+                    </div>
+                    <div class="my-picture">
+                        <label for="my-picture-input" class="picture-label">
+                            <div class="plus-box" style="position: relative; overflow: hidden">
+                                <img src="../image/plus.png" alt="사진추가" class="plus-icon">
+                                <img id="preview-image" src="" alt="미리보기" style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 0" />
+                            </div>
+                            <span class="add-text">사진추가</span>
+                            <input type="file" id="my-picture-input" name="photo" accept="image/*"  class="file-input">
+
+                        </label>
+<!--                        <img id="preview-image" src="" alt="미리보기" style="display:none;" />-->
+                        <img src="../image/pencil.png" alt="" class="pencil modifyPencil">
+                        <input type="hidden" name="resumeId" th:value="${param.uniqueTime}"id="pictureResumeId"/>
+                        <input type="hidden" name="userNum" th:value="${userVO.userNum}" id="pictureUserNum"/>
+                    </div>
+                </div>
+            </section>
+
+            <section class="sec03">
+                <h2>02</h2>
+                <div class="flex plus">
+                    <p>학력</p>
+                    <figure class="flex">
+                        <img src="../image/plus.png" alt="">
+                        <p>추가</p>
+                    </figure>
+                </div>
+
+                <div th:if="${userVO.educationList != null}">
+                    <div class="school-list" id="educationList">
+
+                        <div th:each="education : ${userVO.educationList}" class="education flex" th:attr="data-id=${education.educationId}">
+                            <input type="hidden" name="educationId" th:value="${education.educationId}"/>
+                            <div class="school">
+                                <h4 th:text="${education.schoolName}">서울대학교</h4>
+                                <p th:text="${education.major}">컴퓨터공학과</p>
+                            </div>
+                            <div class="edu-info">
+                                <div>
+                                    <span th:text="${education.part}">주간</span>
+                                    <span th:text="${education.degreeType}">졸업</span>
+                                    <span th:text="${education.graduationStatus} ?: '미입력'">졸업</span>
+                                </div>
+
+                                <p class="graduration" th:text="${#temporals.format(education.graduationDate, 'yyyy-MM-dd')}">2025-07-22 졸업</p>
+
+                            </div>
+                            <img src="../image/pencil.png" alt="" class="pencil">
+                            <!-- 삭제 버튼 추가 -->
+                            <!-- GET 방식에서 POST 방식으로 변경 -->
+                            <form th:action="@{/user/deleteEdu/{educationId}(educationId=${education.educationId})}" method="POST">
+                                <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa-solid fa-x"></i>
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-edu-form" id="addEduForm">
+                    <h5>추가</h5>
+
+                    <form  id="eduForm" >
+                        <!-- uniqueTime을 URL 파라미터로 받아서 사용하는 예시 -->
+                        <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+
+                        <input type="hidden" name="userNum"  th:value="${userVO.userNum}">
+                        <input type="text" class="input-school" placeholder="학교명" name="schoolName" required>
+                        <div class="flex">
+                            <input type="text" class="input-major" placeholder="전공" name="major" required>
+                            <div class="flex">
+                                <select class="input-type widthstyle part"  name="part" required>
+                                    <option value="">이수형태</option>
+                                    <option value="주간">주간</option>
+                                    <option value="야간">야간</option>
+                                    <option value="온라인">온라인</option>
+                                </select>
+                                <select class="input-type widthstyle" id="degreeType" name="degreeType" required>
+                                    <option value="">학력구분</option>
+                                    <option value="박사">박사</option>
+                                    <option value="학사">학사</option>
+                                    <option value="4년제">4년제</option>
+                                    <option value="2/3년제">2/3년제</option>
+                                    <option value="고졸">고졸</option>
+                                </select>
+                                <select class="input-status widthstyle " id="graduationStatus" name="graduationStatus" required>
+                                    <option value="">졸업여부</option>
+                                    <option value="졸업">졸업</option>
+                                    <option value="재학">재학</option>
+                                    <option value="휴학">휴학</option>
+                                    <option value="중퇴">중퇴</option>
+                                </select>
+                            </div>
+
+                            <input type="date" name="graduationDate" class="custom-date widthstyle"
+                                   placeholder="졸업/졸업예정일" required/>
+
+                        </div>
+                        <div class="button">
+                            <button type="button" class="btn-save">저장</button>
+                            <button type="button" class="btn-del">취소</button>
+                        </div>
+
+                    </form>
+                </div>
+
+
+                <div class="edit-edu-form" id="eduEdit">
+                    <h5>수정</h5>
+                    <input type="hidden" id="fake">
+                    <form id="eduEditForm" >
+                        <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" id="schoolResumeId">
+                        <input type="hidden" name="userNum"  th:value="${userVO.userNum}" id="schoolUserNum">
+                        <input type="hidden" name="educationId" id="schoolEduId" value="">
+
+                        <input type="text" class="input-school" placeholder="학교명" name="schoolName" id="schoolNameEdit" required>
+                        <div class="flex">
+                            <input type="text" class="input-major" placeholder="전공" name="major" id="majorEdit" required>
+                            <div class="flex">
+                                <select class="input-type widthstyle completion" name="part" id="partEdit" required>
+                                    <option value="">이수형태</option>
+                                    <option value="주간">주간</option>
+                                    <option value="야간">야간</option>
+                                    <option value="온라인">온라인</option>
+                                </select>
+                                <select class="input-type widthstyle level" name="degreeType" id="degreeEdit" required>
+                                    <option value="">학력구분</option>
+                                    <option value="박사">박사</option>
+                                    <option value="학사">학사</option>
+                                    <option value="4년제">4년제</option>
+                                    <option value="2/3년제">2/3년제</option>
+                                    <option value="고졸">고졸</option>
+                                </select>
+                                <select class="input-status widthstyle grad" name="graduationStatus" id="graduationStatusEdit" required>
+                                    <option value="">졸업여부</option>
+                                    <option value="졸업">졸업</option>
+                                    <option value="재학">재학</option>
+                                    <option value="휴학">휴학</option>
+                                    <option value="중퇴">중퇴</option>
+                                </select>
+                            </div>
+
+                            <input type="date" name="graduationDate" class="custom-date widthstyle"
+                                   placeholder="졸업/졸업예정일" id="graduationDateEdit" required/>
+
+                        </div>
+                        <div class="button">
+                            <button type="button" class="btn-save" id="saveEducationBtn">저장</button>
+                            <button type="button" class="btn-del editDel">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="sec04">
+                <h2>03</h2>
+                <div class="flex plus">
+                    <p>경력</p>
+                    <figure class="flex">
+                        <img src="../image/plus.png" alt="">
+                        <p>추가</p>
+                    </figure>
+                </div>
+
+                <div th:if="${userVO.careerList != null}">
+                    <div class="com-list" id="careerList">
+
+                        <div th:each="career : ${userVO.careerList}"  class="education flex">
+                            <div class="school">
+                                <h4 th:text="${career.companyName}">삼성전자</h4>
+                                <p th:text="${career.department}">전략기획실</p>
+                            </div>
+                            <div class="edu-info">
+                                <span th:text="${#temporals.format(career.joinDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(career.quitDate, 'yyyy-MM-dd')}">2020-05-10 ~ 2025-05-30</span>
+                                <span th:text="${career.position}">과장</span>
+                                <p class="job_description" th:text="${career.jobDescription}"></p>
+                            </div>
+                            <img src="../image/pencil.png" alt="" class="pencil">
+                            <form th:action="@{/user/deleteCareer/{careerId}(careerId=${career.careerId})}" method="POST">
+                                <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa-solid fa-x"></i>
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-edu-form" id="careerAdd">
+                    <h5>추가</h5>
+                    <form id="careerForm" >
+                        <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+                        <input type="hidden" name="userNum" th:value="${userVO.userNum}">
+                        <input type="text" class="company-name" placeholder="회사명" name="companyName" required>
+                        <div class="flex">
+                            <input type="text" class="department" placeholder="부서" name="department" required>
+                            <input type="date" name="joinDate" class="custom-date widthstyle" placeholder="입사일" required />
+                            <input type="date" name="quitDate" class="custom-date widthstyle" placeholder="퇴사일"  required/>
+                            <input type="text" name="position" class="input-school widthstyle" placeholder="직급" required>
+                        </div>
+                        <textarea id="myText" name="jobDescription"  placeholder="주요업무 (최대 300자까지 입력 가능)" maxlength="300"
+                                  oninput="updateCount()"></textarea>
+                        <p><span id="charCount">0</span>/300자</p>
+                        <div class="button">
+                            <button type="button" class="btn-save">저장</button>
+                            <button type="button" class="btn-del">취소</button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="edit-edu-form" id="careerEdit">
+                    <h5>수정</h5>
+                    <form action="/user/editCareer" method="post"  id="careerEditForm">
+                        <input type="hidden" name="resumeId" id="conResumeId" >
+                        <input type="hidden" name="userNum" id="comUserNum" th:value="${userVO.userNum}"  required>
+                        <input type="hidden" name="careerId" required>
+                        <input type="text" class="company-name" id="comName" placeholder="회사명" name="companyName" required>
+                        <div class="flex">
+                            <input type="text" class="department" id="comDepartment" placeholder="부서" name="department" required>
+                            <input type="date" name="joinDate" id="comJoinDate" class="custom-date widthstyle" placeholder="입사일" required />
+                            <input type="date" name="quitDate" id="comQuitDate" class="custom-date widthstyle" placeholder="퇴사일"  required/>
+                            <input type="text" name="position" id="comPosition" class="input-school widthstyle" placeholder="직급" required>
+                        </div>
+                        <textarea id="myText2" name="jobDescription" placeholder="주요업무 (최대 300자까지 입력 가능)" maxlength="300"
+                                  oninput="updateCount()"  required></textarea>
+                        <p><span id="charCount6">0</span>/300자</p>
+                        <div class="button">
+                            <button type="button" class="btn-save" id="editCareerBtn">저장</button>
+                            <button type="button" class="btn-del editDel">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="sec05">
+                <h2>04</h2>
+                <div class="flex plus">
+                    <p>자격증</p>
+                    <figure class="flex">
+                        <img src="../image/plus.png" alt="">
+                        <p>추가</p>
+                    </figure>
+                </div>
+
+                <div th:if="${userVO.careerList != null}">
+                    <ul class="license-list flex" id="licenseId">
+                        <li class="license-card" th:each="license : ${licenseList}">
+                            <h3 class="name"  th:text="${license.licenseName}">정보처리기사</h3>
+                            <span class="org" th:text="${license.licenseOrg}">발급기관</span>
+                            <p class="date" th:text="${#temporals.format(license.acquisition, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(license.expiration, 'yyyy-MM-dd')}">2025-04-22 ~ 2046-02-33</p>
+                            <img src="../image/pencil.png" alt="" class="licensePencil">
+
+                            <form th:action="@{/user/deleteLicens/{licenseId}(licenseId=${license.licenseId})}" method="POST">
+                                <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa-solid fa-x"></i>
+                                </button>
+
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 자격증 추가 폼 -->
+                <div class="add-license-form" id="licenseAdd">
+                    <h5>추가</h5>
+                    <form id="licenseForm">
+                        <input type="hidden" th:value="${param.uniqueTime}" name="resumeId" >
+                        <input type="hidden" name="userNum"  th:value="${userVO.userNum}">
+                        <input type="text" class="liName" placeholder="자격증명 입력" name="licenseName" required>
+                        <input type="text" class="license-org" placeholder="발급 기관" name="licenseOrg" required>
+                        <input type="text" name="acquisition" class="custom-date widthstyle" placeholder="자격증 취득일" required />
+                        <input type="text" name="expiration" class="custom-date widthstyle" placeholder="자격증 만료일"  required/>
+                        <div class="button">
+                            <button type="button" class="btn-license-save">저장</button>
+                            <button type="button" class="btn-license-cancel addCancel">취소</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 자격증 수정 폼 -->
+                <div class="edit-license-form" id="licenseEdit">
+                    <h5>수정</h5>
+                    <input type="hidden" id="fakeLicense">
+                    <form id="licenseEditForm">
+                        <input type="hidden" name="resumeId" id="licenseResumeId">
+                        <input type="hidden" name="userNum" id="licenseUserNum" th:value="${userVO.userNum}">
+                        <input type="hidden" name="licenseId" required>
+
+                        <input type="text" class="" placeholder="자격증명 입력" name="licenseName" id="editLicenseName" required>
+                        <input type="text" class="" placeholder="발급 기관" name="licenseOrg"  id="editLicenseOrg" required>
+                        <input type="text" name="acquisition" class="custom-date widthstyle" id="editAcquisition" placeholder="자격증 취득일" required />
+                        <input type="text" name="expiration" class="custom-date widthstyle" id="editExpiration" placeholder="자격증 만료일" required />
+                        <div class="button">
+                            <button type="button" class="btn-license-save" id="licenseEditBtn">저장</button>
+
+                            <button type="button" class="btn-license-cancel editDel">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+
+            <section class="sec06">
+                <h2>05</h2>
+                <p>자기소개서</p>
+                <div class="introduceMyself">
+                    <div class="resume-item outerBox">
+                        <label>
+                            성장과정 <img src="../image/pencil.png" alt="수정" class="edit-icon">
+                        </label>
+
+                        <p><span id="charCount2">0</span>&nbsp; 자</p>
+                        <textarea class="writeBox" data-type="resumeEarlyLife" data-name="성장과정" placeholder="성장과정을 입력하세요." name="growth" id="growth"  oninput="updateCount()" th:text="${growth}"></textarea>
+                        <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                        <div class="spinner" style="display: none;"></div>
+                    </div>
+
+                    <div class="resume-item outerBox">
+                        <label>
+                            학창 시절 및 경력 <img src="../image/pencil.png" alt="수정" class="edit-icon">
+                        </label>
+                        <p><span id="charCount3">0 </span>&nbsp; 자</p>
+
+
+                        <textarea class="writeBox" data-type="resumeSchoolCareer" data-name="학창 시절 및 경력" placeholder="학창 시절 및 경력을 입력하세요." name="student-day" id="student-day" oninput="updateCount()" th:text="${studentDay}"></textarea>
+
+                        <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                        <div class="spinner" style="display: none;"></div>
+                    </div>
+
+                    <div class="resume-item outerBox">
+                        <label>
+                            성격의 장단점 <img src="../image/pencil.png" alt="수정" class="edit-icon">
+                        </label>
+                        <p><span id="charCount4">0</span>&nbsp; 자</p>
+
+                        <textarea class="writeBox" data-type="resumeStrengthWeakness" data-name="성격의 장단점" placeholder="성격의 장단점을 입력하세요." name="pros-and-cons" id="pros-and-cons" oninput="updateCount()" th:text="${prosAndCons}"></textarea>
+
+                        <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                        <div class="spinner" style="display: none;"></div>
+                    </div>
+
+                    <div class="resume-item outerBox">
+                        <label>
+                            입사 후 포부 <img src="../image/pencil.png" alt="수정" class="edit-icon">
+                        </label>
+                        <p><span id="charCount5">0</span>&nbsp; 자</p>
+                        <textarea class="writeBox" data-type="resumeApplyAfterDream" data-name="입사 후 포부" placeholder="입사 후 포부를 입력하세요." name="aspiration" id="aspiration"  oninput="updateCount()"  th:text="${aspiration}"></textarea>
+                        <button type="button" class="preview-btn">AI이력서 미리보기</button>
+                        <div class="spinner" style="display: none;"></div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+    <form action="/user/saveResume" method="post" id="hiddenForm">
+        <input type="hidden" name="resumeId" th:value="${param.uniqueTime}">
+        <input type="hidden" name="title2" id="title2">
+        <input type="hidden" name="growth2" id="growth2">
+        <input type="hidden" name="studentDay2" id="studentDay2">
+        <input type="hidden" name="prosAndCons2" id="prosAndCons2">
+        <input type="hidden" name="aspiration2" id="aspiration2">
+    </form>
+
+    <div th:replace="include/footer :: footerFragment"></div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="../css/js/header.js"></script>
+<script src="../css/js/resume.js"></script>
+
+    <script>
+        document.querySelectorAll('.preview-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const textarea = this.previousElementSibling;
+                const content = textarea.value;
+                const name = textarea.getAttribute('data-name');
+
+                // 로딩 스피너를 해당 텍스트 영역 아래에 표시
+                const spinner = textarea.nextElementSibling.nextElementSibling; // "spinner" 클래스를 찾음
+
+                // 스피너 보이기
+                spinner.style.display = "block";
+                textarea.innerText = ""; // 이전 결과 지우기
+
+
+                fetch('submitresume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        name: name
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        spinner.style.display = "none";
+                        textarea.value = data.result || '응답이 없습니다.';
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        textarea.value = '오류가 발생했습니다.';
+                    });
+            });
+        });
+
+        document.getElementById("downloadPDF").addEventListener("click", async function () {
+            // 각 textarea 값 추출
+            const inputs = {};
+            inputs["resume_title"] =  document.getElementById("resume-title").value;
+
+            document.querySelectorAll(".writeBox").forEach(textarea => {
+                const key = textarea.getAttribute("data-type");
+                const valuee = textarea.value;
+                inputs[key] = valuee;
+
+            });
+
+            const educationList = [];
+
+            document.querySelectorAll(".school-list .education").forEach(eduEl => {
+                const schoolName = eduEl.querySelector("h4")?.textContent.trim();
+                const major = eduEl.querySelector("p")?.textContent.trim();
+
+                const spans = eduEl.querySelectorAll(".edu-info span");
+                const part = spans[0]?.textContent.trim();
+                const degreeType = spans[1]?.textContent.trim();
+                const graduationStatus = spans[2]?.textContent.trim();
+
+                const graduationDate = eduEl.querySelector(".graduration")?.textContent.trim();
+
+                educationList.push({
+                    schoolName,
+                    major,
+                    part,
+                    degreeType,
+                    graduationStatus,
+                    graduationDate
+                });
+            });
+
+            inputs["educationList"] = educationList;
+
+            const careerList = [];
+
+            document.querySelectorAll(".com-list .education").forEach(careerEl => {
+                const companyName = careerEl.querySelector("h4")?.textContent.trim();
+                const department = careerEl.querySelector("p")?.textContent.trim();
+
+                const spanEls = careerEl.querySelectorAll(".edu-info span");
+                const joinQuit = spanEls[0]?.textContent.trim().split(" ~ ");
+                const joinDate = joinQuit?.[0];
+                const quitDate = joinQuit?.[1];
+
+                const position = spanEls[1]?.textContent.trim();
+
+                const jobDescription = careerEl.querySelector(".job_description")?.textContent.trim();
+
+                careerList.push({
+                    companyName,
+                    department,
+                    joinDate,
+                    quitDate,
+                    position,
+                    jobDescription
+                });
+            });
+
+            inputs["careerList"] = careerList;
+
+            const licenseList = [];
+
+            document.querySelectorAll(".license-card").forEach(licenseEl => {
+                const licenseName = licenseEl.querySelector(".name")?.textContent.trim();
+                const licenseOrg = licenseEl.querySelector(".org")?.textContent.trim();
+
+                const dateText = licenseEl.querySelector(".date")?.textContent.trim();
+                let acquisition = "", expiration = "";
+                if (dateText.includes("~")) {
+                    const dates = dateText.split("~").map(d => d.trim());
+                    acquisition = dates[0];
+                    expiration = dates[1];
+                }
+
+                licenseList.push({
+                    licenseName,
+                    licenseOrg,
+                    acquisition,
+                    expiration
+                });
+            });
+
+            inputs["licenseList"] = licenseList;
+
+            console.log(inputs);
+
+            // Ajax 요청 보내기
+            fetch("/generatepdf", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(inputs)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("PDF 생성 실패");
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Blob으로 다운로드 처리
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "이력서.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                })
+                .catch(error => {
+                    console.error("에러:", error);
+                    alert("PDF 생성 중 오류 발생");
+                });
+        });
+    </script>
+
+</body>
+
+</html>

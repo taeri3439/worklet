@@ -1,0 +1,459 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.flex{
+  display: flex;
+}
+
+:root {
+  --main-color1: #255EEE;
+  --sub-color1: #87A9FF;
+  --sub-color2: #D2DFFF;
+  --text-color: #1d1d1d;
+  --text-color2: #D0D0D0;
+  --text-color3: #F5F5F0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pretendard-Regular', sans-serif;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+/* PC (데스크탑) 버전 */
+@media (min-width: 768px) {
+
+  .wrap{
+    margin-top: 50px;
+  }
+
+  .ham-menu{
+    display: none;
+  }
+
+  header {
+    width: 100%;
+    min-width: 1200px;
+    height: 80px;
+    justify-content: space-between;
+    padding: 0 80px;
+    align-items: center;
+    backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
+
+  /*header .logout {*/
+  /*    display: none;*/
+  /*}*/
+
+  header h1 {
+    width: 170px;
+  }
+
+  header .hamburger {
+    display: none;
+  }
+
+  header h1 a {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  header h1 a img {
+    width: 100%;
+  }
+
+  header .menu {
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+    border-radius: 50px;
+    gap: 50px;
+    padding: 20px 40px;
+    min-width: 548px;
+  }
+
+
+  header .login,
+  header .logout {
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    height: 50px;
+    align-items: center;
+    border-radius: 50px;
+    gap: 50px;
+    padding: 20px;
+    min-width: 186px;
+  }
+
+  .find-id-container input {
+    border: none;
+    outline: none;
+    transition: border 0.2s ease;
+  }
+
+  .find-id-container input:focus {
+    border: 1px solid #777;
+  }
+
+
+  .title {
+    font-size: 50px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+
+  .find-id-container {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 100%;
+    max-width: 550px;
+    border: 1px solid #b8bfd3;
+  }
+
+
+  .find-id-container h2 {
+    text-align: center;
+    color: #255EEE;
+    margin-bottom: 25px;
+  }
+
+  .find-id-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 32px;
+  }
+
+
+  .find-id-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  .find-id-form input {
+    width: 65%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    height: 50px;
+  }
+
+  .find-id-form button {
+    width: 65%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .find-id-form button:hover {
+    background-color: #0056b3;
+  }
+
+  /* --------footer----------- */
+  footer{
+    width: 100%;
+    height: 250px;
+    background-color: #D9D9D9;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 100px;
+  }
+
+  footer p{
+    margin: 20px 0;
+  }
+
+  footer .footer-logo{
+    width: 300px;
+  }
+  footer .footer-logo img{
+    width: 100%;
+  }
+
+
+}
+
+
+
+
+/* ----모바일--------- */
+@media (max-width: 767px) {
+  @font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+
+
+  :root {
+    --main-color1: #255EEE;
+    --sub-color1: #87A9FF;
+    --sub-color2: #D2DFFF;
+    --text-color: #1d1d1d;
+    --text-color2: #D0D0D0;
+    --text-color3: #F5F5F0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard-Regular', sans-serif;
+  }
+
+
+
+  body {
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  header {
+    width: 100%;
+    height: 65px;
+    justify-content: space-between;
+    padding: 0 30px;
+    align-items: center;
+    backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
+
+  /*header .logout {*/
+  /*    display: none;*/
+  /*}*/
+
+  header h1 {
+    width: 130px;
+  }
+
+  header .hamburger {
+    display: block;
+    background-color: var(--main-color1);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  header .hamburger span {
+    width: 23px;
+    height: 1px;
+    background-color: #fff;
+    margin: 3px 0;
+    display: block;
+    transition: .4s;
+  }
+
+  header .hamburger span.on:nth-child(2) {
+    display: none;
+  }
+
+  header .hamburger span.on:nth-child(1) {
+    transform: rotate(45deg) translate(2px, 2px);
+  }
+
+  header .hamburger span.on:nth-child(3) {
+    transform: rotate(-45deg) translate(2px, -3px);
+  }
+
+  header h1 a {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  header h1 a img {
+    width: 100%;
+  }
+
+  header .menu {
+    display: none;
+  }
+
+
+  header .login,
+  header .logout {
+    display: none;
+  }
+
+  .ham-menu {
+    position: fixed;
+    top: 65px;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    transition: .4s;
+  }
+
+  .ham-menu.on {
+    right: 0;
+  }
+
+  .ham-menu .menu-list {
+    width: 85%;
+    margin: auto;
+    margin-top: 50px;
+  }
+
+  .ham-menu .menu-list li {
+    border-bottom: 1px solid #d7d7d7;
+    padding: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .ham-menu .ham-logout {
+    display: none;
+  }
+
+  .ham-menu .ham-logout,
+  .ham-login {
+    width: 85%;
+    margin: 5cqb auto;
+  }
+
+  .ham-menu .ham-logout li,
+  .ham-login li {
+    margin: 10px 0;
+  }
+
+
+  .wrap{
+    width: 100%;
+    padding: 150px 0;
+  }
+
+  .title {
+    font-size: 50px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+
+ 
+.find-id-container {
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 90%;
+  border: 1px solid #b8bfd3;
+}
+
+
+
+
+  .find-id-container h2 {
+    text-align: center;
+    color: #255EEE;
+    margin-bottom: 25px;
+  }
+
+
+  .find-id-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  .find-id-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    height: 50px;
+  }
+
+  .find-id-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .find-id-form button:hover {
+    background-color: #0056b3;
+  }
+
+
+  /* --------footer----------- */
+  footer{
+    width: 100%;
+    background-color: #D9D9D9;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+    flex-direction: column;
+  }
+
+  footer p{
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  footer .footer-logo{
+    width: 100%
+  }
+  footer .footer-logo img{
+    width: 250px;
+  }
+}

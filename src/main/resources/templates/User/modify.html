@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원수정</title>
+  <link rel="stylesheet" href="../css/user/regiest.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <script src="https://kit.fontawesome.com/599a3a7868.js" crossorigin="anonymous"></script>
+
+  <!-- 카카오 주소 API -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <!-- 카카오 지도 API -->
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=0f0c892be57f61276f534d3ff4c7601b&libraries=services"></script>
+  <script>
+    // 전역 변수로 map 선언
+    var map;
+
+    window.onload = function() {
+      if (typeof kakao !== "undefined") {
+        // 지도 생성
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                  center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울의 위도와 경도 (기본 값)
+                  level: 3 // 지도 확대 레벨
+                };
+
+        map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+        console.log("map: ", map);
+      } else {
+        console.log("카카오 맵 API가 로드되지 않았습니다.");
+      }
+    };
+
+  </script>
+
+
+
+</head>
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+
+<div class="wrap">
+  <div class="form-container">
+    <h2 class="title">WORKLET</h2>
+    <h2>회원정보 수정</h2>
+    <form action="/user/modify" method="post" name="registForm">
+      <div class="form">
+        <div class="form-row">
+          <label class="username">아이디</label>
+          <input type="text" name="userId" id="id"  th:value="${user.userId}" readonly>
+
+          <span id="check-result"></span>
+
+        </div>
+
+        <div class="form-row">
+          <label for="password">비밀번호</label>
+          <input type="password" name="userPw" id="password" placeholder="8~16자 영문, 숫자, 특수문자 포함">
+        </div>
+
+        <div class="form-row">
+          <label for="passwordCheck">비밀번호 확인</label>
+          <input type="password" id="passwordCheck" placeholder="비밀번호 재입력">
+        </div>
+
+        <div class="form-row">
+          <label>이름</label>
+          <input type="text" id="name" name="userName"  th:value="${user.userName}">
+        </div>
+
+        <div class="form-row">
+          <label>성별</label>
+          <div class="radio-group">
+            <label><input type="radio" name="userGender" value="남성"  th:checked="${user.userGender=='남성'}"> 남성</label>
+            <label><input type="radio" name="userGender" value="여성"  th:checked="${user.userGender=='여성'}"> 여성</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>생년월일</label>
+          <div class="birth-row">
+            <input type="text" class="small" id="birthYear"  th:value="${user.userBirthday.substring(0, 4)}">
+            <input type="text" class="small" id="birthMonth"  th:value="${user.userBirthday.substring(5, 7)}">
+            <input type="text" class="small" id="birthDay"  th:value="${user.userBirthday.substring(8, 10)}">
+            <input type="hidden" name="userBirthday" id="userBirthday" th:value="${user.userBirthday}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>연락처</label>
+          <input type="text" placeholder="000-0000-0000" name="userPhone"  th:value="${user.userPhone}">
+        </div>
+
+        <div class="form-row">
+          <label>이메일</label>
+          <input type="email" placeholder="example@email.com" name="userEmail"  th:value="${user.userEmail}">
+        </div>
+
+        <div class="form-row flex  address">
+          <label for="userAddress">주소</label>
+          <div class="flex">
+            <input type="text" id="userAddress" name="userAddress" readonly  th:value="${user.userAddress}">
+            <button type="button" id="findAddressBtn" onclick="openPostcode()">주소 찾기</button> <!-- 주소 찾기 버튼 -->
+          </div>
+
+
+          <!-- 지도 표시할 영역 -->
+          <div id="map" style="width:100%; height:300px;"></div>
+
+          <!-- 선택한 주소를 보여줄 영역 -->
+          <div id="address"></div>
+        </div>
+
+
+        <div class="form-row">
+            <label>희망직종 (선택)</label>
+            <button type="button" id="selectJobBtn" onclick="openJobPopup()">희망 직종 선택</button>
+
+          <div id="selectedJobList" style="margin-top: 10px;">
+
+          </div>
+
+            <div id="jobPopup" class="popup">
+              <h2 style="text-align: center; padding: 20px; border-bottom: 1px solid #eee">희망직무</h2>
+              <div class="searchCheckBoxJobType">
+
+                <!--검색 세부 3개까지 / 가로 7 세로 3-->
+                <div class="searchCheckTopCategoryJobType" id="topCategoryList">
+                  <button class="popupClose" onclick="closeJobPopup()">
+                    <i class="fa-solid fa-x"></i>
+                  </button>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="01"><span>경영·사무·금융·보험</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="02"><span>연구 및 공학기술</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="03"><span>교육·법률·사회복지·경찰·소방 및 군인</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="04"><span>보건·의료</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="05"><span>예술·디자인·방송·스포츠</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="06"><span>미용·여행·숙박·음식·경비·돌봄·청소</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="07"><span>영업·판매·운전·운송</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="08"><span>건설·채굴</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="09"><span>설치·정비·생산-기계·금속·재료</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="10"><span>설치·정비·생산-전기·전자·정보통신</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="11"><span>설치·정비·생산-화학·환경·섬유·의복·식품가공</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="12"><span>설치·정비·생산-인쇄·목재·공예 및 제조 단순</span><i class="fa-solid fa-chevron-right"></i></div>
+                  <div><input type="radio" class="topCategoryCheckJobType" name = "topCategory" value="13"><span>농림어업직</span><i class="fa-solid fa-chevron-right"></i></div>
+
+
+                </div>
+                <div class="searchCheckUnderCategoryJobType" id="underCategoryList">
+
+
+                </div>
+
+              </div>
+
+              <div class="signupBtn">
+                <button type="button" id="jobSignup">
+                  등록
+                </button>
+              </div>
+            </div>
+         </div>
+
+        <div class="form-row">
+          <label>희망고용형태 (최대 3개)</label>
+          <div class="option-group">
+            <label><input type="checkbox" name="wantJobType" value="정규직" th:checked="${userWantJobTypeList.contains('정규직')}"> 정규직</label>
+            <label><input type="checkbox" name="wantJobType" value="계약직"  th:checked="${userWantJobTypeList.contains('계약직')}"> 계약직</label>
+            <label><input type="checkbox" name="wantJobType" value="인턴"  th:checked="${userWantJobTypeList.contains('인턴')}"> 인턴</label>
+            <label><input type="checkbox" name="wantJobType" value="아르바이트"  th:checked="${userWantJobTypeList.contains('아르바이트')}"> 아르바이트</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>희망직종경력</label>
+          <div class="option-group">
+            <label><input type="radio" name="wantJobWorkexpHowlong" value="0" th:checked="${user.wantJobWorkexpHowlong == '0'}"> 없음</label>
+            <label><input type="radio" name="wantJobWorkexpHowlong" value="1" th:checked="${user.wantJobWorkexpHowlong == '1'}"> 1년 이하</label>
+            <label><input type="radio" name="wantJobWorkexpHowlong" value="2" th:checked="${user.wantJobWorkexpHowlong == '2'}"> 1년~2년</label>
+            <label><input type="radio" name="wantJobWorkexpHowlong" value="3" th:checked="${user.wantJobWorkexpHowlong == '3'}"> 2년 이상</label>
+          </div>
+        </div>
+
+        <div class="form-group terms-box">
+          <label class="terms-title">가입 약관</label>
+          <div class="terms-inner-box">
+            <div class="terms-item">
+              <label><input type="checkbox" class="agree" required> 개인회원 약관 동의(필수)</label>
+            </div>
+            <div class="terms-item">
+              <label><input type="checkbox" class="agree" required> 개인정보 수집 및 이용 동의(필수)</label>
+            </div>
+            <div class="terms-item">
+              <label><input type="checkbox" class="agree"> 마케팅 정보 수신 동의 - 이메일(선택)</label>
+            </div>
+            <div class="terms-item">
+              <label><input type="checkbox" class="agree"> 마케팅 정보 수신 동의 - MMS(선택)</label>
+            </div>
+          </div>
+          <div class="terms-all">
+            <label><input type="checkbox" id="checkAll"> <strong>전체 동의</strong></label>
+            <p class="terms-desc">위의 약관에 모두 동의합니다.</p>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">회원 수정하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById("checkAll").addEventListener("change", function () {
+    document.querySelectorAll(".agree").forEach(chk => chk.checked = this.checked);
+  });
+
+  document.querySelectorAll(".agree").forEach(chk => {
+    chk.addEventListener("change", function () {
+      const allChecked = Array.from(document.querySelectorAll(".agree")).every(cb => cb.checked);
+      document.getElementById("checkAll").checked = allChecked;
+    });
+  });
+
+  document.querySelector(".submit-btn").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("id");
+    const pw = document.getElementById("password");
+    const pwCheck = document.getElementById("passwordCheck");
+    const name = document.getElementById("name");
+    const gender = document.querySelector('input[name="userGender"]:checked');
+    const birthYear = document.getElementById("birthYear").value.trim();
+    const birthMonth = document.getElementById("birthMonth").value.trim();
+    const birthDay = document.getElementById("birthDay").value.trim();
+    const userBirthday = document.getElementById("userBirthday");
+
+    const phone = document.querySelector('input[name="userPhone"]');
+    const email = document.querySelector('input[name="userEmail"]');
+    const employmentTypes = document.querySelectorAll('.option-group input[type="checkbox"]');
+    const career = document.querySelector('input[name="wantJobWorkexpHowlong"]:checked');
+
+    const redId = /^[a-z0-9]{6,20}$/i;
+    const redPw = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+]).{8,16}$/;
+    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!id.value || !redId.test(id.value)) return alert("올바른 아이디를 입력해주세요");
+    if (!pw.value || !redPw.test(pw.value)) return alert("올바른 비밀번호를 입력해주세요");
+    if (pw.value !== pwCheck.value) return alert("비밀번호가 일치하지 않습니다");
+    if (!name.value) return alert("이름을 입력해주세요");
+    if (!gender) return alert("성별을 선택해주세요");
+
+    if (!/^\d{4}$/.test(birthYear) || birthYear < 1900) return alert("출생년도를 올바르게 입력해주세요");
+    if (birthMonth < 1 || birthMonth > 12) return alert("월은 1~12 사이여야 합니다");
+    if (birthDay < 1 || birthDay > 31) return alert("일은 1~31 사이여야 합니다");
+    const maxDay = new Date(birthYear, birthMonth, 0).getDate();
+    if (birthDay > maxDay) return alert(`${birthMonth}월은 ${maxDay}일까지 있습니다`);
+    userBirthday.value = `${birthYear}-${birthMonth.padStart(2, '0')}-${birthDay.padStart(2, '0')}`;
+
+    if (!phoneRegex.test(phone.value)) return alert("전화번호 형식을 확인해주세요 (예: 010-1234-5678)");
+    if (!emailRegex.test(email.value)) return alert("이메일 형식을 확인해주세요");
+
+    const checkedEmployment = Array.from(employmentTypes).filter(cb => cb.checked);
+    if (checkedEmployment.length === 0 || checkedEmployment.length > 3) return alert("고용형태는 1~3개 선택해주세요");
+    if (!career) return alert("경력을 선택해주세요");
+
+    alert("회원수정이 완료되었습니다! 🎉");
+    document.forms["registForm"].submit();
+  });
+
+
+
+
+    const userIdInput = document.getElementById('id');
+    const resultSpan = document.getElementById('check-result');
+
+    userIdInput.addEventListener('input', function () {
+      const userId = userIdInput.value;
+
+      // 입력 안 했으면 리셋
+      if (userId.trim() === '') {
+        resultSpan.textContent = '';
+        resultSpan.style.color = '';
+        return;
+      }
+
+      fetch(`/user/check-id?userId=${encodeURIComponent(userId)}`)
+              .then(response => response.text())
+              .then(data => {
+                console.log('서버 응답:', data);
+
+                if (data === 'duplicate') {
+                  resultSpan.textContent = '사용 중인 아이디입니다.';
+                  resultSpan.style.color = 'red';
+                } else if (data === 'available') {
+                  resultSpan.textContent = '사용 가능한 아이디입니다.';
+                  resultSpan.style.color = 'green';
+                } else {
+                  resultSpan.textContent = '알 수 없는 응답입니다.';
+                  resultSpan.style.color = 'gray';
+                }
+              })
+              .catch(error => {
+                console.error('에러 발생:', error);
+                resultSpan.textContent = '서버 오류입니다.';
+                resultSpan.style.color = 'orange';
+              });
+    });
+
+
+  // 선택한 중분류 저장할 배열
+  var selectedJobs = [];
+
+  // 팝업 열기
+  function openJobPopup() {
+    document.getElementById("jobPopup").style.display = "flex";  // 팝업을 보이게 함
+
+    // 팝업 열 때 선택한 것 미리 칠하기
+    setTimeout(() => { // DOM이 완전히 열리고 나서 적용
+      var checkboxes = document.querySelectorAll('.searchCheckJobType');
+      checkboxes.forEach(function(checkbox) {
+        var jobName = checkbox.nextElementSibling.textContent.trim();
+        if (selectedJobs.some(job => job.name === jobName)) {
+          checkbox.checked = true;
+          var article = checkbox.closest('article');
+          article.style.borderColor = '#ffffff';
+          article.style.backgroundColor = '#255EEE';
+          article.style.color = '#ffffff';
+          article.style.padding = '13px';
+        }
+      });
+    }, 100);
+  }
+
+  // 팝업 닫기
+  function closeJobPopup() {
+    document.getElementById("jobPopup").style.display = "none";  // 팝업을 숨김
+  }
+
+  // "등록" 버튼 클릭
+  document.getElementById('jobSignup').addEventListener('click', function() {
+    var selectedCheckboxes = document.querySelectorAll('.searchCheckJobType:checked');
+
+    if (selectedCheckboxes.length === 0) {
+      alert('하나 이상 선택해야 합니다!');
+      return;
+    }
+
+    selectedJobs = [];
+    selectedCheckboxes.forEach(function (checkbox){
+      selectedJobs.push({
+        value: checkbox.value,
+        name: checkbox.nextElementSibling.textContent.trim()
+      });
+    });
+
+    renderSelectedJobs(); // 화면에 뿌리기
+    closeJobPopup();
+
+  })
+
+
+  function renderSelectedJobs(){
+    var selectedJobList = document.getElementById('selectedJobList');
+    selectedJobList.innerHTML = '';
+
+    selectedJobs.forEach(function(job, idx) {
+      var span = document.createElement('span');
+      span.style.display = 'inline-block';
+      span.style.padding = '8px 10px';
+      span.style.margin = '5px';
+      // span.style.backgroundColor = 'var(--sub-color2)';
+      span.style.border = '1px solid var(--main-color1)';
+      span.style.borderRadius = '20px';
+      span.style.position = 'relative';
+      span.style.fontSize = '14px';
+      span.style.color = 'var(--main-color1)';
+
+      var textNode = document.createTextNode(job.name);
+
+      // 삭제 버튼
+      var deleteBtn = document.createElement('span');
+      deleteBtn.textContent = ' ×';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.style.marginLeft = '5px';
+      // deleteBtn.style.color = 'red';
+
+      deleteBtn.addEventListener('click', function() {
+        selectedJobs.splice(idx, 1); // 배열에서도 삭제
+        renderSelectedJobs(); // 다시 렌더링
+
+        // 팝업 열려 있으면 체크박스 상태도 바로 업데이트
+        var checkboxes = document.querySelectorAll('.searchCheckJobType');
+        checkboxes.forEach(function(checkbox) {
+          if (checkbox.nextElementSibling.textContent.trim() === job.name) {
+            checkbox.checked = false;
+            var article = checkbox.closest('article');
+            article.style.borderColor = '#D0D0D0';
+            article.style.backgroundColor = '#ffffff';
+            article.style.color = '#000000';
+          }
+        });
+      });
+
+      span.appendChild(textNode);
+      span.appendChild(deleteBtn);
+
+      selectedJobList.appendChild(span);
+    });
+
+  };
+
+
+  //   팝업 내용
+  var fakeCheckBoxJobType = document.querySelectorAll('.searchCheckUnderCategoryJobType > div')
+
+  var searchCheckTopCategoryJobType = document.querySelectorAll('.searchCheckTopCategoryJobType > div')
+  var searchCheckUnderCategoryJobType = document.querySelector('.searchCheckUnderCategoryJobType')
+
+
+  //대분류
+  for(var i = 0; i<searchCheckTopCategoryJobType.length; i++ ) {
+    (function(index) {
+      searchCheckTopCategoryJobType[index].addEventListener('click', function() {
+
+        for(var j=0; j< searchCheckTopCategoryJobType.length; j++) {
+          searchCheckTopCategoryJobType[j].style.borderColor='#d0d0d0';
+          searchCheckTopCategoryJobType[j].style.backgroundColor='#ffffff';
+          searchCheckTopCategoryJobType[j].style.color='#000000'
+          var icon = searchCheckTopCategoryJobType[j].querySelector("i");
+          if (icon) {
+            icon.style.color = "#777"; // 원하는 색상으로
+          }
+        }
+
+        var radioBox = searchCheckTopCategoryJobType[index].querySelector('.topCategoryCheckJobType')
+
+        radioBox.checked = true;
+
+
+        searchCheckTopCategoryJobType[index].style.borderColor = '#ffffff';
+        searchCheckTopCategoryJobType[index].style.backgroundColor = '#255EEE';
+        searchCheckTopCategoryJobType[index].style.color = '#ffffff';
+        searchCheckTopCategoryJobType[index].querySelector("i").style.color = "#fff";
+
+
+        searchCheckUnderCategoryJobType.style.display = 'inline-block';
+
+        //대분류 나타내기
+        // ✅ 여기에 넣으면 됩니다
+        var selectedCategoryNum = radioBox.value; // 대분류 번호
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/category/secondary?primary=' + selectedCategoryNum, true);
+
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) { //서버에서 응답이 오면 호출되는 콜백 //4는 요청완료 200은 응답성공
+            var responseData = JSON.parse(xhr.responseText); //json 문자열 객체 변환
+
+            // 👉 여기에 중분류 HTML을 렌더링하는 코드를 추가하면 됩니다
+            searchCheckUnderCategoryJobType.innerHTML = ''; // 기존 것 지우고
+
+            for (var k = 0; k < responseData.length; k++) {
+              var item = responseData[k];
+
+              //빈 컬럼이면 skip
+              if (!item.secondaryCategoryName || item.secondaryCategoryName.trim() === '') {
+                continue;
+              }
+
+              var article = document.createElement('article');
+              article.innerHTML = '<input type="checkbox" name="preferredJobTypes" class="searchCheckJobType" value="' + item.secondaryCategoryNum + '">' +
+                      '<span>' + item.secondaryCategoryName + '</span>';
+              searchCheckUnderCategoryJobType.appendChild(article);
+            }
+          }
+        };
+        xhr.send();
+
+      });
+
+    })(i);
+
+  }
+
+
+  //중분류 3개까지
+
+  searchCheckUnderCategoryJobType.addEventListener('click', function(e) {
+    // 클릭한 대상이 체크박스를 포함하는 div인지 확인
+    var div = e.target.closest('article');
+
+    // 체크박스가 있는 div만 처리
+    if (!fakeCheckBoxJobType) {
+      return;
+    }
+
+    var checkbox = div.querySelector('input[type="checkbox"]');
+
+    // 클릭한 체크박스가 이미 체크되어 있으면 해제
+    if (checkbox.checked) {
+      checkbox.checked = false;
+      div.style.borderColor = '#D0D0D0';  // 기본 스타일로 복원
+      div.style.backgroundColor = '#ffffff';
+      div.style.color = '#000000';
+    } else {
+      var checkedCount = document.querySelectorAll('.searchCheckJobType:checked').length;
+
+      // 최대 3개까지 선택하도록 제한
+      if (checkedCount >= 3) {
+        alert('최대 3개까지 선택할 수 있습니다!');
+        return;
+      }
+
+      checkbox.checked = true;
+      div.style.borderColor = '#ffffff';  // 선택된 스타일 적용
+      div.style.backgroundColor = '#255EEE';
+      div.style.color = '#ffffff';
+      div.style.padding = '13px';
+      div.style.marginTop = '1px';
+    }
+  });
+
+
+
+
+
+
+
+</script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+
+<script src="../css/js/header.js"></script>
+
+<script>
+  // 주소 찾기 함수
+  function openPostcode() {
+    new daum.Postcode({
+      oncomplete: function(data) {
+        var address = data.roadAddress;
+        document.getElementById('userAddress').value = address;
+
+        // 주소의 위도, 경도를 가져와 지도에 표시
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(address, function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            console.log(coords);
+            map.setCenter(coords);
+            var marker = new kakao.maps.Marker({
+              position: coords
+            });
+            marker.setMap(map);
+          } else{
+            console.log("주소 변환 실패");
+          }
+        });
+      }
+    }).open();
+  }
+</script>
+</body>
+</html>

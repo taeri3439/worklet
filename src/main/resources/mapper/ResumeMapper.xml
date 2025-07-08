@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project2.worklet.resume.service.ResumeMapper">
+
+            <!-- 이력서 등록 -->
+            <insert id="insertResume" useGeneratedKeys="true" keyProperty="resumeId">
+                INSERT INTO resume (
+                    resume_id,
+                    user_num,
+                                    title
+                ) VALUES (
+                          #{resumeId},
+                             #{userNum},
+                          ''
+                         )
+            </insert>
+
+        <!-- 이력서 수정 -->
+        <update id="updateResume">
+            UPDATE resume
+            SET
+                title = #{title},
+                growth = #{growth},
+                student_day = #{studentDay},
+                pros_and_cons = #{prosAndCons},
+                aspiration = #{aspiration},
+                updated_at = NOW()
+            WHERE resume_id = #{resumeId}
+        </update>
+
+        <!-- 이력서 삭제 -->
+        <delete id="deleteResume">
+            DELETE FROM resume WHERE resume_id = #{resumeId}
+        </delete>
+
+        <!-- 이력서 단건 조회 -->
+        <select id="getResumeById" resultType="com.project2.worklet.component.ResumeVO">
+            SELECT *
+            FROM resume
+            WHERE resume_id = #{resumeId}
+        </select>
+
+        <!-- 이력서 전체 조회 (해당 유저 번호 기준) -->
+        <select id="getResumesByUserNum" resultMap="resumeResultMap">
+            SELECT resume_id AS resumeId,
+                   user_num AS userNum,
+                   title,
+                   updated_at AS updatedAt
+            FROM resume
+            WHERE user_num = #{userNum}
+            ORDER BY updated_at DESC
+        </select>
+
+    <resultMap id="resumeResultMap" type="com.project2.worklet.component.ResumeVO">
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <update id="saveResume" parameterType="com.project2.worklet.component.ResumeVO">
+        UPDATE resume
+        SET title = #{title},
+            growth = #{growth},
+            student_day = #{studentDay},
+            pros_and_cons = #{prosAndCons},
+            aspiration = #{aspiration},
+            updated_at = NOW(),
+            is_done = 'y'
+        WHERE resume_id = #{resumeId}
+    </update>
+
+    <select id="getResumeByResumeId" resultType="com.project2.worklet.component.ResumeVO">
+        SELECT FROM resume WHERE resume_id = #{resumeId}
+    </select>
+
+</mapper>

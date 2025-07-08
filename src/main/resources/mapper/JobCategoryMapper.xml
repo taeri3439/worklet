@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project2.worklet.jobcategory.JobCategoryMapper">
+    <select id="getAllJobCategories" resultType="com.project2.worklet.component.JobCategoryVO">
+        SELECT
+
+            primary_category_num,
+            primary_category_name,
+            secondary_category_num,
+            secondary_category_name,
+            tertiary_category_num,
+            tertiary_category_name
+        FROM category
+        ORDER BY primary_category_num, secondary_category_num, tertiary_category_num
+
+    </select>
+
+    <select id="getSecondaryCategories" parameterType="String" resultType="com.project2.worklet.component.JobCategoryVO">
+        SELECT
+            secondary_category_num,
+            secondary_category_name
+        FROM category
+        WHERE primary_category_num = #{primaryCategoryNum}
+          AND secondary_category_num IS NOT NULL
+        GROUP BY secondary_category_num, secondary_category_name
+        ORDER BY secondary_category_num
+
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/board/notice_write.css">
+</head>
+<body>
+    <div id="wrap">
+        <header class="header">
+            <div class="header_title">공지 글 작성 페이지</div>
+        </header>
+        <section class="notice_write_page">
+            <div class="write_pagebox">
+                <div class="notice_write_page_inner">
+                    <div class="notice_write_page_inner_title">관리자 공지작성</div>
+                    <div class="notice_write_page_inner_form">
+                        <form th:action="@{/notice/noticeForm}" name="noticeForm" id="noticeForm" method="post">
+                            <div class="formUpper">
+                                <p class="noticeTitleWrap"><span class="pilsoo">*</span>제목</p> 
+                                <input type="text" class="noticeTitle" name="noticeTitle" placeholder="제목을 입력해 주세요" required><br>
+                            </div>
+                            <div class="formMid">
+                                <p class="noticeContentWrap"><span class="pilsoo">*</span>내용</p>
+                                <textarea class="noticeContent" name="noticeContent">내용을 입력해 주세요.</textarea><br>
+                            </div>
+                            <input type="submit" value="등록" class="notice_submit_btn">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+</body>
+</html>

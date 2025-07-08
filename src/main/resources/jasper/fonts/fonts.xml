@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fontFamilies>
+
+    <fontFamily name="KR_맑은고딕">
+        <normal>jasper/fonts/malgun.ttf</normal>
+        <bold>jasper/fonts/malgunbd.ttf</bold>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <exportFonts>
+        </exportFonts>
+    </fontFamily>
+
+</fontFamilies>

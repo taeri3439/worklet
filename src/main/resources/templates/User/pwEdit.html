@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/user/pwEdit.css">
+</head>
+
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+    <div class="wrap">
+        <div class="header">
+            <h1><img src="../image/logo-white.png" alt=""></h1>
+            <p>비밀번호 재설정</p>
+        </div>
+
+        <div class="card">
+            <h2>새로 사용하실 비밀번호를
+                입력해 주세요.</h2>
+            <form action="/user/pwEdit" method="post" name="pwEditForm">
+                <div class="form-row">
+                    <input type="hidden" name="userId"  th:value="${userId}">
+                    <label for="password">비밀번호</label>
+                    <input type="password" name="userPw" id="password" placeholder="8~16자 영문, 숫자, 특수문자 포함">
+                </div>
+
+                <div class="form-row">
+                    <label for="passwordCheck">비밀번호 확인</label>
+                    <input type="password" id="passwordCheck" placeholder="비밀번호 재입력"  name="newPassword">
+                </div>
+
+                <div class="buttons">
+                    <button class="btn-secondary submit-btn" type="submit">비밀번호 재설정</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.querySelector(".submit-btn").addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 제출 동작 막기
+
+            const pw = document.getElementById("password");
+            const pwCheck = document.getElementById("passwordCheck");
+            const redPw = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+]).{8,16}$/;
+
+            if (!pw.value || !redPw.test(pw.value)) {
+                alert("올바른 비밀번호를 입력해주세요");
+                pw.focus();
+                return;
+            }
+
+            if (pw.value !== pwCheck.value) {
+                alert("비밀번호가 일치하지 않습니다");
+                pwCheck.focus();
+                return;
+            }
+
+            alert("비밀번호가 변경되었습니다.");
+            this.submit(); // 조건 통과하면 폼 제출
+        });
+
+    </script>
+<script src="../css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+
+</html>

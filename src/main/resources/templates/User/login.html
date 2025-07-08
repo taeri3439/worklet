@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Worklet Login</title>
+    <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/user/login2.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<div th:replace="include/header :: headerFragment"></div>
+<div class="wrap">
+
+  <div class="login-container">
+    <h2 class="title">WORKLET</h2>
+
+      <form id="loginForm" action="/user/login" method="post">
+          <div>
+              <input type="text" id="id" placeholder="아이디" name="userId">
+          </div>
+          <div class="password-row">
+              <input type="password" id="pw" placeholder="비밀번호" name="userPw">
+          </div>
+          <div class="login-button">
+              <button type="submit">로그인</button>
+          </div>
+      </form>
+
+    <div class="login-links">
+      <a href="/user/idOk">아이디 찾기</a>
+      <span>|</span>
+      <a href="/user/pwOk">비밀번호 찾기</a>
+      <span>|</span>
+      <a href="/user/regist">회원가입</a>
+    </div>
+
+    </div>
+</div>
+
+
+    <script>
+      var loginForm = document.getElementById("loginForm");
+      var loginBtn = document.querySelector(".login-button");
+      var id = document.getElementById("id");
+      var pw = document.getElementById("pw");
+    
+      loginBtn.addEventListener("click", function () {
+        var redId = /^[a-z0-9]{6,20}$/i;
+        var redPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
+    
+        if (id.value === '') {
+          alert('아이디를 입력해주세요 (6~20자 영문자 또는 숫자 포함)');
+        } else if (!redId.test(id.value)) {
+          alert('아이디 형식이 올바르지 않습니다.');
+        } else if (pw.value === '') {
+          alert('비밀번호를 입력해주세요 (8~16자 영문, 숫자, 특수문자 포함)');
+        } else if (!redPw.test(pw.value)) {
+          alert('비밀번호 형식이 올바르지 않습니다.');
+        } else {
+            sessionStorage.setItem('userId', id.value);
+            sessionStorage.setItem('userPw', pw.value);
+            loginForm.submit();
+        }
+      });
+
+
+
+
+    </script>
+
+
+<script src="../css/js/header.js"></script>
+
+<div th:replace="include/footer :: footerFragment"></div>
+</body>
+</html>

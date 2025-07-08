@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project2.worklet.calendarService.CalendarMapper">
+
+    <select id="getAllEvent" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings
+
+    </select>
+
+    <!--달력버튼-->
+    <!--  시작일  -->
+    <select id="getStartDayEvents" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings
+
+    </select>
+
+    <!--  종료일 / getEndDayEvents -->
+    <select id="getEndDayEvents" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings
+
+    </select>
+
+    <!--  공채정보시작일 / getStartDayEventsOnlyY -->
+    <select id="getStartDayEventsOnlyY" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings WHERE is_open ='Y'
+
+    </select>
+
+    <!--  공채정보종료일 / getEndDayEventsOnlyY -->
+    <select id="getEndDayEventsOnlyY" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings WHERE is_open ='Y'
+
+    </select>
+
+    <!--  채용정보시작일 / getStartDayEventsOnlyN -->
+    <select id="getStartDayEventsOnlyN" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings WHERE is_open ='N'
+
+    </select>
+
+    <!--  채용정보종료일 / getEndDayEventsOnlyN -->
+    <select id="getEndDayEventsOnlyN" resultType="com.project2.worklet.component.CalendarVO">
+        SELECT
+            emp_seq_no       AS empSeqNo,
+            emp_wanted_title AS empWantedTitle,
+            emp_busi_nm      AS empBusiNm,
+            emp_wanted_stdt  AS empWantedStdt,
+            emp_wanted_endt  AS empWantedEndt,
+            emp_wanted_type_nm AS empWantedTypeNm,
+            reg_log_img_nm   AS regLogImgNm,
+            emp_wanted_homepg_detail AS empWantedHomepgDetail
+        FROM job_postings WHERE is_open ='N'
+
+    </select>
+
+
+
+
+    <insert id="insertFavorite" parameterType="map">
+        INSERT INTO my_calendar (user_id, emp_seq_no, color)
+        VALUES (#{userId}, #{empSeqNo}, #{color})
+    </insert>
+
+    <delete id="deleteFavorite" parameterType="map">
+        DELETE FROM my_calendar
+        WHERE emp_seq_no = #{empSeqNo} AND user_id = #{userId}
+
+    </delete>
+
+
+    <select id="findFavoriteEmpSeqNosUserId" resultType="int">
+        SELECT emp_seq_no FROM my_calendar WHERE user_id = #{userId}
+    </select>
+
+
+
+</mapper>
